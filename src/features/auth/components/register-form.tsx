@@ -38,7 +38,6 @@ export function RegisterForm() {
         name: data.name,
         email: data.email,
         password: data.password,
-        callbackURL: "/",
       },
       {
         onSuccess: () => {

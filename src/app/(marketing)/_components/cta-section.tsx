@@ -4,7 +4,7 @@ export function CTASection() {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-white">
-            Plan the present. Build the future.
+            Automate the busywork. Ship the work that matters.
           </h2>
           <div className="flex items-center gap-3">
             <button className="px-5 py-2.5 border border-zinc-700 text-white font-medium rounded-lg hover:bg-zinc-800 transition-colors text-sm">

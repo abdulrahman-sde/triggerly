@@ -21,7 +21,7 @@ export function Navbar() {
               href="#"
               className="text-sm text-zinc-400 hover:text-white transition-colors"
             >
-              Resources
+              Integrations
             </a>
             <a
               href="#"
@@ -33,13 +33,13 @@ export function Navbar() {
               href="#"
               className="text-sm text-zinc-400 hover:text-white transition-colors"
             >
-              Customers
+              Templates
             </a>
             <a
               href="#"
               className="text-sm text-zinc-400 hover:text-white transition-colors"
             >
-              Contact
+              Docs
             </a>
           </div>
           <div className="flex items-center gap-4">

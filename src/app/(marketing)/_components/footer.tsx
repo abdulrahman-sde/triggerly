@@ -1,9 +1,8 @@
 export function Footer() {
   const footerLinks = {
-    Features: ["Plan", "Build", "Insights", "Customer Requests", "Sprint Asks", "Security", "Mobile"],
-    Product: ["Pricing", "Method", "Integrations", "Changelog", "Documentation", "Download", "Switch"],
-    Company: ["About", "Customers", "Careers", "Now", "README", "Quality", "Brand"],
-    Resources: ["Developers", "Status", "Startups", "Report vulnerability", "DPA", "Privacy", "Terms"],
+    Product: ["Editor", "Integrations", "Templates", "Pricing", "Changelog"],
+    Resources: ["Docs", "API reference", "Status", "Community", "Security"],
+    Company: ["About", "Customers", "Careers", "Contact", "Brand"],
     Connect: ["Contact us", "Community", "X (Twitter)", "GitHub", "YouTube"],
   }
 

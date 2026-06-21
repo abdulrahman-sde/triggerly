@@ -36,7 +36,7 @@ export function LogoCloud() {
             transition={{ duration: 0.6 }}
             className="text-lg text-zinc-300 mb-2"
           >
-            Powering the world's best product teams.
+            Powering automation at fast-moving teams.
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -45,7 +45,7 @@ export function LogoCloud() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-lg text-zinc-500 mb-16"
           >
-            From next-gen startups to established enterprises.
+            From indie teams to scaled enterprises.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

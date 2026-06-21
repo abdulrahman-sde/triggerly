@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { DashboardMockup } from "./dashboard-mockup";
+import { EditorMockup } from "./editor-mockup";
 import Link from "next/link";
 
 export function Hero() {
@@ -26,11 +26,11 @@ export function Hero() {
     rotateZ: 324,
   };
 
-  const headingWords = "A modern tool for planning and building products".split(
+  const headingWords = "A visual builder for automating any workflow".split(
     " ",
   );
   const subtitleWords =
-    "Meet the system for modern software development. Streamline issues, projects, and product roadmaps.".split(
+    "Connect your apps, trigger actions, and automate processes on a drag-and-drop node editor. No code required.".split(
       " ",
     );
 
@@ -129,8 +129,8 @@ export function Hero() {
                 Start building
               </Link>
               <button className="text-zinc-300 font-medium hover:text-white transition-colors flex items-center gap-2 text-sm">
-                <span className="text-zinc-500">New:</span> Sprint agent for
-                Slack
+                <span className="text-zinc-500">New:</span> Sprint AI builds
+                your flows
                 <span aria-hidden="true">→</span>
               </button>
             </motion.div>
@@ -191,7 +191,7 @@ export function Hero() {
                 overflow: "hidden",
               }}
             >
-              <DashboardMockup />
+              <EditorMockup />
             </motion.div>
           </div>
         </div>

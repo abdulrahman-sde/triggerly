@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { AISection } from "./_components/ai-section";
 import { CTASection } from "./_components/cta-section";
 import { FeatureCardsSection } from "./_components/feature-cards-section";
@@ -8,12 +7,8 @@ import { LogoCloud } from "./_components/logo-cloud";
 import { Navbar } from "./_components/navbar";
 import { ProductDirectionSection } from "./_components/product-direction-section";
 import { WorkflowsSection } from "./_components/workflows-section";
-import { headers } from "next/headers";
-export default async function SprintPage() {
-  const data = await auth.api.getSession({
-    headers: await headers(),
-  });
-  console.log("data", data);
+
+export default function SprintPage() {
   return (
     <div
       className="w-full overflow-x-hidden"

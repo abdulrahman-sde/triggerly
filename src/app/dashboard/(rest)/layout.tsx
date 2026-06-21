@@ -13,6 +13,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  await requireAuth();
   return (
     <SidebarProvider>
       <AppSidebar />

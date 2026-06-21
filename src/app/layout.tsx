@@ -12,9 +12,9 @@ const fontSans = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ui.abdulrahmanasif.dev"),
-  title: "Sprint — Product Planning & Building Tool",
+  title: "Sprint — Visual Workflow Automation",
   description:
-    "A Linear-inspired dark landing page with 3D dashboard mockup, AI agents integration, project timeline visualization, and workflow carousel.",
+    "Connect apps, trigger actions, and automate processes with a drag-and-drop node-based editor.",
 };
 
 export default function SprintLayout({
