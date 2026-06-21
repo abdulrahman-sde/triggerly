@@ -55,12 +55,9 @@ export function RegisterForm() {
   }
 
   return (
-    <div
-      className="relative flex min-h-dvh flex-col items-center justify-center px-6 py-12 overflow-hidden"
-      style={{ backgroundColor: "#09090B" }}
-    >
+    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-background px-6 py-12">
       <div
-        className="absolute pointer-events-none"
+        className="pointer-events-none absolute"
         style={{
           top: "50%",
           left: "50%",
@@ -68,20 +65,22 @@ export function RegisterForm() {
           width: "800px",
           height: "600px",
           background:
-            "radial-gradient(ellipse at center, rgba(99, 102, 241, 0.06) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center, color-mix(in oklch, var(--primary) 8%, transparent) 0%, transparent 70%)",
         }}
       />
-      <div className="relative z-10 mb-10 flex items-center gap-2">
-        <CirclePower className="w-5 h-5 text-white" />
-        <span className="text-white font-semibold">Sprint</span>
+      <div className="relative z-10 mb-10 flex items-center gap-2.5">
+        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <CirclePower className="size-4" />
+        </div>
+        <span className="font-semibold text-foreground">Sprint</span>
       </div>
 
-      <div className="relative z-10 w-full max-w-sm border border-zinc-800 p-8 rounded-xl">
+      <div className="relative z-10 w-full max-w-sm rounded-xl border border-border bg-card p-8 text-card-foreground">
         <div className="mb-6">
-          <h1 className="text-white text-lg font-medium tracking-tight">
-            Create account
-          </h1>
-          <p className="text-zinc-400 text-sm mt-1.5">Register for Sprint</p>
+          <h1 className="text-lg font-medium tracking-tight">Create account</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Register for Sprint
+          </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -90,11 +89,13 @@ export function RegisterForm() {
               {...register("name")}
               type="text"
               placeholder="Full name"
-              className="border-zinc-700 bg-zinc-800/50 text-white placeholder:text-zinc-500 focus-visible:border-zinc-500 focus-visible:ring-0 rounded-lg h-10 px-3 text-sm"
+              className="h-10 px-3"
               autoComplete="name"
             />
             {errors.name && (
-              <p className="text-xs text-red-400 mt-1">{errors.name.message}</p>
+              <p className="mt-1 text-xs text-destructive">
+                {errors.name.message}
+              </p>
             )}
           </div>
           <div>
@@ -102,11 +103,11 @@ export function RegisterForm() {
               {...register("email")}
               type="email"
               placeholder="Email"
-              className="border-zinc-700 bg-zinc-800/50 text-white placeholder:text-zinc-500 focus-visible:border-zinc-500 focus-visible:ring-0 rounded-lg h-10 px-3 text-sm"
+              className="h-10 px-3"
               autoComplete="email"
             />
             {errors.email && (
-              <p className="text-xs text-red-400 mt-1">
+              <p className="mt-1 text-xs text-destructive">
                 {errors.email.message}
               </p>
             )}
@@ -117,13 +118,15 @@ export function RegisterForm() {
                 {...register("password")}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="border-zinc-700 bg-zinc-800/50 pr-10 text-white placeholder:text-zinc-500 focus-visible:border-zinc-500 focus-visible:ring-0 rounded-lg h-10 px-3 text-sm"
+                className="h-10 px-3 pr-10"
                 autoComplete="new-password"
               />
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
+                className="absolute right-0 top-0 h-full rounded-l-none"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-0 top-0 h-full px-3 text-zinc-500 hover:text-white transition-colors"
                 tabIndex={-1}
               >
                 {showPassword ? (
@@ -131,10 +134,10 @@ export function RegisterForm() {
                 ) : (
                   <Eye className="size-4" />
                 )}
-              </button>
+              </Button>
             </div>
             {errors.password && (
-              <p className="text-xs text-red-400 mt-1">
+              <p className="mt-1 text-xs text-destructive">
                 {errors.password.message}
               </p>
             )}
@@ -142,7 +145,7 @@ export function RegisterForm() {
 
           <Button
             type="submit"
-            className="w-full bg-white text-zinc-900 hover:bg-zinc-100 rounded-lg h-10 text-sm font-medium transition-colors"
+            className="h-10 w-full"
             disabled={isSubmitting}
           >
             {isSubmitting ? <Loader className="animate-spin" /> : "Register"}
@@ -150,9 +153,9 @@ export function RegisterForm() {
         </form>
 
         <div className="relative my-6">
-          <Separator className="w-full bg-zinc-800" />
+          <Separator className="w-full" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="bg-[#09090B] px-2 text-sm text-zinc-500">
+            <span className="bg-card px-2 text-sm text-muted-foreground">
               or continue with
             </span>
           </div>
@@ -160,13 +163,13 @@ export function RegisterForm() {
 
         <Button
           variant="outline"
-          className="w-full border-zinc-700 bg-zinc-800/30 text-white hover:bg-zinc-800 rounded-lg h-10 text-sm font-medium transition-colors"
+          className="h-10 w-full"
           onClick={() => {}}
           disabled={isSubmitting}
         >
           <svg
             viewBox="0 0 24 24"
-            className="size-4 mr-2 shrink-0"
+            className="mr-2 size-4 shrink-0"
             aria-hidden="true"
           >
             <path
@@ -189,11 +192,11 @@ export function RegisterForm() {
           Continue with Google
         </Button>
 
-        <p className="text-center text-sm text-zinc-500 mt-6">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="text-white hover:text-zinc-300 transition-colors font-medium"
+            className="font-medium text-foreground transition-colors hover:text-primary"
           >
             Log in
           </Link>

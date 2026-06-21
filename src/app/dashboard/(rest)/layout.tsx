@@ -24,7 +24,7 @@ export default async function DashboardLayout({
           <ThemeToggle />
           <HeaderProfile />
         </header>
-        <div className="flex flex-1 flex-col gap-4 bg-muted/50 p-4 rounded-xl">
+        <div className="flex flex-1 flex-col gap-4 bg-[#ffffffca] dark:bg-muted/50 p-4 rounded-xl">
           {children}
         </div>
       </SidebarInset>

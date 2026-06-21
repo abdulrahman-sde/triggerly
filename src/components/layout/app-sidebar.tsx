@@ -121,7 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 authClient.signOut();
                 router.push("/login");
               }}
-              className="text-red-400/60 mt-1.5 hover:bg-red-500/10 hover:text-red-400"
+              className="text-destructive/60 mt-1.5 hover:bg-destructive/10 hover:text-destructive"
             >
               <LogOut className="size-4" />
               <span>Sign Out</span>
