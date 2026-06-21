@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    ports:
+      - "51213:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: nodebase
+    volumes:
+      - pg_data:/var/lib/postgresql
+  
+volumes:
+  pg_data:
