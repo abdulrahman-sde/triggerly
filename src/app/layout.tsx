@@ -12,12 +12,12 @@ const fontSans = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ui.abdulrahmanasif.dev"),
-  title: "Sprint — Visual Workflow Automation",
+  title: "Triggerly — Visual Workflow Automation",
   description:
     "Connect apps, trigger actions, and automate processes with a drag-and-drop node-based editor.",
 };
 
-export default function SprintLayout({
+export default function TriggerlyLayout({
   children,
 }: {
   children: React.ReactNode;

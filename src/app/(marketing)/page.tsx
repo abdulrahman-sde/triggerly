@@ -8,7 +8,7 @@ import { Navbar } from "./_components/navbar";
 import { ProductDirectionSection } from "./_components/product-direction-section";
 import { WorkflowsSection } from "./_components/workflows-section";
 
-export default function SprintPage() {
+export default function TriggerlyPage() {
   return (
     <div
       className="w-full overflow-x-hidden"

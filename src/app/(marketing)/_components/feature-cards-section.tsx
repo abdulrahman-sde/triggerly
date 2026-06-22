@@ -180,7 +180,7 @@ export function FeatureCardsSection() {
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
               className="max-w-md">
               <p className="text-zinc-400 leading-relaxed">
-                Sprint is built around a drag-and-drop node editor, a growing library of app integrations, and the branching logic to handle any edge case.{" "}
+                Triggerly is built around a drag-and-drop node editor, a growing library of app integrations, and the branching logic to handle any edge case.{" "}
                 <a href="#" className="text-white inline-flex items-center gap-1 hover:underline">See how it works <ChevronRight className="w-4 h-4" /></a>
               </p>
             </motion.div>

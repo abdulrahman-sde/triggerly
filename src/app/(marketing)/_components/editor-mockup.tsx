@@ -28,7 +28,7 @@ export function EditorMockup() {
         <div className="p-3 border-b border-zinc-800/50">
           <div className="flex items-center gap-2 px-2 py-1.5">
             <CirclePower className="w-5 h-5 text-white" />
-            <span className="text-white font-semibold text-sm">Sprint</span>
+            <span className="text-white font-semibold text-sm">Triggerly</span>
             <ChevronDown className="w-3.5 h-3.5 text-zinc-500 ml-auto" />
           </div>
         </div>

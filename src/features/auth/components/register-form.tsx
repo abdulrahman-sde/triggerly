@@ -72,14 +72,14 @@ export function RegisterForm() {
         <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <CirclePower className="size-4" />
         </div>
-        <span className="font-semibold text-foreground">Sprint</span>
+        <span className="font-semibold text-foreground">Triggerly</span>
       </div>
 
       <div className="relative z-10 w-full max-w-sm rounded-xl border border-border bg-card p-8 text-card-foreground">
         <div className="mb-6">
           <h1 className="text-lg font-medium tracking-tight">Create account</h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            Register for Sprint
+            Register for Triggerly
           </p>
         </div>
 

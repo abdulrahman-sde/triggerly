@@ -129,7 +129,7 @@ export function Hero() {
                 Start building
               </Link>
               <button className="text-zinc-300 font-medium hover:text-white transition-colors flex items-center gap-2 text-sm">
-                <span className="text-zinc-500">New:</span> Sprint AI builds
+                <span className="text-zinc-500">New:</span> Triggerly AI builds
                 your flows
                 <span aria-hidden="true">→</span>
               </button>

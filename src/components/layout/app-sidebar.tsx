@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { CirclePower, LogOut } from "lucide-react";
+import { LogoIcon } from "../logo";
 
 function ExecutionsIcon(props: { className?: string }) {
   return (
@@ -103,10 +104,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar variant="floating" {...props}>
       <SidebarHeader>
         <div className="flex items-center gap-2.5 px-2 pt-1">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <CirclePower className="size-4" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-200 dark:bg-zinc-800">
+            <LogoIcon className="size-4" />
           </div>
-          <span className="text-sm font-semibold">Sprint</span>
+          <span className="text-sm font-semibold">Triggerly</span>
         </div>
       </SidebarHeader>
       <SidebarContent>

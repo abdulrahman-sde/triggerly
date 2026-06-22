@@ -63,7 +63,7 @@ export default function RegisterPage() {
               <LogoIcon />
             </Link>
             <h1 className="mb-1 mt-4 text-xl font-semibold">Create account</h1>
-            <p>Register for Sprint</p>
+            <p>Register for Triggerly</p>
           </div>
 
           <div className="mt-6">
