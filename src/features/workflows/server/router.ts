@@ -4,9 +4,10 @@ import z from "zod";
 
 export const workflowsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
+    console.log("Fetching workflows for user:", ctx.session.user.id);
     return await prisma.workflow.findMany({
       where: {
-        userId: ctx.auth.user.id,
+        userId: ctx.session.user.id,
       },
     });
   }),
@@ -16,7 +17,7 @@ export const workflowsRouter = createTRPCRouter({
       return await prisma.workflow.findFirst({
         where: {
           id: input.id,
-          userId: ctx.auth.user.id,
+          userId: ctx.session.user.id,
         },
       });
     }),
@@ -31,7 +32,7 @@ export const workflowsRouter = createTRPCRouter({
       return await prisma.workflow.create({
         data: {
           name: input.name,
-          userId: ctx.auth.user.id,
+          userId: ctx.session.user.id,
         },
       });
     }),
@@ -42,7 +43,7 @@ export const workflowsRouter = createTRPCRouter({
       await prisma.workflow.deleteMany({
         where: {
           id: input.id,
-          userId: ctx.auth.user.id,
+          userId: ctx.session.user.id,
         },
       });
     }),
@@ -58,7 +59,7 @@ export const workflowsRouter = createTRPCRouter({
       return await prisma.workflow.updateMany({
         where: {
           id: input.id,
-          userId: ctx.auth.user.id,
+          userId: ctx.session.user.id,
         },
         data: {
           name: input.name,

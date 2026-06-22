@@ -31,7 +31,7 @@ export const caller = appRouter.createCaller(async () =>
   }),
 );
 
-export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
+export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(  
   queryOptions: T,
 ) {
   const queryClient = getQueryClient();

@@ -8,8 +8,8 @@ import superjson from "superjson";
  * API route handler (where you pass the request headers).
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  // const user = await auth(opts.headers);
-  return { userId: "user_123" };
+  const session = await auth.api.getSession({ headers: opts.headers });
+  return { session };
 };
 // Avoid exporting the entire t-object
 // since it's not very descriptive.
@@ -29,19 +29,13 @@ export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) {
+  if (!ctx.session) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
-      message: "You must be logged in to access this resource.",
+      message: "You must be logged in to access this resource",
     });
   }
   return next({
-    ctx: {
-      ...ctx,
-      auth: session,
-    },
+    ctx: { ...ctx, session: ctx.session }, // now non-null, TS narrows it
   });
 });

@@ -1,4 +1,4 @@
-import { PlusIcon } from "lucide-react";
+import { Loader, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
@@ -35,7 +35,11 @@ export const EntityHeader = ({
       </div>
       {onNew && !newButtonHref && (
         <Button disabled={isCreating || disabled} size="sm" onClick={onNew}>
-          <PlusIcon className="size-4" />
+          {isCreating ? (
+            <Loader className="size-4" />
+          ) : (
+            <PlusIcon className="size-4" />
+          )}
           {newButtonLabel}
         </Button>
       )}
