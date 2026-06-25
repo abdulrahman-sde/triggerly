@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { CirclePower, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { LogoIcon } from "../logo";
 
 function ExecutionsIcon(props: { className?: string }) {
@@ -167,8 +167,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton
               onClick={() => {
                 queryClient.invalidateQueries({ queryKey: ["subscription"] });
-                authClient.signOut();
-                router.push("/login");
+                authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      queryClient.clear();
+                      router.replace("/login");
+                    },
+                  },
+                });
               }}
               className="text-destructive/60 mt-1.5 hover:bg-destructive/10 hover:text-destructive"
             >

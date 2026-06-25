@@ -124,7 +124,7 @@ export function Hero() {
             >
               <Link
                 href="/register"
-                className="px-5 pointer py-2.5 bg-white text-zinc-900 font-medium rounded-lg hover:bg-zinc-100 transition-colors text-sm"
+                className="px-5 py-2.5 bg-white text-zinc-900 font-medium rounded-lg hover:bg-zinc-100 transition-colors text-sm"
               >
                 Start building
               </Link>
@@ -137,7 +137,7 @@ export function Hero() {
           </div>
         </div>
         <div
-          className="relative mt-16 w-full"
+          className="relative mt-16 w-full pointer-events-none"
           style={{
             height: "700px",
             marginTop: "-60px",
