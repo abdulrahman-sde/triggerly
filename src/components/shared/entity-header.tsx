@@ -36,7 +36,7 @@ export const EntityHeader = ({
       {onNew && !newButtonHref && (
         <Button disabled={isCreating || disabled} size="sm" onClick={onNew}>
           {isCreating ? (
-            <Loader className="size-4" />
+            <Loader className="size-4 animate-spin  " />
           ) : (
             <PlusIcon className="size-4" />
           )}

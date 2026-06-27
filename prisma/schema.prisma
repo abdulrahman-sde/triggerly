@@ -72,12 +72,41 @@ model Verification {
 }
 
 model Workflow {
-    id        String   @id @default(uuid())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id          String       @id @default(uuid())
+    name        String
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    userId      String
+    user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    nodes       Node[]
+    connections Connection[]
 
     @@map("workflow")
+}
+
+model Node {
+    id                String       @id @default(uuid())
+    type              String
+    data              Json
+    position          Json
+    workflowId        String
+    workflow          Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+    outputConnections Connection[] @relation("FromNode")
+    inputConnections  Connection[] @relation("ToNode")
+
+    @@map("node")
+}
+
+model Connection {
+    id         String @id @default(uuid())
+    fromNodeId String
+    toNodeId   String
+
+    fromNode   Node     @relation("FromNode", fields: [fromNodeId], references: [id], onDelete: Cascade)
+    toNode     Node     @relation("ToNode", fields: [toNodeId], references: [id], onDelete: Cascade)
+    workflowId String
+    workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+    @@unique([fromNodeId, toNodeId, workflowId])
+    @@map("connection")
 }

@@ -28,6 +28,7 @@ import {
   useSuspenseWorkflows,
 } from "../hooks/use-worflows";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function WorkflowsList() {
   const workflows = useSuspenseWorkflows();
@@ -87,7 +88,10 @@ export default function WorkflowsList() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
                         className="text-destructive gap-2"
-                        onClick={() => handleRemoveWorkflow(workflow.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveWorkflow(workflow.id);
+                        }}
                       >
                         <Trash2 className="size-4" />
                         Delete

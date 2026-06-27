@@ -7,7 +7,7 @@ export function Navbar() {
       <div className="w-full flex justify-center px-6 py-4">
         <div className="w-full max-w-4xl flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <LogoIcon />
+            <LogoIcon className="size-4.5 mt-[2px] -mr-0.5" />
             <span className="text-white font-semibold">Triggerly</span>
           </div>
           <div className="hidden md:flex items-center gap-8">

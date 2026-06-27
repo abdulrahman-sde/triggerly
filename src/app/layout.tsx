@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/trpc/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -27,8 +28,14 @@ export default function TriggerlyLayout({
       <body className="antialiased font-sans">
         <TRPCReactProvider>
           <TooltipProvider delayDuration={0}>
-            <Toaster richColors />
-            {children}
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem={false}
+            >
+              <Toaster richColors />
+              {children}
+            </ThemeProvider>
           </TooltipProvider>
         </TRPCReactProvider>
       </body>

@@ -1,3 +1,4 @@
+import EditorHeader from "@/features/editor/components/editor-header";
 import Editor from "@/features/editor/components/workflow-editor";
 import { prefetchWorkflow } from "@/features/workflows/server/prefetch";
 import { HydrateClient } from "@/trpc/server";
@@ -15,6 +16,7 @@ export default async function WorkflowEditor({
     <HydrateClient>
       <Suspense fallback={<div>Loading workflow editor...</div>}>
         <ErrorBoundary fallback={<div>Failed to load workflow editor.</div>}>
+          <EditorHeader workflowId={workflowId} />
           <Editor />
         </ErrorBoundary>
       </Suspense>
