@@ -4,7 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/trpc/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/ui/theme-provider";
+
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -24,18 +24,12 @@ export default function TriggerlyLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${fontSans.variable}`}>
+    <html lang="en" className={`${fontSans.variable}`}>
       <body className="antialiased font-sans">
         <TRPCReactProvider>
           <TooltipProvider delayDuration={0}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem={false}
-            >
-              <Toaster richColors />
-              {children}
-            </ThemeProvider>
+            <Toaster richColors />
+            {children}
           </TooltipProvider>
         </TRPCReactProvider>
       </body>

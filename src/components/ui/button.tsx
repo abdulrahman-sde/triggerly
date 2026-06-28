@@ -12,15 +12,15 @@ const buttonVariants = cva(
         default:
           "bg-primary text-primary-foreground border-primary/40 shadow-[inset_0_0_4px_1.5px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 hover:bg-primary/90 hover:border-primary/60 hover:shadow-[inset_0_-2px_6px_1.5px_rgba(255,255,255,0.15),0_6px_20px_rgba(0,0,0,0.15)] active:scale-[0.96] active:translate-y-0 active:shadow-[inset_0_0_3px_1px_rgba(255,255,255,0.15)]",
         outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground border-input bg-input/30 hover:bg-input/50",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground hover:bg-muted/50",
         glassy:
-          "bg-primary/10 text-primary backdrop-blur-xl border-primary/20 hover:bg-primary/20 hover:border-primary/30 dark:bg-primary/15 dark:hover:bg-primary/25",
+          "bg-primary/10 text-primary backdrop-blur-xl border-primary/20 hover:bg-primary/20 hover:border-primary/30 bg-primary/15 hover:bg-primary/25",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 bg-destructive/20 hover:bg-destructive/30 focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

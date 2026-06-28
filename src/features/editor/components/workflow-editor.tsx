@@ -1,6 +1,6 @@
 "use client";
 import { useSuspenseWorkflow } from "@/features/workflows/hooks/use-worflows";
-import { useParams } from "next/navigation";
+import { nodeComponents } from "@/utils/node-components";
 import {
   ReactFlow,
   Background,
@@ -8,15 +8,24 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
   addEdge,
+  Node,
+  Edge,
+  NodeChange,
+  EdgeChange,
+  Connection,
+  MiniMap,
+  Panel,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useCallback, useSyncExternalStore, useState } from "react";
+import { Plus } from "lucide-react";
+import { useCallback, useState } from "react";
+import { NodeSelector } from "./node-selector";
 
 const initialNodes = [
   {
     id: "n1",
     position: { x: 0, y: 0 },
-    data: { label: "Node 1" },
+    data: { label: "gg" },
     type: "input",
   },
   {
@@ -37,53 +46,46 @@ const initialEdges = [
   },
 ];
 export default function Editor({ workflowId }: { workflowId: string }) {
-  const { data } = useSuspenseWorkflow(workflowId);
-
-  const isDarkMode = useSyncExternalStore(
-    (onStoreChange) => {
-      const observer = new MutationObserver(onStoreChange);
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-      });
-      return () => observer.disconnect();
-    },
-    () => document.documentElement.classList.contains("dark"),
-    () => true,
-  );
-
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const { data: workflow } = useSuspenseWorkflow(workflowId);
+  const [nodes, setNodes] = useState<Node[]>(workflow?.nodes);
+  const [edges, setEdges] = useState<Edge[]>(workflow?.edges);
 
   const onNodesChange = useCallback(
-    (changes: any) =>
+    (changes: NodeChange[]) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
     [],
   );
   const onEdgesChange = useCallback(
-    (changes: any) =>
+    (changes: EdgeChange[]) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
     [],
   );
   const onConnect = useCallback(
-    (params: any) =>
+    (params: Connection) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
     [],
   );
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full ">
       <ReactFlow
         proOptions={{ hideAttribution: true }}
-        colorMode={isDarkMode ? "dark" : "light"}
+        colorMode="dark"
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         fitView
+        nodeTypes={nodeComponents}
+        onConnect={onConnect}
+        className="rounded-xl"
       >
-        <Background />
+        <MiniMap />
+        <Background gap={15} />
         <Controls />
+        <Panel position="top-right">
+          <div className="bg-zinc-800 rounded-lg p-2 hover:bg-zinc-700 transition-colors"></div>
+        </Panel>
       </ReactFlow>
     </div>
   );

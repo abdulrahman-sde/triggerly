@@ -4,11 +4,11 @@ import {
   premiumProcedure,
   protectedProcedure,
 } from "@/trpc/init";
+import { Edge, Node } from "@xyflow/react";
 import z from "zod";
 
 export const workflowsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
-    console.log("Fetching workflows for user:", ctx.user.id);
     return await prisma.workflow.findMany({
       where: {
         userId: ctx.user.id,
@@ -16,14 +16,30 @@ export const workflowsRouter = createTRPCRouter({
     });
   }),
   getOne: protectedProcedure
-    .input(z.object({ id: z.uuid() }))
-    .query(({ ctx, input }) => {
-      return prisma.workflow.findUniqueOrThrow({
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
         where: {
           id: input.id,
           userId: ctx.user.id,
         },
+        include: {
+          nodes: true,
+          connections: true,
+        },
       });
+      const nodes: Node[] = workflow.nodes.map((node) => ({
+        id: node.id,
+        type: node.type,
+        position: node.position as { x: number; y: number },
+        data: (node.data as Record<string, unknown>) || {},
+      }));
+      const edges: Edge[] = workflow?.connections.map((connection) => ({
+        id: connection.id,
+        source: connection.fromNodeId,
+        target: connection.toNodeId,
+      }));
+      return { ...workflow, nodes, edges };
     }),
 
   create: premiumProcedure
@@ -37,6 +53,15 @@ export const workflowsRouter = createTRPCRouter({
         data: {
           name: input.name,
           userId: ctx.user.id,
+          nodes: {
+            create: [
+              {
+                type: "INITIAL",
+                position: { x: 0, y: 0 },
+                data: {},
+              },
+            ],
+          },
         },
       });
     }),

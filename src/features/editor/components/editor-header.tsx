@@ -1,6 +1,5 @@
 "use client";
 
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   Breadcrumb,
@@ -18,7 +17,7 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
 
   return (
     <>
-      <header className="flex h-14 shrink-0 items-center gap-2 px-4">
+      <header className="flex h-13 shrink-0 items-center gap-2 px-4  ">
         <SidebarTrigger className="-ml-1" />
         <Breadcrumb>
           <BreadcrumbList>
@@ -36,7 +35,6 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex-1" />
-        <ThemeToggle />
       </header>
     </>
   );

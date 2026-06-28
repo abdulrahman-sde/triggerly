@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { EditorMockup } from "./editor-mockup";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function Hero() {
   const [yOffset, setYOffset] = useState(0);
@@ -124,9 +125,11 @@ export function Hero() {
             >
               <Link
                 href="/register"
-                className="px-5 py-2.5 bg-white text-zinc-900 font-medium rounded-lg hover:bg-zinc-100 transition-colors text-sm"
+                className=" font-medium rounded-lg  text-sm"
               >
-                Start building
+                <Button size={"lg"} className="px-5">
+                  Start building
+                </Button>
               </Link>
               <button className="text-zinc-300 font-medium hover:text-white transition-colors flex items-center gap-2 text-sm">
                 <span className="text-zinc-500">New:</span> Triggerly AI builds

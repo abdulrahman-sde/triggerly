@@ -17,7 +17,7 @@ export default async function WorkflowEditor({
       <Suspense fallback={<div>Loading workflow editor...</div>}>
         <ErrorBoundary fallback={<div>Failed to load workflow editor.</div>}>
           <EditorHeader workflowId={workflowId} />
-          <Editor />
+          <Editor workflowId={workflowId} />
         </ErrorBoundary>
       </Suspense>
     </HydrateClient>

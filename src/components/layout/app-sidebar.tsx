@@ -101,10 +101,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   return (
-    <Sidebar variant="floating" {...props}>
+    <Sidebar variant="floating" className=" p-0" {...props}>
       <SidebarHeader>
-        <div className="flex items-center gap-2.5 px-2 pt-1">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-200 dark:bg-zinc-800">
+        <div className="flex items-center gap-2.5 px-2 pt-2.5  ">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-800">
             <LogoIcon className="size-4" />
           </div>
           <span className="text-sm font-semibold">Triggerly</span>

@@ -1,4 +1,6 @@
 import { LogoIcon } from "@/components/logo";
+import { Button } from "@/components/ui/button";
+import { ArrowRightIcon, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export function Navbar() {
@@ -43,17 +45,8 @@ export function Navbar() {
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <Link
-              href="/login"
-              className="text-sm text-zinc-400 hover:text-white transition-colors"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/register"
-              className="text-sm text-white bg-zinc-800 hover:bg-zinc-700 px-3.5 py-1.5 rounded-md border border-zinc-700 transition-colors"
-            >
-              Sign up
+            <Link href="/register" className="text-sm flex items-center">
+              <Button>Dashboard</Button>
             </Link>
           </div>
         </div>
