@@ -1,22 +1,33 @@
-import { Workflow } from "lucide-react";
 import { cn } from "../lib/utils";
 
-// ─── Option 1: Two Connected Workflow Nodes ───────────────────────────────
-
-export const Logo = ({
-  className,
-}: {
-  className?: string;
-  uniColor?: boolean;
-}) => {
+export const Logo = ({ className }: { className?: string }) => {
   return (
-    <div>
-      <LogoIcon className={cn("size-4", className)} />
-      <p>Triggerly</p>
+    <div className="flex items-center gap-2">
+      <LogoIcon className={cn("size-8 rounded-2xl", className)} />
+      <span className="font-semibold text-lg">Triggerly</span>
     </div>
   );
 };
 
 export const LogoIcon = ({ className }: { className?: string }) => {
-  return <Workflow className={cn(className)} />;
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn(className)}
+    >
+      <rect width="48" height="48" rx="14" fill="#2563EB" />
+      <rect width="48" height="48" fill="url(#logo-gradient)" />
+      <path d="M25 12L17 24h5.5L21 37L32 24h-5.5L30 12H25Z" fill="white" />
+      <defs>
+        <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48">
+          <stop stopColor="#3B82F6" />
+          <stop offset="1" stopColor="#1D4ED8" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
 };

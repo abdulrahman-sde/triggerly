@@ -124,7 +124,7 @@ export function Hero() {
               className="mt-8 flex items-center gap-6"
             >
               <Link
-                href="/register"
+                href="/dashboard"
                 className=" font-medium rounded-lg  text-sm"
               >
                 <Button size={"lg"} className="px-5">

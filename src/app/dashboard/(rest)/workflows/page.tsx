@@ -1,4 +1,4 @@
-import { WorkflowsSkeleton } from "@/components/skeleton/workflows-skeleton";
+import WorkflowsSkeleton from "@/components/loaders/workflows-skeleton";
 import WorkflowsList from "@/features/workflows/components/workflows";
 
 import { prefetchWorkflows } from "@/features/workflows/server/prefetch";

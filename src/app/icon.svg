@@ -1,0 +1,11 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="48" height="48" rx="14" fill="#2563EB" />
+  <rect width="48" height="48" fill="url(#logo-gradient)" />
+  <path d="M25 12L17 24h5.5L21 37L32 24h-5.5L30 12H25Z" fill="white" />
+  <defs>
+    <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48">
+      <stop stop-color="#3B82F6" />
+      <stop offset="1" stop-color="#1D4ED8" />
+    </linearGradient>
+  </defs>
+</svg>

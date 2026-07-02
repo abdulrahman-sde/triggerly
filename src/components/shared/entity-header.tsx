@@ -1,6 +1,7 @@
-import { Loader, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { Plus, Loader } from "reicon-react";
+import { toast } from "sonner";
 
 type EntityHeaderProps = {
   title: string;
@@ -34,19 +35,28 @@ export const EntityHeader = ({
         )}
       </div>
       {onNew && !newButtonHref && (
-        <Button disabled={isCreating || disabled} size="sm" onClick={onNew}>
+        <Button
+          disabled={isCreating || disabled}
+          className="h-8 px-2.5"
+          onClick={onNew}
+        >
           {isCreating ? (
-            <Loader className="size-4 animate-spin  " />
+            <>
+              <Loader size={24} weight="Filled" className="animate-spin" />
+              Creating...
+            </>
           ) : (
-            <PlusIcon className="size-4" />
+            <>
+              <Plus size={24} weight="Filled" />
+              {newButtonLabel}
+            </>
           )}
-          {newButtonLabel}
         </Button>
       )}
       {newButtonHref && !onNew && (
         <Button size="sm" asChild>
           <Link href={newButtonHref} prefetch>
-            <PlusIcon className="size-4" />
+            <Plus className="size-4" />
             {newButtonLabel}
           </Link>
         </Button>

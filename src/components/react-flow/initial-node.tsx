@@ -10,7 +10,7 @@ export const initialNode = memo((props: NodeProps) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <NodeSelector open={isOpen} onOpenChange={setIsOpen}>
-      <WorkflowNode>
+      <WorkflowNode showToolbar={false}>
         <PlaceholderNode {...props}>
           <div className="flex flex-col items-center justify-center ">
             <Plus className="size-4 text-gray-400" />

@@ -1,163 +1,324 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { ChevronLeft, ChevronRight, Plus, Zap, GitBranch, Webhook, Clock, Code, MessageSquare, LayoutGrid } from "lucide-react"
-import { Slack } from "../../../../public/assets/icons/slack"
-import { GitHub } from "../../../../public/assets/icons/github"
-import { Stripe } from "../../../../public/assets/icons/stripe"
-import { Notion } from "../../../../public/assets/icons/notion"
-import { Supabase } from "../../../../public/assets/icons/supabase"
-import { Figma } from "../../../../public/assets/icons/figma"
+import React, { useState } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Zap,
+  GitBranch,
+  Webhook,
+  Clock,
+  Code,
+  MessageSquare,
+  LayoutGrid,
+} from "lucide-react";
+import { Slack } from "../../../../public/assets/icons/slack";
+import { GitHub } from "../../../../public/assets/icons/github";
+import { Stripe } from "../../../../public/assets/icons/stripe";
+import { Notion } from "../../../../public/assets/icons/notion";
+import { Supabase } from "../../../../public/assets/icons/supabase";
+import { Figma } from "../../../../public/assets/icons/figma";
 
 const carouselCards = [
-  { id: 1, category: "Messaging", title: "Slack message to Linear issue", mockup: "slack-linear" },
-  { id: 2, category: "Payments", title: "Stripe payment to receipt and Notion", mockup: "stripe-notion" },
-  { id: 3, category: "Code", title: "Pull request checks and notify", mockup: "github-notify" },
-  { id: 4, category: "Forms", title: "Form submission to CRM and email", mockup: "form-crm" },
-  { id: 5, category: "Data", title: "Scheduled database snapshot sync", mockup: "schedule-sync" },
-  { id: 6, category: "Design", title: "Figma comment to task", mockup: "figma-task" },
-  { id: 7, category: "Developer", title: "Build your own with the API", mockup: "api" },
-]
+  {
+    id: 1,
+    category: "Messaging",
+    title: "Slack message to Linear issue",
+    mockup: "slack-linear",
+  },
+  {
+    id: 2,
+    category: "Payments",
+    title: "Stripe payment to receipt and Notion",
+    mockup: "stripe-notion",
+  },
+  {
+    id: 3,
+    category: "Code",
+    title: "Pull request checks and notify",
+    mockup: "github-notify",
+  },
+  {
+    id: 4,
+    category: "Forms",
+    title: "Form submission to CRM and email",
+    mockup: "form-crm",
+  },
+  {
+    id: 5,
+    category: "Data",
+    title: "Scheduled database snapshot sync",
+    mockup: "schedule-sync",
+  },
+  {
+    id: 6,
+    category: "Design",
+    title: "Figma comment to task",
+    mockup: "figma-task",
+  },
+  {
+    id: 7,
+    category: "Developer",
+    title: "Build your own with the API",
+    mockup: "api",
+  },
+];
 
-function MiniFlow({ nodes }: { nodes: { icon?: React.ElementType; label: string; color?: string }[] }) {
+function MiniFlow({
+  nodes,
+}: {
+  nodes: { icon?: React.ElementType; label: string; color?: string }[];
+}) {
   return (
     <div className="flex items-center gap-2">
       {nodes.map((node, i) => (
         <React.Fragment key={i}>
           {i > 0 && <span className="text-zinc-700 text-xs">→</span>}
-          <div className="flex items-center gap-1.5 bg-zinc-800/60 rounded-md px-2 py-1.5">
+          <div className="flex items-center gap-1.5 bg-zinc-800/60 rounded-md px-2 py-1.5 ">
             {node.icon && <node.icon className="w-3.5 h-3.5 text-zinc-400" />}
-            <span className="text-xs text-zinc-300">{node.label}</span>
+            <span className="text-xs text-zinc-300 text-nowrap">
+              {node.label}
+            </span>
           </div>
         </React.Fragment>
       ))}
     </div>
-  )
+  );
 }
 
 function CardMockup({ type }: { type: string }) {
   switch (type) {
     case "slack-linear":
-      return <div className="flex flex-col gap-3 p-4">
-        <MiniFlow nodes={[{ icon: Slack, label: "New message" }, { icon: GitBranch, label: "Filter" }, { icon: GitHub, label: "Create issue" }]} />
-        <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-          <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">Trigger</span>
-          <span className="text-xs text-zinc-400">When message in #ops</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center"><Zap className="w-2.5 h-2.5 text-emerald-400" /></span>
-          <span className="text-xs text-zinc-300">Runs in 1.2s</span>
-          <span className="text-[10px] text-zinc-600 ml-auto">•••</span>
-        </div>
-      </div>
-    case "stripe-notion":
-      return <div className="flex flex-col gap-3 p-4">
-        <MiniFlow nodes={[{ icon: Stripe, label: "Payment" }, { icon: GitBranch, label: "Branch" }, { icon: MessageSquare, label: "Receipt" }, { icon: Notion, label: "Log" }]} />
-        <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-          <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">Trigger</span>
-          <span className="text-xs text-zinc-400">Successful payment</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center"><Zap className="w-2.5 h-2.5 text-emerald-400" /></span>
-          <span className="text-xs text-zinc-300">2 actions in parallel</span>
-        </div>
-      </div>
-    case "github-notify":
-      return <div className="flex flex-col gap-3 p-4">
-        <MiniFlow nodes={[{ icon: GitHub, label: "PR opened" }, { icon: GitBranch, label: "Checks" }, { icon: Slack, label: "Notify" }]} />
-        <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-          <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">Trigger</span>
-          <span className="text-xs text-zinc-400">Pull request opened</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center"><Zap className="w-2.5 h-2.5 text-emerald-400" /></span>
-          <span className="text-xs text-zinc-300">Runs on every PR</span>
-        </div>
-      </div>
-    case "form-crm":
-      return <div className="flex flex-col gap-3 p-4">
-        <MiniFlow nodes={[{ icon: Webhook, label: "Form submit" }, { icon: GitBranch, label: "Branch" }, { icon: LayoutGrid, label: "Add to CRM" }, { icon: MessageSquare, label: "Email" }]} />
-        <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-          <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">Trigger</span>
-          <span className="text-xs text-zinc-400">Webhook received</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center"><Zap className="w-2.5 h-2.5 text-emerald-400" /></span>
-          <span className="text-xs text-zinc-300">4 steps, 2 parallel</span>
-        </div>
-      </div>
-    case "schedule-sync":
-      return <div className="flex flex-col gap-3 p-4">
-        <MiniFlow nodes={[{ icon: Clock, label: "Cron" }, { icon: Supabase, label: "Snapshot" }, { icon: Webhook, label: "Sync" }]} />
-        <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-          <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">Schedule</span>
-          <span className="text-xs text-zinc-400">Every 6 hours</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center"><Zap className="w-2.5 h-2.5 text-emerald-400" /></span>
-          <span className="text-xs text-zinc-300">Sequential execution</span>
-        </div>
-      </div>
-    case "figma-task":
-      return <div className="flex flex-col gap-3 p-4">
-        <MiniFlow nodes={[{ icon: Figma, label: "Comment" }, { icon: GitBranch, label: "Filter" }, { icon: GitHub, label: "Create task" }]} />
-        <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-          <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">Trigger</span>
-          <span className="text-xs text-zinc-400">New comment added</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center"><Zap className="w-2.5 h-2.5 text-emerald-400" /></span>
-          <span className="text-xs text-zinc-300">Runs in 0.8s</span>
-        </div>
-      </div>
-    case "api":
-      return <div className="flex items-center justify-center h-full">
-        <div className="flex flex-col items-center gap-3">
-          <div className="bg-zinc-800/50 rounded-lg px-4 py-3 border border-zinc-700/50">
-            <Code className="w-6 h-6 text-zinc-400" />
+      return (
+        <div className="flex flex-col gap-3 p-4">
+          <MiniFlow
+            nodes={[
+              { icon: Slack, label: "New message" },
+              { icon: GitBranch, label: "Filter" },
+              { icon: GitHub, label: "Create issue" },
+            ]}
+          />
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+              Trigger
+            </span>
+            <span className="text-xs text-zinc-400">When message in #ops</span>
           </div>
-          <span className="text-xs font-mono text-zinc-500">POST /api/triggers</span>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <Zap className="w-2.5 h-2.5 text-emerald-400" />
+            </span>
+            <span className="text-xs text-zinc-300">Runs in 1.2s</span>
+            <span className="text-[10px] text-zinc-600 ml-auto">•••</span>
+          </div>
         </div>
-      </div>
+      );
+    case "stripe-notion":
+      return (
+        <div className="flex flex-col gap-3 p-4">
+          <MiniFlow
+            nodes={[
+              { icon: Stripe, label: "Payment" },
+              { icon: GitBranch, label: "Branch" },
+              { icon: MessageSquare, label: "Receipt" },
+              { icon: Notion, label: "Log" },
+            ]}
+          />
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+              Trigger
+            </span>
+            <span className="text-xs text-zinc-400">Successful payment</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <Zap className="w-2.5 h-2.5 text-emerald-400" />
+            </span>
+            <span className="text-xs text-zinc-300">2 actions in parallel</span>
+          </div>
+        </div>
+      );
+    case "github-notify":
+      return (
+        <div className="flex flex-col gap-3 p-4">
+          <MiniFlow
+            nodes={[
+              { icon: GitHub, label: "PR opened" },
+              { icon: GitBranch, label: "Checks" },
+              { icon: Slack, label: "Notify" },
+            ]}
+          />
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+              Trigger
+            </span>
+            <span className="text-xs text-zinc-400">Pull request opened</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <Zap className="w-2.5 h-2.5 text-emerald-400" />
+            </span>
+            <span className="text-xs text-zinc-300">Runs on every PR</span>
+          </div>
+        </div>
+      );
+    case "form-crm":
+      return (
+        <div className="flex flex-col gap-3 p-4">
+          <MiniFlow
+            nodes={[
+              { icon: Webhook, label: "Form submit" },
+              { icon: GitBranch, label: "Branch" },
+              { icon: LayoutGrid, label: "Add to CRM" },
+              { icon: MessageSquare, label: "Email" },
+            ]}
+          />
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+              Trigger
+            </span>
+            <span className="text-xs text-zinc-400">Webhook received</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <Zap className="w-2.5 h-2.5 text-emerald-400" />
+            </span>
+            <span className="text-xs text-zinc-300">4 steps, 2 parallel</span>
+          </div>
+        </div>
+      );
+    case "schedule-sync":
+      return (
+        <div className="flex flex-col gap-3 p-4">
+          <MiniFlow
+            nodes={[
+              { icon: Clock, label: "Cron" },
+              { icon: Supabase, label: "Snapshot" },
+              { icon: Webhook, label: "Sync" },
+            ]}
+          />
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+              Schedule
+            </span>
+            <span className="text-xs text-zinc-400">Every 6 hours</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <Zap className="w-2.5 h-2.5 text-emerald-400" />
+            </span>
+            <span className="text-xs text-zinc-300">Sequential execution</span>
+          </div>
+        </div>
+      );
+    case "figma-task":
+      return (
+        <div className="flex flex-col gap-3 p-4">
+          <MiniFlow
+            nodes={[
+              { icon: Figma, label: "Comment" },
+              { icon: GitBranch, label: "Filter" },
+              { icon: GitHub, label: "Create task" },
+            ]}
+          />
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+              Trigger
+            </span>
+            <span className="text-xs text-zinc-400">New comment added</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <Zap className="w-2.5 h-2.5 text-emerald-400" />
+            </span>
+            <span className="text-xs text-zinc-300">Runs in 0.8s</span>
+          </div>
+        </div>
+      );
+    case "api":
+      return (
+        <div className="flex items-center justify-center h-full">
+          <div className="flex flex-col items-center gap-3">
+            <div className="bg-zinc-800/50 rounded-lg px-4 py-3 border border-zinc-700/50">
+              <Code className="w-6 h-6 text-zinc-400" />
+            </div>
+            <span className="text-xs font-mono text-zinc-500">
+              POST /api/triggers
+            </span>
+          </div>
+        </div>
+      );
     default:
-      return null
+      return null;
   }
 }
 
 export function WorkflowsSection() {
-  const [scrollPosition, setScrollPosition] = useState(0)
-  const scrollLeft = () => setScrollPosition(Math.max(0, scrollPosition - 1))
-  const scrollRight = () => setScrollPosition(Math.min(carouselCards.length - 4, scrollPosition + 1))
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollLeft = () => setScrollPosition(Math.max(0, scrollPosition - 1));
+  const scrollRight = () =>
+    setScrollPosition(Math.min(carouselCards.length - 4, scrollPosition + 1));
 
   return (
     <section className="relative py-24" style={{ backgroundColor: "#09090B" }}>
-      <div className="absolute top-0 left-0 right-0 pointer-events-none" style={{ height: "20%", background: "linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)" }} />
+      <div
+        className="absolute top-0 left-0 right-0 pointer-events-none"
+        style={{
+          height: "20%",
+          background:
+            "linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)",
+        }}
+      />
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-16">
           <div className="lg:max-w-xl">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-2 h-2 rounded-full bg-orange-500" />
-              <span className="text-sm text-zinc-400">Templates & integrations</span>
+              <span className="text-sm text-zinc-400">
+                Templates & integrations
+              </span>
               <ChevronRight className="w-4 h-4 text-zinc-600" />
             </div>
-            <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-white">Start from a template</h2>
+            <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-white">
+              Start from a template
+            </h2>
           </div>
-          <p className="text-zinc-400 lg:max-w-sm lg:pt-12">Pick a pre-built template, customize the nodes, and go live in minutes. No wiring from scratch.</p>
+          <p className="text-zinc-400 lg:max-w-sm lg:pt-12">
+            Pick a pre-built template, customize the nodes, and go live in
+            minutes. No wiring from scratch.
+          </p>
         </div>
         <div className="relative overflow-hidden">
-          <div className="flex gap-4 transition-transform duration-300 ease-out" style={{ transform: `translateX(-${scrollPosition * (100 / 4)}%)` }}>
+          <div
+            className="flex gap-4 transition-transform duration-300 ease-out"
+            style={{ transform: `translateX(-${scrollPosition * (100 / 4)}%)` }}
+          >
             {carouselCards.map((card) => (
-              <div key={card.id} className="flex-shrink-0 w-[calc(25%-12px)] min-w-[280px]">
+              <div
+                key={card.id}
+                className="flex-shrink-0 w-[calc(25%-12px)] min-w-[280px]"
+              >
                 <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-xl overflow-hidden h-[340px] flex flex-col">
                   <div className="flex-1 relative overflow-hidden">
                     <CardMockup type={card.mockup} />
-                    <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(9,9,11,0.9), transparent)" }} />
+                    <div
+                      className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(9,9,11,0.9), transparent)",
+                      }}
+                    />
                   </div>
                   <div className="p-4 border-t border-zinc-800/30">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs text-zinc-500 mb-1">{card.category}</p>
-                        <p className="text-sm text-zinc-200 leading-snug">{card.title}</p>
+                        <p className="text-xs text-zinc-500 mb-1">
+                          {card.category}
+                        </p>
+                        <p className="text-sm text-zinc-200 leading-snug">
+                          {card.title}
+                        </p>
                       </div>
                       <button className="flex-shrink-0 w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-zinc-600 transition-colors">
                         <Plus className="w-4 h-4" />
@@ -170,16 +331,22 @@ export function WorkflowsSection() {
           </div>
         </div>
         <div className="flex items-center justify-center gap-2 mt-8">
-          <button onClick={scrollLeft} disabled={scrollPosition === 0}
-            className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+          <button
+            onClick={scrollLeft}
+            disabled={scrollPosition === 0}
+            className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <button onClick={scrollRight} disabled={scrollPosition >= carouselCards.length - 4}
-            className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+          <button
+            onClick={scrollRight}
+            disabled={scrollPosition >= carouselCards.length - 4}
+            className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>
     </section>
-  )
+  );
 }

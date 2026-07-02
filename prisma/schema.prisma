@@ -113,6 +113,9 @@ model Connection {
     workflowId String
     workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 
+    fromOutput String @default("main")
+    toInput    String @default("main")
+
     @@unique([fromNodeId, toNodeId, workflowId])
     @@map("connection")
 }

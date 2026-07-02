@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
   CardAction,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,7 +62,11 @@ export default function WorkflowsList() {
     >
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {workflows.data.map((workflow) => (
-          <Link href={`/dashboard/workflows/${workflow.id}`} key={workflow.id}>
+          <Link
+            href={`/dashboard/workflows/${workflow.id}`}
+            prefetch
+            key={workflow.id}
+          >
             <Card
               key={workflow.id}
               size="sm"

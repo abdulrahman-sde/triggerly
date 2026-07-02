@@ -1,12 +1,8 @@
-import { AppSidebar } from "@/components/layout/app-sidebar";
 import { HeaderProfile } from "@/components/ui/header-profile";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Suspense } from "react";
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,7 +12,9 @@ export default async function DashboardLayout({
       <header className="flex h-13 shrink-0 items-center gap-2 px-4  ">
         <SidebarTrigger className="-ml-1" />
         <div className="flex-1" />
-        <HeaderProfile />
+        <Suspense fallback={<div className="h-8 w-8 rounded-full bg-muted" />}>
+          <HeaderProfile />
+        </Suspense>
       </header>
       <div className="flex flex-1 flex-col gap-4 bg-muted/50 p-4 rounded-xl">
         {children}

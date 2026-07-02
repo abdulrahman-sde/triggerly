@@ -10,26 +10,29 @@ import {
 } from "@/components/ui/sheet";
 import { NodeType } from "@/generated/prisma/enums";
 import { cn } from "@/lib/utils";
-import { GlobeIcon, MousePointerIcon, TerminalIcon } from "lucide-react";
+import { useReactFlow } from "@xyflow/react";
+import { GlobeIcon, MousePointer2Icon, MousePointerIcon } from "lucide-react";
+import { toast } from "sonner";
+
 export type NodeTypeOption = {
   type: NodeType;
   label: string;
   description: string;
   icon: React.ComponentType<{ className?: string }> | string;
 };
+
 const TriggerNodes: NodeTypeOption[] = [
   {
     type: NodeType.MANUAL_TRIGGER,
     label: "Trigger manually",
-    description:
-      "Runs the flow on clicking a button. Good for getting started quickly",
-    icon: MousePointerIcon,
+    description: "Runs the flow on clicking a button. ",
+    icon: MousePointer2Icon,
   },
 ];
 
 const ExecutionNodes: NodeTypeOption[] = [
   {
-    type: NodeType.MANUAL_TRIGGER,
+    type: NodeType.HTTP_REQUEST,
     label: "HTTP",
     description: "Send an HTTP request to a URL",
     icon: GlobeIcon,
@@ -47,6 +50,45 @@ export function NodeSelector({
   onSelect?: (type: NodeType) => void;
   children: React.ReactNode;
 }) {
+  const { getNodes, setNodes, screenToFlowPosition } = useReactFlow();
+
+  const handleNodeSelect = (selection: NodeTypeOption) => {
+    if (selection.type === NodeType.MANUAL_TRIGGER) {
+      const nodes = getNodes();
+      console.log(nodes);
+      const hasManualTriggerAlready = nodes.some(
+        (node) => node.type === NodeType.MANUAL_TRIGGER,
+      );
+
+      if (hasManualTriggerAlready) {
+        return toast.error(
+          "Only one manual trigger node is allowed per workflow.",
+        );
+      }
+    }
+    const position = screenToFlowPosition({
+      x: window.innerWidth / 2 + (Math.random() - 0.5) * 200,
+      y: window.innerHeight / 2 + (Math.random() - 0.5) * 200,
+    });
+
+    const newNode = {
+      id: crypto.randomUUID(),
+      type: selection.type,
+      position,
+      data: {},
+    };
+
+    setNodes((nodes) => {
+      const hasInitialNode = nodes.some(
+        (node) => node.type === NodeType.INITIAL,
+      );
+      if (hasInitialNode) {
+        return [newNode];
+      }
+      return [...nodes, newNode];
+    });
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger>{children}</SheetTrigger>
@@ -65,6 +107,7 @@ export function NodeSelector({
                 key={node.type}
                 type="button"
                 onClick={() => {
+                  handleNodeSelect(node);
                   onSelect?.(node.type);
                   onOpenChange?.(false);
                 }}
@@ -94,6 +137,7 @@ export function NodeSelector({
                 key={node.type}
                 type="button"
                 onClick={() => {
+                  handleNodeSelect(node);
                   onSelect?.(node.type);
                   onOpenChange?.(false);
                 }}
@@ -108,7 +152,7 @@ export function NodeSelector({
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium">{node.label}</p>
-                  <p className="text    -muted-foreground mt-0.5 text-xs leading-relaxed">
+                  <p className="text-muted-foreground mt-0.5 text-xs leading-relaxed">
                     {node.description}
                   </p>
                 </div>
