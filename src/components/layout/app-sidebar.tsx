@@ -20,9 +20,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { LogOut } from "lucide-react";
 import { LogoIcon } from "../logo";
-import { History2, History3, History, Logout6 } from "reicon-react";
+import { History, Logout6 } from "reicon-react";
 
 // function ExecutionsIcon(props: { className?: string }) {
 //   return (
@@ -118,7 +117,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href} className="mb-1">
                 <SidebarMenuButton asChild isActive={isActive(item.href)}>
-                  <Link href={item.href}>
+                  <Link href={item.href} prefetch>
                     <item.icon className="size-4" />
                     <span>{item.label}</span>
                   </Link>
