@@ -40,7 +40,7 @@ export function LoginForm() {
       {
         onSuccess: () => {
           setIsSubmitting(false);
-          router.refresh();
+          router.push("/dashboard");
         },
         onError: (ctx) => {
           toast.error(ctx.error.message || "Something went wrong");

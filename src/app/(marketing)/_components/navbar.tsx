@@ -1,6 +1,5 @@
 import { LogoIcon } from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export function Navbar() {
@@ -45,7 +44,11 @@ export function Navbar() {
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-sm flex items-center">
+            <Link
+              href="/dashboard"
+              prefetch
+              className="text-sm flex items-center"
+            >
               <Button>Dashboard</Button>
             </Link>
           </div>
