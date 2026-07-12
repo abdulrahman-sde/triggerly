@@ -27,7 +27,6 @@ import {
   useSuspenseWorkflows,
 } from "../hooks/use-worflows";
 import Link from "next/link";
-import { toast } from "sonner";
 
 export default function WorkflowsList() {
   const workflows = useSuspenseWorkflows();

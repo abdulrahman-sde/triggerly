@@ -10,33 +10,22 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
+  useExecuteWorkflow,
   useSuspenseWorkflow,
   useUpdateName,
-  useUpdateWorkflow,
 } from "@/features/workflows/hooks/use-worflows";
 import { Button } from "@/components/ui/button";
-import { useEditorStore } from "@/store/editor-store";
-import { Floppy, Loader, Pen } from "reicon-react";
+import { Loader, Pen, Play } from "reicon-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 
 export default function EditorHeader({ workflowId }: { workflowId: string }) {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
-  const editorState = useEditorStore((state) => state.editorState);
-  const handleSaveWorkflow = useUpdateWorkflow();
   const handleNameEdit = useUpdateName();
   const [isEditMode, setEditMode] = useState(false);
   const [workflowName, setWorkflowName] = useState(workflow.name);
-  const handleSave = () => {
-    if (!editorState) return;
-    handleSaveWorkflow.mutate({
-      id: workflowId,
-      nodes: editorState.getNodes(),
-      edges: editorState.getEdges(),
-    });
-  };
-
+  const executeWorkflow = useExecuteWorkflow();
   const handleEditName = () => {
     if (workflowName.trim().length < 3) {
       return toast.error("Workflow name must be at least 3 characters long");
@@ -57,6 +46,10 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
         },
       },
     );
+  };
+
+  const handleExecuteWorkflow = () => {
+    executeWorkflow.mutate({ workflowId });
   };
   return (
     <>
@@ -113,24 +106,28 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+
         <div className="flex-1" />
+
         <Button
-          size={"sm"}
-          onClick={handleSave}
-          disabled={handleSaveWorkflow.isPending}
+          size="sm"
+          variant="default"
+          onClick={handleExecuteWorkflow}
+          disabled={executeWorkflow.isPending}
         >
-          {handleSaveWorkflow.isPending ? (
+          {executeWorkflow.isPending ? (
             <>
-              <Loader size={25} className="animate-spin" />
-              Saving...
+              <Loader size={24} className="animate-spin" />
+              Executing ...
             </>
           ) : (
             <>
-              <Floppy size={25} className="font-bold" />
-              Save Workflow
+              <Play size={18} />
+              Execute Workflow
             </>
           )}
         </Button>
+
       </header>
     </>
   );

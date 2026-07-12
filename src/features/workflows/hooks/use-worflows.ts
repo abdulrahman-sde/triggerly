@@ -1,4 +1,5 @@
 "use client";
+import { useWorkflowRun } from "@/store/workflow-run";
 import { useTRPC } from "@/trpc/client";
 import {
   useMutation,
@@ -92,6 +93,25 @@ export const useUpdateName = () => {
       onError: (err) => {
         toast.dismiss();
         toast.error(err.message || "Failed to update workflow name");
+      },
+    }),
+  );
+};
+
+export const useExecuteWorkflow = () => {
+  const trpc = useTRPC();
+  return useMutation(
+    trpc.workflows.execute.mutationOptions({
+      onMutate: () => {
+        useWorkflowRun.getState().setRunId(null); // <-- this is "how you get the runId on the frontend"
+      },
+      onSuccess: (data) => {
+        useWorkflowRun.getState().setRunId(data.runId); // <-- this is "how you get the runId on the frontend"
+
+        toast.success(data.message || "Workflow execution started");
+      },
+      onError: (err) => {
+        toast.error(err.message || "Failed to execute workflow");
       },
     }),
   );

@@ -1,25 +1,66 @@
 import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
+import { NodeStatus } from "./node-status-indicator";
+import { Loader2 } from "lucide-react";
 
-export function BaseNode({ className, ...props }: ComponentProps<"div">) {
+interface BaseNodeProps extends ComponentProps<"div"> {
+  status?: NodeStatus;
+}
+
+export function BaseNode({
+  className,
+  status = "initial",
+  ...props
+}: BaseNodeProps) {
   return (
     <div
       className={cn(
-        "bg-card text-card-foreground relative rounded-md border duration-200",
-        // "hover:ring-1",
-        // React Flow displays node elements inside of a `NodeWrapper`
-        // component, which compiles down to a div with the class
-        // `react-flow__node`. When a node is selected, the class `selected` is
-        // added to the `react-flow__node` element. This allows us to style the
-        // node when it is selected.
-        "in-[.selected]:border-muted-foreground",
-        "in-[.selected]:shadow-lg",
+        "bg-card text-card-foreground relative rounded-md border duration-200 ",
+
         className,
       )}
       tabIndex={0}
       {...props}
-    />
+    >
+      {props.children}
+      {status === "loading" && (
+        <Loader2 className=" absolute animate-spin text-blue-500  -right-[0.15px] -bottom-[0.15px]  w-[7.15px] h-[7.15px]" />
+      )}
+      {status === "error" && (
+        <svg
+          className="absolute right-[2px] bottom-[3px] text-red-400 w-2 h-2"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      )}
+      {status === "success" && (
+        <svg
+          className="absolute right-[2px] bottom-[3px] text-emerald-400 w-2 h-2"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          // className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      )}
+    </div>
   );
 }
 

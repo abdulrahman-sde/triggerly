@@ -1,5 +1,5 @@
 import { NodeProps } from "@xyflow/react";
-import { BaseTriggerNode } from "./base-trigger-node";
+import { BaseTriggerNode } from "../base-trigger-node";
 import { MousePointer2Icon } from "lucide-react";
 
 export default function ManualTriggerNode(props: NodeProps) {
@@ -9,6 +9,7 @@ export default function ManualTriggerNode(props: NodeProps) {
         {...props}
         name="Manual Trigger"
         icon={MousePointer2Icon}
+        status="success"
       ></BaseTriggerNode>
     </div>
   );

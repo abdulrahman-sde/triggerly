@@ -1,4 +1,5 @@
 import { NodeType } from "@/generated/prisma/enums";
+import { inngest } from "@/inngest/client";
 import prisma from "@/lib/prisma";
 import {
   createTRPCRouter,
@@ -9,6 +10,37 @@ import { Edge, Node } from "@xyflow/react";
 import z from "zod";
 
 export const workflowsRouter = createTRPCRouter({
+  execute: premiumProcedure
+    .input(
+      z.object({
+        workflowId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: {
+          id: input.workflowId,
+          userId: ctx.user.id,
+        },
+        include: {
+          nodes: true,
+          connections: true,
+        },
+      });
+
+      const runId = crypto.randomUUID(); // <-- generate it here
+
+      await inngest.send({
+        name: "workflows/execute.workflow",
+        data: {
+          workflowId: workflow.id,
+          runId,
+        },
+      });
+
+      return { message: "Workflow execution triggered", runId }; // <-- return it here
+    }),
+
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await prisma.workflow.findMany({
       where: {
@@ -16,6 +48,7 @@ export const workflowsRouter = createTRPCRouter({
       },
     });
   }),
+
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {

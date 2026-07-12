@@ -1,8 +1,5 @@
 "use client";
-import {
-  useSuspenseWorkflow,
-  useUpdateWorkflow,
-} from "@/features/workflows/hooks/use-worflows";
+import { useSuspenseWorkflow } from "@/features/workflows/hooks/use-worflows";
 import { nodeComponents } from "@/utils/node-components";
 import {
   ReactFlow,
@@ -20,12 +17,12 @@ import {
   Panel,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { Loader2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import { NodeSelector } from "./node-selector";
+import { EditorBottomBar } from "./editor-bottom-bar";
 import { Button } from "@/components/ui/button";
-import { useTRPC } from "@/trpc/client";
-import { useQueryClient } from "@tanstack/react-query";
+
 import { useEditorStore } from "@/store/editor-store";
 
 export default function Editor({ workflowId }: { workflowId: string }) {
@@ -33,6 +30,7 @@ export default function Editor({ workflowId }: { workflowId: string }) {
   const [nodes, setNodes] = useState<Node[]>(workflow?.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow?.edges);
   const [isOpen, setIsOpen] = useState(false);
+  const [zoom, setZoom] = useState(100);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) =>
@@ -50,6 +48,13 @@ export default function Editor({ workflowId }: { workflowId: string }) {
     [],
   );
 
+  const onViewportChange = useCallback(
+    (viewport: { x: number; y: number; zoom: number }) => {
+      setZoom(Math.round(viewport.zoom * 100));
+    },
+    [],
+  );
+
   return (
     <div className="w-full h-full ">
       <ReactFlow
@@ -62,6 +67,7 @@ export default function Editor({ workflowId }: { workflowId: string }) {
         fitView
         nodeTypes={nodeComponents}
         onConnect={onConnect}
+        onViewportChange={onViewportChange}
         onInit={(state) => {
           const setEditor = useEditorStore.getState().setEditorState;
           setEditor(state);
@@ -86,6 +92,9 @@ export default function Editor({ workflowId }: { workflowId: string }) {
               <span className="text-xs font-bold text-gray-100">Add Node</span>
             </div>
           </NodeSelector>
+        </Panel>
+        <Panel position="bottom-center">
+          <EditorBottomBar workflowId={workflowId} zoom={zoom} />
         </Panel>
       </ReactFlow>
     </div>
