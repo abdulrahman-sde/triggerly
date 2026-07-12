@@ -1,6 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const timestamp = new Date().toISOString();
   const body = await req.json();
 
@@ -28,7 +26,7 @@ export async function POST(req: NextRequest) {
   console.log(formData);
   console.log("\n");
 
-  return NextResponse.json(
+  return Response.json(
     {
       message: "Data received successfully",
     },
@@ -36,7 +34,7 @@ export async function POST(req: NextRequest) {
   );
 }
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: Request) {
   const timestamp = new Date().toISOString();
 
   console.log("\n");
@@ -51,7 +49,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   console.log("╚════════════════════════════════════════════════════════════╝");
   console.log("\n");
 
-  return NextResponse.json(
+  return Response.json(
     {
       message: "Data retrieved successfully",
     },
