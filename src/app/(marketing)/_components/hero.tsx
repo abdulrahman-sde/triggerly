@@ -174,6 +174,7 @@ export function Hero() {
                 duration: 1,
                 ease: [0.22, 1, 0.36, 1] as const,
               }}
+              className="dark"
               style={{
                 backgroundColor: "#09090B",
                 transformOrigin: "0 0",

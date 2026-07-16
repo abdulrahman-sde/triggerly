@@ -28,13 +28,13 @@ export const workflowsRouter = createTRPCRouter({
         },
       });
 
-      const runId = crypto.randomUUID(); // <-- generate it here
+      const runId = crypto.randomUUID(); // <-- generate a unique runId for this execution
 
       await inngest.send({
         name: "workflows/execute.workflow",
         data: {
           workflowId: workflow.id,
-          runId,
+          runId, // <-- include the runId in the event data
         },
       });
 
@@ -45,6 +45,9 @@ export const workflowsRouter = createTRPCRouter({
     return await prisma.workflow.findMany({
       where: {
         userId: ctx.user.id,
+      },
+      orderBy: {
+        updatedAt: "desc",
       },
     });
   }),

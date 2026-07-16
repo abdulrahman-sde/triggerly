@@ -15,7 +15,7 @@ import {
   useUpdateName,
 } from "@/features/workflows/hooks/use-worflows";
 import { Button } from "@/components/ui/button";
-import { Loader, Pen, Play } from "reicon-react";
+import { Loader, Pen, Play, X } from "reicon-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -53,12 +53,15 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
   };
   return (
     <>
-      <header className="flex  h-13 shrink-0 items-center gap-2 px-4  ">
+      <header className="flex bg-sidebar h-13 shrink-0 items-center gap-2 px-4   ">
         <SidebarTrigger className="-ml-1" />
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/dashboard/workflows ">
+              <BreadcrumbLink
+                href="/dashboard/workflows"
+                className="text-[13px]"
+              >
                 Workflows
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -68,7 +71,7 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
                 {isEditMode ? (
                   <>
                     <Input
-                      className="h-7.5"
+                      className="h-7 text-[12.5px] px-2.5 py-0.5 "
                       value={workflowName}
                       onChange={(e) => {
                         e.preventDefault();
@@ -76,9 +79,18 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
                       }}
                     />
                     <Button
+                      variant="outline"
+                      size={"sm"}
+                      className="h-7 py-1 px-2 border-red-300"
+                      onClick={() => setEditMode(false)}
+                    >
+                      <X weight="Filled" color="#ee7e7f" />
+                    </Button>
+                    <Button
                       size={"sm"}
                       onClick={handleEditName}
                       disabled={handleNameEdit.isPending}
+                      className="h-7"
                     >
                       {handleNameEdit.isPending ? (
                         <>
@@ -91,16 +103,18 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
                     </Button>
                   </>
                 ) : (
-                  <>
-                    <p>{workflowName || `Workflow: ${workflowId}`}</p>
+                  <div className=" flex items-center gap-1.5 mt-0.5">
+                    <p className="text-[13px] ">
+                      {workflowName || `Workflow: ${workflowId}`}
+                    </p>
                     <Pen
-                      size={13}
-                      className="mt-0.5 cursor-pointer"
+                      size={11}
+                      className=" cursor-pointer"
                       onClick={() => {
                         setEditMode(true);
                       }}
                     />
-                  </>
+                  </div>
                 )}
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -127,7 +141,6 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
             </>
           )}
         </Button>
-
       </header>
     </>
   );

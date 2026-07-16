@@ -1,14 +1,22 @@
 "use client";
 
+import { Globe } from "lucide-react";
 import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
-import { GlobeIcon } from "lucide-react";
 import { memo, useState } from "react";
 import HttpRequestSheet from "./sheet";
 import { BaseExecutionNode } from "../base-execution-node";
-import { httpRequestChannel } from "@/inngest/channels";
-import { useRealtime } from "inngest/react";
-import { getRealtimeToken } from "./actions";
-import { useWorkflowRun } from "@/store/workflow-run";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+
+import { useNodeStatus } from "../../hooks/use-node-status";
+
+const methodStyles: Record<string, string> = {
+  GET: "bg-green-100/70 text-green-700",
+  POST: "bg-blue-100/70 text-blue-700",
+  PUT: "bg-orange-100/70 text-orange-700",
+  PATCH: "bg-violet-100/70 text-violet-700",
+  DELETE: "bg-red-100/70 text-red-700",
+};
 
 type HttpRequestNodeData = {
   variableName?: string;
@@ -19,31 +27,15 @@ type HttpRequestNodeData = {
 
 type HttpRequestNodeType = Node<HttpRequestNodeData>;
 
-// Mirrors the "kind: data" branch of Realtime.Message for the "status" topic.
-// We never publish streamed chunks on this channel, so this is the only
-// variant that will actually occur at runtime — but TS needs it spelled out
-// to narrow the union produced by messages.all.
-type HttpStatusMessage = {
-  topic: "status";
-  channel: string;
-  kind: "data";
-  createdAt: Date;
-  runId?: string;
-  fnId?: string;
-  envId?: string;
-  data: {
-    type: "loading" | "success" | "error";
-    nodeId: string;
-  };
-};
-
 export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   const { updateNodeData } = useReactFlow();
   const [dialogOpen, setDialogOpen] = useState(false);
   const nodeData = props.data;
-  const description = nodeData?.endpoint
-    ? `${nodeData.method || "GET"}: ${nodeData.endpoint}`
+  const endpoint = nodeData?.endpoint
+    ? `${nodeData.endpoint}`
     : "Not configured";
+
+  const method = nodeData?.method ? `${nodeData.method}` : "";
 
   const handleSubmit = (values: Partial<HttpRequestNodeData>) => {
     updateNodeData(props.id, values);
@@ -53,24 +45,7 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
     setDialogOpen(true);
   };
 
-  const runId = useWorkflowRun((s) => s.runId);
-
-  const ch = httpRequestChannel({ runId: runId ?? "" });
-  const topics = ["status"] as const;
-
-  const { messages } = useRealtime({
-    channel: ch,
-    topics,
-    token: () => getRealtimeToken(runId as string),
-    enabled: Boolean(runId),
-  });
-
-  const status = messages.all
-    .filter(
-      (msg): msg is HttpStatusMessage =>
-        msg.kind === "data" && msg.data.nodeId === props.id,
-    )
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  const { status } = useNodeStatus({ nodeId: props.id });
 
   return (
     <>
@@ -83,13 +58,46 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
       <BaseExecutionNode
         {...props}
         id={props.id}
-        icon={GlobeIcon}
-        name="HTTPS Request"
-        description={description}
+        chipLabel="HTTP Request"
+        chipIcon={Globe}
         onSettings={handleOpenSettings}
         onDoubleClick={handleOpenSettings}
-        status={status[0]?.data.type ?? "initial"}
-      />
+        status={status ?? "initial"}
+      >
+        <div className="flex items-start gap-3 p-4">
+          <div
+            className={cn(
+              "flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl",
+              "bg-zinc-100/80",
+            )}
+          >
+            <Image
+              src="/assets/icons/http-request.svg"
+              alt="HTTP Request"
+              width={36}
+              height={36}
+            />
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[15px] font-medium leading-5 text-foreground">
+              HTTP Request
+            </p>
+            <div className="mt-1 flex items-center gap-1.5">
+              {method && (
+                <span
+                  className={`inline-block rounded-md px-1.5 py-0.5 text-[10px] font-medium leading-none ${methodStyles[method] || "bg-zinc-100/70 text-zinc-700"}`}
+                >
+                  {method}
+                </span>
+              )}
+              <span className="text-sm leading-5 text-muted-foreground truncate">
+                {endpoint ?? "Not configured yet"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </BaseExecutionNode>
     </>
   );
 });

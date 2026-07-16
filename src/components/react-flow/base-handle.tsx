@@ -13,8 +13,9 @@ export function BaseHandle({
   return (
     <Handle
       {...props}
+      style={{ width: 11, height: 11, ...props.style }}
       className={cn(
-        "dark:border-secondary dark:bg-secondary h-[11px] w-[11px] rounded-full border border-slate-300 bg-slate-100 transition",
+        "rounded-full border-2 border-background bg-foreground shadow-[0_0_0_1px_hsl(var(--border))] transition-opacity",
         className,
       )}
     >

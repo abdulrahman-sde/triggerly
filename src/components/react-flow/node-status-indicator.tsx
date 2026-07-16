@@ -1,7 +1,8 @@
 import { type ReactNode } from "react";
-import { LoaderCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, LoaderCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export type NodeStatus = "loading" | "success" | "error" | "initial";
 
@@ -21,13 +22,16 @@ export const SpinnerLoadingIndicator = ({
 }) => {
   return (
     <div className="relative">
-      <StatusBorder className="border-blue-700/40">{children}</StatusBorder>
+      <StatusBorder className="border-blue-400/30">{children}</StatusBorder>
 
-      <div className="bg-background/50 backdrop-blur-xs absolute inset-0 z-50 rounded-[6px]" />
-      <div className="absolute inset-0 z-50">
-        <span className="absolute left-[calc(50%-1.25rem)] top-[calc(50%-1.25rem)] inline-block h-10 w-10 animate-ping rounded-full bg-blue-700/20" />
+      <div className="pointer-events-none bg-background/50 backdrop-blur-xs absolute inset-0 z-50 rounded-2xl" />
+      <div className="pointer-events-none absolute inset-0 z-50">
+        <span className="absolute left-[calc(50%-1.25rem)] top-[calc(50%-1.25rem)] inline-block h-10 w-10 animate-ping rounded-full bg-blue-400/15" />
 
-        <LoaderCircle className="absolute left-[calc(50%-0.75rem)] top-[calc(50%-0.75rem)] size-6 animate-spin text-blue-700" />
+        <LoaderCircle className="absolute left-[calc(50%-0.75rem)] top-[calc(50%-0.75rem)] size-6 animate-spin text-blue-500" />
+      </div>
+      <div className="pointer-events-none absolute right-2.5 top-2.5 z-50 flex size-5 items-center justify-center rounded-full border border-blue-300/20 bg-blue-300/8 text-blue-300 shadow-[0_0_0_1px_rgba(37,99,235,0.08)]">
+        <LoaderCircle className="size-3.5 animate-spin" />
       </div>
     </div>
   );
@@ -62,11 +66,11 @@ export const BorderLoadingIndicator = ({
         </style>
         <div
           className={cn(
-            "absolute inset-0 overflow-hidden rounded-[6px]",
+            "pointer-events-none absolute inset-0 overflow-hidden rounded-2xl",
             className,
           )}
         >
-          <div className="spinner rounded-full bg-[conic-gradient(from_0deg_at_50%_50%,rgb(42,67,233)_0deg,rgba(42,138,246,0)_360deg)]" />
+          <div className="spinner rounded-full bg-[conic-gradient(from_0deg_at_50%_50%,rgb(100,130,255)_0deg,rgba(100,130,255,0)_360deg)]" />
         </div>
       </div>
       {children}
@@ -85,7 +89,7 @@ const StatusBorder = ({
     <>
       <div
         className={cn(
-          "absolute -left-px -top-px h-[calc(100%+2px)] w-[calc(100%+2px)] rounded-[6px] border-2",
+          "pointer-events-none absolute -left-px -top-px h-[calc(100%+2px)] w-[calc(100%+2px)] rounded-2xl border-2",
           className,
         )}
       />
@@ -116,15 +120,25 @@ export const NodeStatusIndicator = ({
       }
     case "success":
       return (
-        <StatusBorder className={cn("border-emerald-600", className)}>
-          {children}
-        </StatusBorder>
+        <div className="relative">
+          <StatusBorder className={cn("border-emerald-400/80", className)}>
+            {children}
+          </StatusBorder>
+          <div className="pointer-events-none absolute right-2.5 top-2.5 z-50 flex size-5 items-center justify-center rounded-full text-emerald-300 shadow-[0_0_0_1px_rgba(5,150,105,0.08)]">
+            <CheckCircle2 className="size-3.5" />
+          </div>
+        </div>
       );
     case "error":
       return (
-        <StatusBorder className={cn("border-red-400", className)}>
-          {children}
-        </StatusBorder>
+        <div className="relative">
+          <StatusBorder className={cn("border-red-300", className)}>
+            {children}
+          </StatusBorder>
+          <div className="pointer-events-none absolute right-2.5 top-2.5 z-50 flex size-5 items-center justify-center rounded-full text-red-300 shadow-[0_0_0_1px_rgba(239,68,68,0.08)]">
+            <AlertCircle className="size-3.5" />
+          </div>
+        </div>
       );
     default:
       return <>{children}</>;

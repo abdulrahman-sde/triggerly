@@ -21,26 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { LogoIcon } from "../logo";
-import { History, Logout6 } from "reicon-react";
-
-// function ExecutionsIcon(props: { className?: string }) {
-//   return (
-//     <svg
-//       xmlns="http://www.w3.org/2000/svg"
-//       fill="none"
-//       viewBox="0 0 24 24"
-//       strokeWidth={2}
-//       stroke="currentColor"
-//       className={props.className}
-//     >
-//       <path
-//         strokeLinecap="round"
-//         strokeLinejoin="round"
-//         d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-//       />
-//     </svg>
-//   );
-// }
+import { History, Home, Logout6 } from "reicon-react";
 
 function CredentialsIcon(props: { className?: string }) {
   return (
@@ -81,6 +62,7 @@ function WorkflowsIcon(props: { className?: string }) {
 }
 
 const navItems = [
+  // { href: "/dashboard", label: "Home", icon: Home },
   { href: "/dashboard/workflows", label: "Workflows", icon: WorkflowsIcon },
   { href: "/dashboard/executions", label: "Executions", icon: History },
   {
@@ -101,7 +83,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   return (
-    <Sidebar variant="floating" className=" p-0" {...props}>
+    <Sidebar variant="sidebar" className=" p-0" {...props}>
       <SidebarHeader>
         <div className="flex items-center gap-1 px-2 pt-2.5  ">
           <div className="flex h-7 w-7 items-center justify-center rounded-md ">

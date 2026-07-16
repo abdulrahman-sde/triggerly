@@ -9,14 +9,14 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <header className="flex h-13 shrink-0 items-center gap-2 px-4  ">
+      <header className="flex h-13 bg-sidebar shrink-0 items-center gap-2 px-4  ">
         <SidebarTrigger className="-ml-1" />
         <div className="flex-1" />
         <Suspense fallback={<div className="h-8 w-8 rounded-full bg-muted" />}>
           <HeaderProfile />
         </Suspense>
       </header>
-      <div className="flex flex-1 flex-col gap-4 bg-muted/50 p-4 rounded-xl">
+      <div className="flex flex-1 flex-col gap-4 bg-muted/50 p-4 ">
         {children}
       </div>
     </>

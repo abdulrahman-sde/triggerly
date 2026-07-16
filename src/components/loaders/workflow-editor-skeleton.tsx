@@ -52,10 +52,7 @@ export default function WorkflowEditorSkeleton() {
         </Breadcrumb>
         <div className="flex-1" />
       </header>
-      <div
-        className="flex-1 relative overflow-hidden flex items-center justify-center"
-        style={{ backgroundColor: "#141414" }}
-      >
+      <div className="flex-1 relative overflow-hidden flex items-center justify-center bg-background">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
         <div className="absolute bottom-4 left-4 flex flex-col gap-1 rounded-lg border border-border bg-card p-1">
           <Shimmer className="size-8 rounded-md" />

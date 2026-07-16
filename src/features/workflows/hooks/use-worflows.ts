@@ -88,7 +88,6 @@ export const useUpdateName = () => {
         queryClient.invalidateQueries(
           trpc.workflows.getOne.queryOptions({ id: variables.id }),
         );
-        toast.success("Workflow Name Updates");
       },
       onError: (err) => {
         toast.dismiss();
@@ -105,7 +104,7 @@ export const useExecuteWorkflow = () => {
       onMutate: () => {
         useWorkflowRun.getState().setRunId(null); // <-- this is "how you get the runId on the frontend"
       },
-      onSuccess: (data) => {
+      onSuccess: (data, input) => {
         useWorkflowRun.getState().setRunId(data.runId); // <-- this is "how you get the runId on the frontend"
 
         toast.success(data.message || "Workflow execution started");

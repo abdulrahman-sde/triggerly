@@ -3,7 +3,6 @@ import { useSuspenseWorkflow } from "@/features/workflows/hooks/use-worflows";
 import { nodeComponents } from "@/utils/node-components";
 import {
   ReactFlow,
-  Background,
   Controls,
   applyNodeChanges,
   applyEdgeChanges,
@@ -15,6 +14,7 @@ import {
   Connection,
   MiniMap,
   Panel,
+  Background,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Plus } from "lucide-react";
@@ -24,6 +24,7 @@ import { EditorBottomBar } from "./editor-bottom-bar";
 import { Button } from "@/components/ui/button";
 
 import { useEditorStore } from "@/store/editor-store";
+import { useWorkflowStatus } from "../hooks/use-workflow-status";
 
 export default function Editor({ workflowId }: { workflowId: string }) {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
@@ -55,11 +56,12 @@ export default function Editor({ workflowId }: { workflowId: string }) {
     [],
   );
 
+  useWorkflowStatus(workflowId);
   return (
-    <div className="w-full h-full ">
+    <div className="h-full w-full bg-background bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_0)] bg-size-[18px_18px]">
       <ReactFlow
         proOptions={{ hideAttribution: true }}
-        colorMode="dark"
+        colorMode="light"
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -72,11 +74,9 @@ export default function Editor({ workflowId }: { workflowId: string }) {
           const setEditor = useEditorStore.getState().setEditorState;
           setEditor(state);
         }}
-        className="rounded-xl"
       >
         <MiniMap />
-        <Background gap={15} />
-
+        <Background gap={14} size={1.25} />
         <Controls />
         <Panel position="top-right">
           <NodeSelector open={isOpen} onOpenChange={setIsOpen}>
@@ -89,7 +89,9 @@ export default function Editor({ workflowId }: { workflowId: string }) {
               >
                 <Plus className=" text-gray-200" />
               </Button>
-              <span className="text-xs font-bold text-gray-100">Add Node</span>
+              <span className="text-xs font-bold text-muted-foreground ">
+                Add Node
+              </span>
             </div>
           </NodeSelector>
         </Panel>

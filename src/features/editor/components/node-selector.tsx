@@ -10,7 +10,7 @@ import {
 import { NodeType } from "@/generated/prisma/enums";
 import { cn } from "@/lib/utils";
 import { useReactFlow } from "@xyflow/react";
-import { GlobeIcon, MousePointer2Icon, X } from "lucide-react";
+import { FormIcon, GlobeIcon, MousePointer2Icon, X } from "lucide-react";
 import { toast } from "sonner";
 
 export type NodeTypeOption = {
@@ -27,6 +27,12 @@ const TriggerNodes: NodeTypeOption[] = [
     description: "Runs the flow when you click a button in the dashboard.",
     icon: MousePointer2Icon,
   },
+  {
+    type: NodeType.GOOGLE_FORM_TRIGGER,
+    label: "Google Form Trigger",
+    description: "Runs the flow when a Google Form is submitted.",
+    icon: FormIcon,
+  },
 ];
 
 const ExecutionNodes: NodeTypeOption[] = [
@@ -35,6 +41,12 @@ const ExecutionNodes: NodeTypeOption[] = [
     label: "HTTPS Request",
     description:
       "Send an HTTPS request to any URL with custom headers and body.",
+    icon: GlobeIcon,
+  },
+  {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Send a request to Gemini API.",
     icon: GlobeIcon,
   },
 ];
@@ -93,12 +105,10 @@ export function NodeSelector({
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent
         side="right"
-        className="w-80 border-l border-zinc-800/60 bg-zinc-950/95 backdrop-blur-xl p-0 rounded-l-2xl"
+        className="w-80 border-l   backdrop-blur-xl p-0 rounded-l-2xl"
       >
-        <SheetHeader className="flex flex-row items-center justify-between px-5 pt-5 pb-3 border-b border-zinc-800/60">
-          <SheetTitle className="text-base font-medium text-zinc-100">
-            Add Node
-          </SheetTitle>
+        <SheetHeader className="flex flex-row items-center justify-between px-5 pt-5 pb-3 border-b ">
+          <SheetTitle className="text-base font-medium ">Add Node</SheetTitle>
         </SheetHeader>
 
         <div className="flex flex-col gap-4 px-5 pt-4 pb-5 overflow-y-auto">
@@ -109,7 +119,7 @@ export function NodeSelector({
                 Triggers
               </span>
             </div>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col ">
               {TriggerNodes.map((node) => {
                 const Icon = node.icon;
                 return (
@@ -123,18 +133,15 @@ export function NodeSelector({
                     }}
                     className={cn(
                       "flex items-start gap-3 rounded-lg px-4 py-3.5 text-left transition-colors w-full",
-                      "hover:bg-zinc-800/50",
-                      "focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none",
+                      "focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none duration-300",
                     )}
                   >
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-zinc-800 text-zinc-400">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border">
                       <Icon className="size-4" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-zinc-300">
-                        {node.label}
-                      </p>
-                      <p className="text-xs text-zinc-600 mt-px leading-relaxed">
+                      <p className="text-sm font-medium ">{node.label}</p>
+                      <p className="text-xs text-muted-foreground mt-px leading-relaxed">
                         {node.description}
                       </p>
                     </div>
@@ -165,18 +172,15 @@ export function NodeSelector({
                     }}
                     className={cn(
                       "flex items-start gap-3 rounded-lg px-4 py-3.5 text-left transition-colors w-full",
-                      "hover:bg-zinc-800/50",
                       "focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none",
                     )}
                   >
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-zinc-800 text-zinc-400">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border">
                       <Icon className="size-4" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-zinc-300">
-                        {node.label}
-                      </p>
-                      <p className="text-xs text-zinc-600 mt-px leading-relaxed">
+                      <p className="text-sm font-medium ">{node.label}</p>
+                      <p className="text-xs text-muted-foreground mt-px leading-relaxed">
                         {node.description}
                       </p>
                     </div>

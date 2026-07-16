@@ -1,5 +1,6 @@
 import { LogoIcon } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 
 export function Navbar() {
@@ -49,7 +50,10 @@ export function Navbar() {
               prefetch
               className="text-sm flex items-center"
             >
-              <Button>Dashboard</Button>
+              <Button className="bg-transparent hover:bg-zinc-800 border-0 text-zinc-400">
+                <LayoutDashboard />
+                Dashboard
+              </Button>
             </Link>
           </div>
         </div>

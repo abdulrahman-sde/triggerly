@@ -3,7 +3,7 @@ import { inngest } from "./client";
 import { topologicalSort } from "./utils";
 import prisma from "@/lib/prisma";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
-import { httpRequestChannel } from "./channels";
+import { nodeStatusChannel } from "./channels/node-status";
 
 export const executeWorkflow = inngest.createFunction(
   {
@@ -16,8 +16,6 @@ export const executeWorkflow = inngest.createFunction(
     if (!workflowId) {
       throw new NonRetriableError("Workflow not found");
     }
-
-    const ch = httpRequestChannel({ runId: event.data.runId });
 
     const sortedNodes = await step.run("prepare-workflow", async () => {
       const workflow = await prisma.workflow.findUniqueOrThrow({
@@ -33,7 +31,9 @@ export const executeWorkflow = inngest.createFunction(
       return topologicalSort(workflow.nodes, workflow.connections);
     });
 
-    let context = event.data.context || {};
+    let ch = nodeStatusChannel({ runId: event.data.runId });
+
+    let context = event.data.initialData || {};
 
     for (const node of sortedNodes) {
       const executor = getExecutor(node.type);
@@ -42,7 +42,6 @@ export const executeWorkflow = inngest.createFunction(
         nodeId: node.id,
         context,
         step,
-        // publish: publish,
         channel: ch,
       });
     }

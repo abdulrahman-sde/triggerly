@@ -1,5 +1,17 @@
+import { workflowChannel } from "@/inngest/channels/workflow";
+import { inngest } from "@/inngest/client";
+
 export async function POST(req: Request) {
-  const timestamp = new Date().toISOString();
+  const url = new URL(req.url);
+  const workflowId = url.searchParams.get("workflowId");
+  console.log("Received webhook request for workflowId:", workflowId);
+
+  if (!workflowId) {
+    return Response.json(
+      { success: false, error: "Missing required query parameter: workflowId" },
+      { status: 400 },
+    );
+  }
   const body = await req.json();
 
   const formData = {
@@ -11,48 +23,21 @@ export async function POST(req: Request) {
     responses: body.responses,
     raw: body,
   };
-  console.log("\n");
-  console.log("╔════════════════════════════════════════════════════════════╗");
-  console.log(
-    "║                   🎣 WEBHOOK ENDPOINT CALL                  ║",
-  );
-  console.log("╠════════════════════════════════════════════════════════════╣");
-  console.log(`║ 📍 Endpoint:  POST /api/webhooks/google-form               ║`);
-  console.log(`║ ⏰ Timestamp: ${timestamp.padEnd(36)}║`);
-  console.log(`║ 📊 Method:    ${req.method.padEnd(41)}║`);
-  console.log("╚════════════════════════════════════════════════════════════╝");
-  console.log("\n");
-  console.log("📨 Request Body:");
-  console.log(formData);
-  console.log("\n");
 
-  return Response.json(
-    {
-      message: "Data received successfully",
+  const runId = crypto.randomUUID();
+
+  await inngest.send({
+    name: "workflows/execute.workflow",
+    data: {
+      workflowId,
+      initialData: formData,
+      runId: runId,
     },
-    { status: 200 },
-  );
-}
+  });
 
-export async function GET(req: Request) {
-  const timestamp = new Date().toISOString();
-
-  console.log("\n");
-  console.log("╔════════════════════════════════════════════════════════════╗");
-  console.log(
-    "║                   🎣 WEBHOOK ENDPOINT CALL                  ║",
+  await inngest.realtime.publish(
+    workflowChannel({ workflowId }).executionStarted,
+    { runId },
   );
-  console.log("╠════════════════════════════════════════════════════════════╣");
-  console.log(`║ 📍 Endpoint:  GET /api/webhooks/google-form                ║`);
-  console.log(`║ ⏰ Timestamp: ${timestamp.padEnd(36)}║`);
-  console.log(`║ 📊 Method:    ${req.method.padEnd(41)}║`);
-  console.log("╚════════════════════════════════════════════════════════════╝");
-  console.log("\n");
-
-  return Response.json(
-    {
-      message: "Data retrieved successfully",
-    },
-    { status: 200 },
-  );
+  return new Response("OK");
 }

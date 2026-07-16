@@ -1,8 +1,8 @@
+import { nodeStatusChannel } from "@/inngest/channels/node-status";
 import type { GetStepTools, Inngest } from "inngest";
 import type { Realtime } from "inngest/realtime";
 export type WorkflowContext = Record<string, unknown>;
 export type StepTools = GetStepTools<Inngest.Any>;
-import type { httpRequestChannel } from "@/inngest/channels";
 
 export interface ExecutorParams<tData = Record<string, unknown>> {
   data: tData;
@@ -10,7 +10,7 @@ export interface ExecutorParams<tData = Record<string, unknown>> {
   context: WorkflowContext;
   step: StepTools;
   publish?: Realtime.TypedPublishFn;
-  channel: ReturnType<typeof httpRequestChannel>;
+  channel: ReturnType<typeof nodeStatusChannel>;
 }
 
 export type NodeExecutor<tData = Record<string, unknown>> = (

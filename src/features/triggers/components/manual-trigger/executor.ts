@@ -1,18 +1,23 @@
 import type { NodeExecutor } from "@/features/executions/types";
 
-type ManualTriggerData = Record<string, unknown>;
+import { inngest } from "@/inngest/client";
 
-export const manualTriggerExecutor: NodeExecutor<ManualTriggerData> = async ({
+export const manualTriggerExecutor: NodeExecutor = async ({
   context,
   step,
+  channel,
+  nodeId,
 }) => {
-  const result = await step.run("manual-trigger", async () => {
-    // Perform any necessary operations for the manual trigger node
-    // For example, you might want to log the trigger or update some state
-    console.log("Manual trigger executed with context:", context);
+  await inngest.realtime.publish(channel.status, {
+    status: "loading",
+    nodeId: nodeId,
+  });
 
-    // Return the updated context (if any changes were made)
-    return context;
+  const result = await step.run("manual-trigger", async () => context);
+
+  await inngest.realtime.publish(channel.status, {
+    status: "success",
+    nodeId: nodeId,
   });
 
   return result;

@@ -74,8 +74,8 @@ function MiniFlow({
     <div className="flex items-center gap-2">
       {nodes.map((node, i) => (
         <React.Fragment key={i}>
-          {i > 0 && <span className="text-zinc-700 text-xs">→</span>}
-          <div className="flex items-center gap-1.5 bg-zinc-800/60 rounded-md px-2 py-1.5 ">
+          {i > 0 && <span className="text-zinc-600 text-xs">→</span>}
+          <div className="flex items-center gap-1.5 bg-zinc-800/50 border border-zinc-700/30 rounded-md px-2 py-1.5 backdrop-blur-sm">
             {node.icon && <node.icon className="w-3.5 h-3.5 text-zinc-400" />}
             <span className="text-xs text-zinc-300 text-nowrap">
               {node.label}
@@ -99,18 +99,18 @@ function CardMockup({ type }: { type: string }) {
               { icon: GitHub, label: "Create issue" },
             ]}
           />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
             <span className="text-xs text-zinc-400">When message in #ops</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
-            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
-              <Zap className="w-2.5 h-2.5 text-emerald-400" />
-            </span>
-            <span className="text-xs text-zinc-300">Runs in 1.2s</span>
-            <span className="text-[10px] text-zinc-600 ml-auto">•••</span>
+              <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
+                <Zap className="w-2.5 h-2.5 text-emerald-400" />
+              </span>
+              <span className="text-xs text-zinc-300">Runs in 1.2s</span>
+              <span className="text-[10px] text-zinc-600 ml-auto">•••</span>
           </div>
         </div>
       );
@@ -125,14 +125,14 @@ function CardMockup({ type }: { type: string }) {
               { icon: Notion, label: "Log" },
             ]}
           />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
             <span className="text-xs text-zinc-400">Successful payment</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
-            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
             <span className="text-xs text-zinc-300">2 actions in parallel</span>
@@ -149,14 +149,14 @@ function CardMockup({ type }: { type: string }) {
               { icon: Slack, label: "Notify" },
             ]}
           />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
             <span className="text-xs text-zinc-400">Pull request opened</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
-            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
             <span className="text-xs text-zinc-300">Runs on every PR</span>
@@ -174,14 +174,14 @@ function CardMockup({ type }: { type: string }) {
               { icon: MessageSquare, label: "Email" },
             ]}
           />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
             <span className="text-xs text-zinc-400">Webhook received</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
-            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
             <span className="text-xs text-zinc-300">4 steps, 2 parallel</span>
@@ -198,14 +198,14 @@ function CardMockup({ type }: { type: string }) {
               { icon: Webhook, label: "Sync" },
             ]}
           />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Schedule
             </span>
             <span className="text-xs text-zinc-400">Every 6 hours</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
-            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
             <span className="text-xs text-zinc-300">Sequential execution</span>
@@ -222,14 +222,14 @@ function CardMockup({ type }: { type: string }) {
               { icon: GitHub, label: "Create task" },
             ]}
           />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/30 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/50 px-1.5 py-0.5 rounded">
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
             <span className="text-xs text-zinc-400">New comment added</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
-            <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
             <span className="text-xs text-zinc-300">Runs in 0.8s</span>
@@ -240,12 +240,12 @@ function CardMockup({ type }: { type: string }) {
       return (
         <div className="flex items-center justify-center h-full">
           <div className="flex flex-col items-center gap-3">
-            <div className="bg-zinc-800/50 rounded-lg px-4 py-3 border border-zinc-700/50">
-              <Code className="w-6 h-6 text-zinc-400" />
-            </div>
-            <span className="text-xs font-mono text-zinc-500">
-              POST /api/triggers
-            </span>
+            <div className="bg-zinc-800/50 rounded-lg px-4 py-3 border border-zinc-700/30 backdrop-blur-sm">
+                <Code className="w-6 h-6 text-zinc-400" />
+              </div>
+              <span className="text-xs font-mono text-zinc-500">
+                POST /api/triggers
+              </span>
           </div>
         </div>
       );
@@ -299,28 +299,28 @@ export function WorkflowsSection() {
                 key={card.id}
                 className="flex-shrink-0 w-[calc(25%-12px)] min-w-[280px]"
               >
-                <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-xl overflow-hidden h-[340px] flex flex-col">
+                <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl overflow-hidden h-[340px] flex flex-col backdrop-blur-sm">
                   <div className="flex-1 relative overflow-hidden">
                     <CardMockup type={card.mockup} />
                     <div
                       className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
                       style={{
                         background:
-                          "linear-gradient(to top, rgba(9,9,11,0.9), transparent)",
+                          "linear-gradient(to top, rgba(9,9,11,0.95), transparent)",
                       }}
                     />
                   </div>
-                  <div className="p-4 border-t border-zinc-800/30">
+                  <div className="p-4 border-t border-zinc-800">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-zinc-500 mb-1">
                           {card.category}
                         </p>
-                        <p className="text-sm text-zinc-200 leading-snug">
+                        <p className="text-sm text-zinc-100 leading-snug font-medium">
                           {card.title}
                         </p>
                       </div>
-                      <button className="flex-shrink-0 w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-zinc-600 transition-colors">
+                      <button className="flex-shrink-0 w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-zinc-500 transition-colors">
                         <Plus className="w-4 h-4" />
                       </button>
                     </div>

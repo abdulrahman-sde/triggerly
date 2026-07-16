@@ -1,16 +1,17 @@
 import { NodeProps } from "@xyflow/react";
 import { BaseTriggerNode } from "../base-trigger-node";
-import { MousePointer2Icon } from "lucide-react";
+import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
 
 export default function ManualTriggerNode(props: NodeProps) {
+  const { status } = useNodeStatus({ nodeId: props.id });
+
   return (
-    <div>
-      <BaseTriggerNode
-        {...props}
-        name="Manual Trigger"
-        icon={MousePointer2Icon}
-        status="success"
-      ></BaseTriggerNode>
-    </div>
+    <BaseTriggerNode
+      {...props}
+      name="Manual Trigger"
+      icon="/assets/icons/manual-trigger.svg"
+      iconBg="bg-zinc-100/80"
+      status={status ?? "initial"}
+    ></BaseTriggerNode>
   );
 }

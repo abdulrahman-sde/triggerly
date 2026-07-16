@@ -2,19 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -23,8 +13,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
 
-const httpMethods = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
+const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
+
+const methodTheme: Record<string, { bg: string; text: string; ring: string }> =
+  {
+    GET: {
+      bg: "bg-green-500/8",
+      text: "text-green-600",
+      ring: "ring-green-500/25",
+    },
+    POST: {
+      bg: "bg-blue-500/8",
+      text: "text-blue-600",
+      ring: "ring-blue-500/25",
+    },
+    PUT: {
+      bg: "bg-orange-500/8",
+      text: "text-orange-600",
+      ring: "ring-orange-500/25",
+    },
+    PATCH: {
+      bg: "bg-violet-500/8",
+      text: "text-violet-600",
+      ring: "ring-violet-500/25",
+    },
+    DELETE: {
+      bg: "bg-red-500/8",
+      text: "text-red-600",
+      ring: "ring-red-500/25",
+    },
+  };
 
 const formSchema = z.object({
   variableName: z
@@ -35,7 +55,7 @@ const formSchema = z.object({
         "Variable name must start with a letter or underscore and can only contain letters, numbers, and underscores",
     }),
   endpoint: z.string().url("Must be a valid URL").or(z.literal("")).optional(),
-  method: z.enum(httpMethods),
+  method: z.enum(METHODS),
   body: z.string().optional(),
 });
 
@@ -85,97 +105,110 @@ export default function HttpRequestSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Configure HTTPS Request</SheetTitle>
-          <SheetDescription>
-            Configure the details for your HTTPS request node.
-          </SheetDescription>
+      <SheetContent className="w-80 border-l border-border/40 p-0 rounded-l-2xl bg-gradient-to-b from-background via-background to-secondary/20 shadow-2xl backdrop-blur-2xl">
+        <SheetHeader className="px-5 pt-6 pb-4 border-b border-border/40 bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent">
+          <SheetTitle className="text-base tracking-tight">HTTPS Request</SheetTitle>
+          <p className="text-xs text-muted-foreground/70 mt-1 leading-relaxed">
+            Send an HTTP request and store the response for later steps.
+          </p>
         </SheetHeader>
+
         <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
-          <div className="grid gap-4 px-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="variableName">Variable Name</Label>
+          <div className="flex flex-col gap-6 px-5 pt-5 pb-5 overflow-y-auto">
+            <div className="grid gap-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-primary/60" />
+                <p className="text-xs font-medium text-foreground/80">Variable name</p>
+              </div>
               <Input
-                id="variableName"
-                placeholder="e.g. responseData"
+                placeholder="responseData"
+                className="h-10 rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
                 {...form.register("variableName")}
               />
-              <p className="text-xs text-muted-foreground">
-                Reference this node's response downstream via{" "}
-                <code className="text-[10px]">{`{{variableName.httpresponse.data}}`}</code>
+              <p className="text-xs text-muted-foreground/60 pl-1">
+                Use <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variableName.httpResponse.data}}`}</code> in later steps to reference the response.
               </p>
               {form.formState.errors.variableName && (
-                <p className="text-destructive text-xs">
+                <p className="text-xs text-destructive pl-1">
                   {form.formState.errors.variableName.message}
                 </p>
               )}
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="method">Method</Label>
-              <Select
-                value={form.watch("method")}
-                onValueChange={(value) =>
-                  form.setValue("method", value as FormValues["method"])
-                }
-              >
-                <SelectTrigger id="method" className="w-full">
-                  <SelectValue placeholder="Select method" />
-                </SelectTrigger>
-                <SelectContent>
-                  {httpMethods.map((m) => (
-                    <SelectItem key={m} value={m}>
+            <div className="grid gap-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                <p className="text-xs font-medium text-foreground/80">Method</p>
+              </div>
+              <div className="grid grid-cols-5 gap-1.5 bg-secondary/10 rounded-xl p-1">
+                {METHODS.map((m) => {
+                  const theme = methodTheme[m];
+                  const selected = method === m;
+                  return (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => form.setValue("method", m)}
+                      className={cn(
+                        "rounded-lg py-1.5 text-xs font-medium transition-all duration-150",
+                        selected
+                          ? `${theme.bg} ${theme.text} ring-1 ${theme.ring}`
+                          : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-secondary/30",
+                      )}
+                    >
                       {m}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                HTTP method for the request
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground/60 pl-1">
+                Choose the HTTP method for this request.
               </p>
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="endpoint">Endpoint</Label>
+            <div className="grid gap-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                <p className="text-xs font-medium text-foreground/80">Endpoint</p>
+              </div>
               <Input
-                id="endpoint"
                 placeholder="https://api.example.com/data"
+                className="h-10 rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
                 {...form.register("endpoint")}
               />
-              <p className="text-xs text-muted-foreground">
-                Use{" "}
-                <code className="text-[10px]">{`{{variableName.httpresponse.data}}`}</code>{" "}
-                to reference data from previous nodes
+              <p className="text-xs text-muted-foreground/60 pl-1">
+                Supports <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variable}}`}</code> templating.
               </p>
               {form.formState.errors.endpoint && (
-                <p className="text-destructive text-xs">
+                <p className="text-xs text-destructive pl-1">
                   {form.formState.errors.endpoint.message}
                 </p>
               )}
             </div>
 
             {showBody && (
-              <div className="grid gap-2">
-                <Label htmlFor="body">Body</Label>
+              <div className="grid gap-1.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                  <p className="text-xs font-medium text-foreground/80">Body</p>
+                </div>
                 <Textarea
-                  id="body"
                   placeholder='{"key": "value"}'
-                  className="min-h-[100px] font-mono text-xs"
+                  className="min-h-[100px] rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm font-mono transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
                   {...form.register("body")}
                 />
-                <p className="text-xs text-muted-foreground">
-                  Use{" "}
-                  <code className="text-[10px]">{`{{variableName.httpresponse.data}}`}</code>{" "}
-                  to reference data from previous nodes
+                <p className="text-xs text-muted-foreground/60 pl-1">
+                  Supports <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variable}}`}</code> templating.
                 </p>
               </div>
             )}
           </div>
 
-          <SheetFooter className="mt-auto">
-            <Button type="submit">Save</Button>
-          </SheetFooter>
+          <div className="mt-auto px-5 py-4 border-t border-border/40 bg-gradient-to-b from-transparent to-secondary/10">
+            <Button type="submit" className="w-full rounded-xl">
+              Save
+            </Button>
+          </div>
         </form>
       </SheetContent>
     </Sheet>

@@ -1,23 +1,26 @@
 "use client";
 
 import { BaseHandle } from "@/components/react-flow/base-handle";
-import { BaseNode, BaseNodeContent } from "@/components/react-flow/base-node";
-import {
-  NodeStatus,
-  NodeStatusIndicator,
-} from "@/components/react-flow/node-status-indicator";
+import { BaseNode } from "@/components/react-flow/base-node";
+import { NodeStatus } from "@/components/react-flow/node-status-indicator";
 import { WorkflowNode } from "@/components/react-flow/workflow-node";
 import { type NodeProps, Position, useReactFlow } from "@xyflow/react";
 import type { LucideIcon } from "lucide-react";
-import Image from "next/image";
 import { memo, type ReactNode } from "react";
+import { cn } from "@/lib/utils";
+
+const chipStyles: Record<string, string> = {
+  "HTTP Request":
+    "border-amber-200 bg-[#FEF3C7] text-amber-700 shadow-[0_8px_20px_-12px_rgba(217,119,6,0.5)]",
+  "AI Action":
+    "border-violet-200 bg-violet-50 text-violet-700 shadow-[0_8px_20px_-12px_rgba(139,92,246,0.4)]",
+};
 
 interface BaseExecutionNodeProps extends NodeProps {
-  icon: LucideIcon | string;
-  name: string;
-  description?: string;
   children?: ReactNode;
   status?: NodeStatus;
+  chipLabel?: string;
+  chipIcon?: LucideIcon;
   onSettings?: () => void;
   onDoubleClick?: () => void;
 }
@@ -25,11 +28,11 @@ interface BaseExecutionNodeProps extends NodeProps {
 export const BaseExecutionNode = memo(
   ({
     id,
-    icon: Icon,
-    name,
-    description,
+    selected,
     children,
     status = "initial",
+    chipLabel,
+    chipIcon: ChipIcon,
     onSettings,
     onDoubleClick,
   }: BaseExecutionNodeProps) => {
@@ -51,33 +54,36 @@ export const BaseExecutionNode = memo(
 
     return (
       <WorkflowNode
-        name={name}
-        description={description}
+        selected={selected}
         onDelete={handleDelete}
         onSettings={onSettings}
       >
-        <NodeStatusIndicator status={status} variant="border">
-          <BaseNode onDoubleClick={onDoubleClick} status={status}>
-            <BaseNodeContent>
-              {typeof Icon === "string" ? (
-                <Image src={Icon} alt={name} width={16} height={16} />
-              ) : (
-                <Icon className="size-4 text-muted-foreground" />
+        <div className="relative w-72 pt-5">
+          {chipLabel && (
+            <div
+              className={cn(
+                "pointer-events-none absolute -top-0.5 -z-20 inline-flex h-13 pb-7 items-center gap-1 rounded-t-xl border px-3.5 text-xs font-medium shadow-sm",
+                chipStyles[chipLabel] ??
+                  "border-border bg-muted text-muted-foreground",
               )}
-              {children}
-              <BaseHandle
-                id="target-1"
-                type="target"
-                position={Position.Left}
-              />
-              <BaseHandle
-                id="source-1"
-                type="source"
-                position={Position.Right}
-              />
-            </BaseNodeContent>
+            >
+              {ChipIcon && <ChipIcon className="size-3" />}
+              {chipLabel}
+            </div>
+          )}
+
+          <BaseNode
+            onDoubleClick={onDoubleClick}
+            status={status}
+            selected={selected}
+            className="group w-full overflow-hidden rounded-2xl bg-card"
+          >
+            {children}
+
+            <BaseHandle id="target-1" type="target" position={Position.Left} />
+            <BaseHandle id="source-1" type="source" position={Position.Right} />
           </BaseNode>
-        </NodeStatusIndicator>
+        </div>
       </WorkflowNode>
     );
   },
