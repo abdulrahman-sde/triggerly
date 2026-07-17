@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-    id            String     @id
+    id            String       @id
     name          String
     email         String
-    emailVerified Boolean    @default(false)
+    emailVerified Boolean      @default(false)
     image         String?
-    createdAt     DateTime   @default(now())
-    updatedAt     DateTime   @updatedAt
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @updatedAt
     sessions      Session[]
     accounts      Account[]
     workflows     Workflow[]
+    credentials   Credential[]
 
     @@unique([email])
     @@map("user")
@@ -71,6 +72,26 @@ model Verification {
     @@map("verification")
 }
 
+enum CredentialType {
+    GEMINI
+    OPENAI_COMPATIBLE
+}
+
+model Credential {
+    id    String @id @default(uuid())
+    name  String
+    value String
+
+    type      CredentialType
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    userId    String
+    user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    nodes     Node[]
+
+    @@map("credential")
+}
+
 model Workflow {
     id          String       @id @default(uuid())
     name        String
@@ -90,15 +111,19 @@ enum NodeType {
     HTTP_REQUEST
     GOOGLE_FORM_TRIGGER
     GEMINI
+    OPENAI_COMPATIBLE
 }
 
 model Node {
-    id                String       @id @default(uuid())
-    type              NodeType
-    data              Json         @default("{}")
-    position          Json
-    workflowId        String
-    workflow          Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+    id         String   @id @default(uuid())
+    type       NodeType
+    data       Json     @default("{}")
+    position   Json
+    workflowId String
+    workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+    credentialId      String?
+    credential        Credential?  @relation(fields: [credentialId], references: [id])
     outputConnections Connection[] @relation("FromNode")
     inputConnections  Connection[] @relation("ToNode")
 

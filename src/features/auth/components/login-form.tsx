@@ -40,7 +40,7 @@ export function LoginForm() {
       {
         onSuccess: () => {
           router.push("/dashboard");
-          setIsSubmitting(false);
+          toast.success("Logged in successfully");
         },
         onError: (ctx) => {
           toast.error(ctx.error.message || "Something went wrong");

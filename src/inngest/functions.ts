@@ -9,6 +9,7 @@ export const executeWorkflow = inngest.createFunction(
   {
     id: "execute-workflow",
     triggers: { event: "workflows/execute.workflow" },
+    retries: 1,
   },
   async ({ event, step }) => {
     const workflowId = event.data.workflowId;
@@ -36,14 +37,23 @@ export const executeWorkflow = inngest.createFunction(
     let context = event.data.initialData || {};
 
     for (const node of sortedNodes) {
-      const executor = getExecutor(node.type);
-      context = await executor({
-        data: node.data as Record<string, unknown>,
-        nodeId: node.id,
-        context,
-        step,
-        channel: ch,
-      });
+      try {
+        const executor = getExecutor(node.type);
+        context = await executor({
+          data: node.data as Record<string, unknown>,
+          nodeId: node.id,
+          context,
+          step,
+          channel: ch,
+        });
+      } catch (error) {
+        await inngest.realtime.publish(ch.status, {
+          status: "error",
+          nodeId: node.id,
+          error: (error as Error).message,
+        });
+        throw error;
+      }
     }
 
     return { workflowId, result: context };

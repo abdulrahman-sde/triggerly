@@ -49,6 +49,12 @@ const ExecutionNodes: NodeTypeOption[] = [
     description: "Send a request to Gemini API.",
     icon: GlobeIcon,
   },
+  {
+    type: NodeType.OPENAI_COMPATIBLE,
+    label: "OpenAI Compatible",
+    description: "Send a request to any OpenAI-compatible API.",
+    icon: GlobeIcon,
+  },
 ];
 
 export function NodeSelector({

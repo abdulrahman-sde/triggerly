@@ -1,6 +1,7 @@
 import { initialNode } from "@/components/react-flow/initial-node";
 import { GeminiNode } from "@/features/executions/components/gemini/node";
 import { HttpRequestNode } from "@/features/executions/components/http-request/node";
+import { OpenAICompatibleNode } from "@/features/executions/components/openai-compatible/node";
 import GoogleFormTriggerNode from "@/features/triggers/components/google-form-trigger/node";
 import ManualTriggerNode from "@/features/triggers/components/manual-trigger/node";
 import { NodeType } from "@/generated/prisma/enums";
@@ -12,6 +13,7 @@ export const nodeComponents = {
   [NodeType.HTTP_REQUEST]: HttpRequestNode,
   [NodeType.GOOGLE_FORM_TRIGGER]: GoogleFormTriggerNode,
   [NodeType.GEMINI]: GeminiNode,
+  [NodeType.OPENAI_COMPATIBLE]: OpenAICompatibleNode,
 } as const satisfies NodeTypes;
 
 export type NodeComponentType = keyof typeof nodeComponents;

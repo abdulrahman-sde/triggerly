@@ -122,7 +122,7 @@ export default function HttpRequestSheet({
               </div>
               <Input
                 placeholder="responseData"
-                className="h-10 rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
+                className="h-8.5 px-3 text-[12px]"
                 {...form.register("variableName")}
               />
               <p className="text-xs text-muted-foreground/60 pl-1">
@@ -173,7 +173,7 @@ export default function HttpRequestSheet({
               </div>
               <Input
                 placeholder="https://api.example.com/data"
-                className="h-10 rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
+                className="h-8.5 px-3 text-[12px]"
                 {...form.register("endpoint")}
               />
               <p className="text-xs text-muted-foreground/60 pl-1">
@@ -194,7 +194,7 @@ export default function HttpRequestSheet({
                 </div>
                 <Textarea
                   placeholder='{"key": "value"}'
-                  className="min-h-[100px] rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm font-mono transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
+                  className="bg-input/30 px-3 text-[12px]"
                   {...form.register("body")}
                 />
                 <p className="text-xs text-muted-foreground/60 pl-1">
@@ -205,7 +205,7 @@ export default function HttpRequestSheet({
           </div>
 
           <div className="mt-auto px-5 py-4 border-t border-border/40 bg-gradient-to-b from-transparent to-secondary/10">
-            <Button type="submit" className="w-full rounded-xl">
+            <Button type="submit" className="w-full">
               Save
             </Button>
           </div>

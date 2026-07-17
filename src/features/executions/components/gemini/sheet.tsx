@@ -16,15 +16,9 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 
 const AVAILABLE_MODELS = [
-  "gemini-1",
-  "gemini-1.5",
-  "gemini-2",
-  "gemini-2.5",
-  "gemini-3",
-  "gemini-3.5",
-  "gemini-4",
-  "gemini-4.5",
-  "gemini-5",
+  "gemini-2.0-flash",
+  "gemini-2.0-flash-lite",
+  "gemini-2.5-pro",
 ] as const;
 
 const formSchema = z.object({
@@ -57,7 +51,7 @@ export default function GeminiSheet({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues?.variableName ?? "",
-      model: defaultValues?.model ?? "gemini-1",
+      model: defaultValues?.model ?? "gemini-2.0-flash",
       systemPrompt: defaultValues?.systemPrompt ?? "",
       userPrompt: defaultValues?.userPrompt ?? "",
     },
@@ -67,7 +61,7 @@ export default function GeminiSheet({
     if (open) {
       form.reset({
         variableName: defaultValues?.variableName ?? "",
-        model: defaultValues?.model ?? "gemini-1",
+        model: defaultValues?.model ?? "gemini-2.0-flash",
         systemPrompt: defaultValues?.systemPrompt ?? "",
         userPrompt: defaultValues?.userPrompt ?? "",
       });
@@ -102,7 +96,7 @@ export default function GeminiSheet({
               </div>
               <Input
                 placeholder="aiResult"
-                className="h-10 rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
+                className="h-8.5 px-3 text-[12px]"
                 {...form.register("variableName")}
               />
               <p className="text-xs text-muted-foreground/60 pl-1">
@@ -156,7 +150,7 @@ export default function GeminiSheet({
               </div>
               <Textarea
                 placeholder="You are a helpful assistant..."
-                className="min-h-[80px] rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
+                className="bg-input/30 px-3 text-[12px]"
                 {...form.register("systemPrompt")}
               />
               <p className="text-xs text-muted-foreground/60 pl-1">
@@ -173,7 +167,7 @@ export default function GeminiSheet({
               </div>
               <Textarea
                 placeholder="Summarize the data: {{previousVar}}"
-                className="min-h-[100px] rounded-xl border-border/50 bg-secondary/20 px-3.5 text-sm transition-all placeholder:text-muted-foreground/25 hover:border-border/80 focus-visible:border-primary/50"
+                className="bg-input/30 px-3 text-[12px]"
                 {...form.register("userPrompt")}
               />
               <p className="text-xs text-muted-foreground/60 pl-1">
@@ -185,7 +179,7 @@ export default function GeminiSheet({
           </div>
 
           <div className="mt-auto px-5 py-4 border-t border-border/40 bg-gradient-to-b from-transparent to-secondary/10">
-            <Button type="submit" className="w-full rounded-xl">
+            <Button type="submit" className="w-full">
               Save
             </Button>
           </div>

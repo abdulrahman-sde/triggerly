@@ -82,7 +82,10 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
                       variant="outline"
                       size={"sm"}
                       className="h-7 py-1 px-2 border-red-300"
-                      onClick={() => setEditMode(false)}
+                      onClick={() => {
+                        setEditMode(false);
+                        setWorkflowName(workflow.name);
+                      }}
                     >
                       <X weight="Filled" color="#ee7e7f" />
                     </Button>

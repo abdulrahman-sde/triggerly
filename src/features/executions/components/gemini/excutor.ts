@@ -1,10 +1,10 @@
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
-import ky, { type Options as kyOptions } from "ky";
 import Handlebars from "handlebars";
 import { inngest } from "@/inngest/client";
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { generateText } from "ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+
 type GeminiData = {
   variableName?: string;
   model?: string;
@@ -34,18 +34,13 @@ export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
     const userPrompt = data.userPrompt
       ? Handlebars.compile(data.userPrompt)(context)
       : "";
-    // const credentials = process.env.NIM_API_KEY;
+    const credentials = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
-    const nim = createOpenAICompatible({
-      name: "nim",
-      baseURL: "https://integrate.api.nvidia.com/v1",
-      headers: {
-        Authorization: `Bearer ${process.env.NIM_API_KEY}`,
-      },
-    });
+    const google = createGoogleGenerativeAI({ apiKey: credentials || "" });
+    const selectedModel = data.model || "gemini-2.0-flash";
 
     const { steps } = await step.ai.wrap("gemini-generate-text", generateText, {
-      model: nim("nvidia/nemotron-3-nano-30b-a3b"),
+      model: google(selectedModel),
       system: systemPrompt,
       prompt: userPrompt,
       experimental_telemetry: {
