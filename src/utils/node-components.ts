@@ -1,4 +1,5 @@
 import { initialNode } from "@/components/react-flow/initial-node";
+import { DiscordNode } from "@/features/executions/components/discord/node";
 import { GeminiNode } from "@/features/executions/components/gemini/node";
 import { HttpRequestNode } from "@/features/executions/components/http-request/node";
 import { OpenAICompatibleNode } from "@/features/executions/components/openai-compatible/node";
@@ -14,6 +15,7 @@ export const nodeComponents = {
   [NodeType.GOOGLE_FORM_TRIGGER]: GoogleFormTriggerNode,
   [NodeType.GEMINI]: GeminiNode,
   [NodeType.OPENAI_COMPATIBLE]: OpenAICompatibleNode,
+  [NodeType.DISCORD]: DiscordNode,
 } as const satisfies NodeTypes;
 
 export type NodeComponentType = keyof typeof nodeComponents;

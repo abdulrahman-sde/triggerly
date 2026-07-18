@@ -3,6 +3,7 @@ import { NodeExecutor } from "../types";
 import { manualTriggerExecutor } from "@/features/triggers/components/manual-trigger/executor";
 import { httpRequestExecutor } from "@/features/executions/components/http-request/excutor";
 import { googleFormTriggerExecutor } from "@/features/triggers/components/google-form-trigger/executor";
+import { discordExecutor } from "@/features/executions/components/discord/excutor";
 import { GeminiExecutor } from "../components/gemini/excutor";
 import { OpenAICompatibleExecutor } from "../components/openai-compatible/excutor";
 
@@ -13,6 +14,7 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.GOOGLE_FORM_TRIGGER]: googleFormTriggerExecutor,
   [NodeType.GEMINI]: GeminiExecutor,
   [NodeType.OPENAI_COMPATIBLE]: OpenAICompatibleExecutor,
+  [NodeType.DISCORD]: discordExecutor,
 };
 
 export const getExecutor = (nodeType: NodeType): NodeExecutor => {

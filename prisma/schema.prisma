@@ -112,6 +112,7 @@ enum NodeType {
     GOOGLE_FORM_TRIGGER
     GEMINI
     OPENAI_COMPATIBLE
+    DISCORD
 }
 
 model Node {

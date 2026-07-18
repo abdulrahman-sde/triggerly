@@ -55,6 +55,12 @@ const ExecutionNodes: NodeTypeOption[] = [
     description: "Send a request to any OpenAI-compatible API.",
     icon: GlobeIcon,
   },
+  {
+    type: NodeType.DISCORD,
+    label: "Discord",
+    description: "Send a request to Discord API.",
+    icon: GlobeIcon,
+  },
 ];
 
 export function NodeSelector({
