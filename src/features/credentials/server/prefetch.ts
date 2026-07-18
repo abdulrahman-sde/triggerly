@@ -6,6 +6,3 @@ export function prefetchCredentials(input?: Input) {
   return prefetch(trpc.credentials.getAll.queryOptions(input));
 }
 
-export const prefetchCredential = (id: string) => {
-  return prefetch(trpc.credentials.getOne.queryOptions({ id }));
-};

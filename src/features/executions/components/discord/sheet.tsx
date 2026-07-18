@@ -22,9 +22,12 @@ const formSchema = z.object({
       message:
         "Variable name must start with a letter or underscore and can only contain letters, numbers, and underscores",
     }),
-  webhookUrl: z.string().url("Must be a valid URL").min(1, "Webhook URL is required"),
+  webhookUrl: z
+    .string()
+    .url("Must be a valid URL")
+    .min(1, "Webhook URL is required"),
   username: z.string().optional(),
-  content: z.string().min(1, "Message content is required"),
+  content: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -140,30 +143,23 @@ export default function DiscordSheet({
                 Override the webhook&apos;s default username (optional).
               </p>
             </div>
+          </div>
 
-            <div className="grid gap-1.5">
-              <div className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-muted-foreground/40" />
-                <p className="text-xs font-medium text-foreground/80">
-                  Message
-                </p>
-              </div>
-              <Textarea
-                placeholder="Hello from workflow!"
-                className="bg-input/30 px-3 text-[12px]"
-                {...form.register("content")}
-              />
-              <p className="text-xs text-muted-foreground/60 pl-1">
-                Supports{" "}
-                <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variable}}`}</code>{" "}
-                templating.
+          <div className="grid gap-1.5">
+            <div className="flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+              <p className="text-xs font-medium text-foreground/80">
+                Message
               </p>
-              {form.formState.errors.content && (
-                <p className="text-xs text-destructive pl-1">
-                  {form.formState.errors.content.message}
-                </p>
-              )}
             </div>
+            <Textarea
+              placeholder="Hello @everyone!"
+              className="h-20 px-3 text-[12px] resize-none"
+              {...form.register("content")}
+            />
+            <p className="text-xs text-muted-foreground/60 pl-1">
+              Message content sent to the channel (optional).
+            </p>
           </div>
 
           <div className="mt-auto px-5 py-4 border-t border-border/40 bg-gradient-to-b from-transparent to-secondary/10">

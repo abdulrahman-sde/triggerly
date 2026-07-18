@@ -13,19 +13,22 @@ import {
   useExecuteWorkflow,
   useSuspenseWorkflow,
   useUpdateName,
+  useUpdateWorkflow,
 } from "@/features/workflows/hooks/use-worflows";
 import { Button } from "@/components/ui/button";
-import { Loader, Pen, Play, X } from "reicon-react";
+import { Floppy, Floppy2, Loader, Pen, Play, X } from "reicon-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { useEditorStore } from "@/store/editor-store";
 
 export default function EditorHeader({ workflowId }: { workflowId: string }) {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
   const handleNameEdit = useUpdateName();
   const [isEditMode, setEditMode] = useState(false);
   const [workflowName, setWorkflowName] = useState(workflow.name);
-  const executeWorkflow = useExecuteWorkflow();
+  const editorState = useEditorStore((state) => state.editorState);
+  const handleSaveWorkflow = useUpdateWorkflow();
   const handleEditName = () => {
     if (workflowName.trim().length < 3) {
       return toast.error("Workflow name must be at least 3 characters long");
@@ -48,8 +51,13 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
     );
   };
 
-  const handleExecuteWorkflow = () => {
-    executeWorkflow.mutate({ workflowId });
+  const handleSave = () => {
+    if (!editorState) return;
+    handleSaveWorkflow.mutate({
+      id: workflowId,
+      nodes: editorState.getNodes(),
+      edges: editorState.getEdges(),
+    });
   };
   return (
     <>
@@ -125,24 +133,17 @@ export default function EditorHeader({ workflowId }: { workflowId: string }) {
         </Breadcrumb>
 
         <div className="flex-1" />
-
         <Button
           size="sm"
-          variant="default"
-          onClick={handleExecuteWorkflow}
-          disabled={executeWorkflow.isPending}
+          onClick={handleSave}
+          disabled={handleSaveWorkflow.isPending}
         >
-          {executeWorkflow.isPending ? (
-            <>
-              <Loader size={24} className="animate-spin" />
-              Executing ...
-            </>
+          {handleSaveWorkflow.isPending ? (
+            <Loader className="h-4 w-4 animate-spin" />
           ) : (
-            <>
-              <Play size={18} />
-              Execute Workflow
-            </>
+            <Floppy className="h-4 w-4" />
           )}
+          Save Workflow
         </Button>
       </header>
     </>

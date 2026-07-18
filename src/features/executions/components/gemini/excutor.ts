@@ -7,6 +7,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 type GeminiData = {
   variableName?: string;
+  apiKey?: string;
   model?: string;
   systemPrompt?: string;
   userPrompt?: string;
@@ -34,7 +35,7 @@ export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
     const userPrompt = data.userPrompt
       ? Handlebars.compile(data.userPrompt)(context)
       : "";
-    const credentials = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    const credentials = data.apiKey || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
     const google = createGoogleGenerativeAI({ apiKey: credentials || "" });
     const selectedModel = data.model || "gemini-2.0-flash";

@@ -1,11 +1,9 @@
 "use client";
 
 import { CredentialType } from "@/generated/prisma/enums";
-import { useRouter } from "next/navigation";
 import {
   useCreateCredential,
   useUpdateCredential,
-  useSuspenseCredential,
 } from "../hooks/use-credentials";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,15 +17,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader } from "lucide-react";
-import Link from "next/link";
+import { Loader, KeyRound, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
-import { EntityContainer } from "@/components/shared/entity-container";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import {
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   type: z.nativeEnum(CredentialType),
   value: z.string().min(1, "API key is required"),
+  baseURL: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -38,58 +43,59 @@ interface CredentialFormProps {
     name: string;
     type: CredentialType;
     value: string;
+    baseURL?: string;
   };
+  onSuccess?: () => void;
 }
 
 const PROVIDERS: {
   value: CredentialType;
   label: string;
   icon: string;
-  iconBg: string;
 }[] = [
   {
     value: CredentialType.GEMINI,
     label: "Gemini",
     icon: "/assets/icons/gemini.svg",
-    iconBg: "bg-blue-500/10",
   },
   {
     value: CredentialType.OPENAI_COMPATIBLE,
     label: "OpenAI Compatible",
-    icon: "/assets/icons/openai-compatible.svg",
-    iconBg: "bg-emerald-500/10",
+    icon: "/assets/icons/openai.svg",
   },
 ];
 
-function ProviderIcon({
-  type,
-  size = 14,
-}: {
-  type: CredentialType;
-  size?: number;
-}) {
-  const provider = PROVIDERS.find((p) => p.value === type);
-  if (!provider) return null;
-  return (
-    <span
-      className={`inline-flex items-center justify-center rounded ${provider.iconBg}`}
-      style={{ width: size + 8, height: size + 8 }}
-    >
-      <Image
-        src={provider.icon}
-        alt={provider.label}
-        width={size}
-        height={size}
-        className="object-contain"
-      />
-    </span>
-  );
-}
+const providerGuides: Record<
+  CredentialType,
+  { heading: string; steps: string[] }
+> = {
+  [CredentialType.GEMINI]: {
+    heading: "Google Gemini API",
+    steps: [
+      "Go to Google AI Studio",
+      'Click "Get API Key"',
+      "Create a new key or copy an existing one",
+      "Paste it below and give it a name",
+    ],
+  },
+  [CredentialType.OPENAI_COMPATIBLE]: {
+    heading: "OpenAI Compatible",
+    steps: [
+      "Visit your provider's API dashboard",
+      "Generate a new API key",
+      "Copy the key and paste it below",
+      "Enter your provider's API base URL",
+    ],
+  },
+};
 
-export default function CredentialForm({ initialData }: CredentialFormProps) {
-  const router = useRouter();
+export default function CredentialForm({
+  initialData,
+  onSuccess,
+}: CredentialFormProps) {
   const createCredential = useCreateCredential();
   const updateCredential = useUpdateCredential();
+  const [showKey, setShowKey] = useState(false);
 
   const isEdit = !!initialData?.id;
 
@@ -99,56 +105,54 @@ export default function CredentialForm({ initialData }: CredentialFormProps) {
       name: "",
       type: CredentialType.GEMINI,
       value: "",
+      baseURL: "",
     },
   });
 
   const selectedType = form.watch("type");
+  const guide = providerGuides[selectedType];
 
   const onSubmit = form.handleSubmit((values) => {
+    const onSettled = () => {
+      form.reset();
+      onSuccess?.();
+    };
+
     if (isEdit && initialData?.id) {
-      updateCredential.mutate({ id: initialData.id, ...values });
+      updateCredential.mutate({ id: initialData.id, ...values }, { onSettled });
     } else {
-      createCredential.mutate(values);
+      createCredential.mutate(values, { onSettled });
     }
   });
 
-  const isPending =
-    createCredential.isPending || updateCredential.isPending;
+  const isPending = createCredential.isPending || updateCredential.isPending;
 
   return (
-    <EntityContainer
-      header={
-        <div className="flex flex-col gap-y-1.5">
-          <Link
-            href="/dashboard/credentials"
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground/60 transition-colors hover:text-foreground w-fit mb-2"
-          >
-            <ArrowLeft className="size-3.5" />
-            Back to Credentials
-          </Link>
-          <h1 className="text-xl font-semibold tracking-tight">
-            {isEdit ? "Edit credential" : "New credential"}
-          </h1>
-          <p className="text-xs text-muted-foreground/75 leading-relaxed">
-            {isEdit
-              ? "Update your API key or credential details securely."
-              : "Connect an API key to allow your workflows to call external AI models."}
-          </p>
-        </div>
-      }
-    >
-      <div className="grid gap-8 lg:grid-cols-5 items-start">
-        {/* Form Column */}
-        <form onSubmit={onSubmit} className="lg:col-span-3 space-y-6">
-          {/* Name */}
+    <div className="flex flex-col h-full">
+      <SheetHeader className="pb-0">
+        <SheetTitle>{isEdit ? "Edit credential" : "New credential"}</SheetTitle>
+        <SheetDescription>
+          {isEdit
+            ? "Update your API key or credential details securely."
+            : "Connect an API key to allow your workflows to call external AI models."}
+        </SheetDescription>
+      </SheetHeader>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-5">
+        <form id="credential-form" onSubmit={onSubmit} className="space-y-5">
           <div className="space-y-1.5">
-            <label htmlFor="name" className="text-xs font-semibold text-foreground/70 uppercase tracking-wide">
+            <label
+              htmlFor="name"
+              className="text-[11px] font-semibold  text-foreground/70 uppercase "
+            >
               Name
             </label>
             <Input
               id="name"
               autoComplete="off"
-              placeholder="e.g. My Gemini Key"
+              placeholder="e.g. My Gemini Key\u2026"
+              spellCheck={false}
+              className="h-8.5 px-3 text-[12px]"
               {...form.register("name")}
             />
             {form.formState.errors.name && (
@@ -158,9 +162,11 @@ export default function CredentialForm({ initialData }: CredentialFormProps) {
             )}
           </div>
 
-          {/* Provider */}
           <div className="space-y-1.5">
-            <label htmlFor="type" className="text-xs font-semibold text-foreground/70 uppercase tracking-wide">
+            <label
+              htmlFor="type"
+              className="text-[11px] font-semibold  text-foreground/70 uppercase "
+            >
               Provider
             </label>
             <Select
@@ -172,26 +178,20 @@ export default function CredentialForm({ initialData }: CredentialFormProps) {
               }
             >
               <SelectTrigger id="type">
-                <span className="flex items-center gap-2 min-w-0">
-                  <ProviderIcon type={selectedType} size={13} />
-                  <SelectValue placeholder="Select a provider" />
-                </span>
+                <SelectValue placeholder="Select a provider" />
               </SelectTrigger>
               <SelectContent>
                 {PROVIDERS.map((provider) => (
                   <SelectItem key={provider.value} value={provider.value}>
-                    <span className="flex items-center gap-2">
-                      <span
-                        className={`inline-flex size-5 items-center justify-center rounded ${provider.iconBg}`}
-                      >
-                        <Image
-                          src={provider.icon}
-                          alt={provider.label}
-                          width={12}
-                          height={12}
-                          className="object-contain"
-                        />
-                      </span>
+                    <span className="flex items-center gap-2 ">
+                      <Image
+                        src={provider.icon}
+                        alt=""
+                        width={14}
+                        height={14}
+                        className="object-contain"
+                        aria-hidden="true"
+                      />
                       {provider.label}
                     </span>
                   </SelectItem>
@@ -205,18 +205,41 @@ export default function CredentialForm({ initialData }: CredentialFormProps) {
             )}
           </div>
 
-          {/* API key */}
           <div className="space-y-1.5">
-            <label htmlFor="value" className="text-xs font-semibold text-foreground/70 uppercase tracking-wide">
+            <label
+              htmlFor="value"
+              className="text-[11px] font-semibold  text-foreground/70 uppercase "
+            >
               API Key
             </label>
-            <Input
-              id="value"
-              type="password"
-              autoComplete="new-password"
-              placeholder="sk-••••••••••••••••"
-              {...form.register("value")}
-            />
+            <div className="relative">
+              <Input
+                id="value"
+                type={showKey ? "text" : "password"}
+                autoComplete="new-password"
+                placeholder={
+                  isEdit
+                    ? "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+                    : "sk-\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+                }
+                spellCheck={false}
+                className="h-8.5 px-3 pr-10 text-[12px]"
+                {...form.register("value")}
+              />
+              <button
+                type="button"
+                onClick={() => setShowKey(!showKey)}
+                className="absolute  right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+                aria-label={showKey ? "Hide API key" : "Show API key"}
+                tabIndex={-1}
+              >
+                {showKey ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
+              </button>
+            </div>
             {form.formState.errors.value && (
               <p className="text-xs text-destructive">
                 {form.formState.errors.value.message}
@@ -224,73 +247,81 @@ export default function CredentialForm({ initialData }: CredentialFormProps) {
             )}
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-3 pt-2">
-            <Button type="submit" disabled={isPending}>
-              {isPending && <Loader className="mr-1.5 size-3.5 animate-spin" />}
-              {isEdit ? "Save changes" : "Create credential"}
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              className="text-muted-foreground hover:text-foreground"
-              onClick={() => router.back()}
-            >
-              Cancel
-            </Button>
-          </div>
+          {selectedType === CredentialType.OPENAI_COMPATIBLE && (
+            <div className="space-y-1.5">
+              <label
+                htmlFor="baseURL"
+                className="text-[11px] font-semibold text-foreground/70 uppercase"
+              >
+                Base URL
+              </label>
+              <Input
+                id="baseURL"
+                autoComplete="off"
+                placeholder="https://api.openai.com/v1"
+                spellCheck={false}
+                className="h-8.5 px-3 text-[12px]"
+                {...form.register("baseURL")}
+              />
+            </div>
+          )}
         </form>
 
-        {/* Documentation/Guide Side panel */}
-        <div className="lg:col-span-2 space-y-5 rounded-xl border border-border/40 bg-secondary/15 p-5">
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-foreground/80 mb-1">
-              Guide & Safety
-            </h2>
-            <p className="text-xs text-muted-foreground/70 leading-relaxed">
-              Ensure you configure the correct API keys for node integration.
-            </p>
-          </div>
+        <div>
+          <p className="text-[11px] font-semibold  text-foreground/50 uppercase  mb-3">
+            Quick Guide
+          </p>
 
-          <div className="space-y-4 pt-1">
-            <div className="space-y-1">
-              <h3 className="text-xs font-medium text-foreground">
-                Google Gemini API
-              </h3>
-              <p className="text-[11px] text-muted-foreground/60 leading-relaxed">
-                Obtain your Gemini API key from Google AI Studio. It allows your workflows to execute nodes running model prompts.
-              </p>
-            </div>
+          {guide && (
+            <ol className="space-y-2.5">
+              {guide.steps.map((step, i) => (
+                <li
+                  key={i}
+                  className="flex gap-2.5 text-xs text-muted-foreground/60"
+                >
+                  <span
+                    className={cn(
+                      "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded text-[9px] font-bold",
+                      selectedType === CredentialType.GEMINI
+                        ? "bg-blue-500/10 text-blue-500"
+                        : "bg-emerald-500/10 text-emerald-500",
+                    )}
+                  >
+                    {i + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
 
-            <div className="space-y-1">
-              <h3 className="text-xs font-medium text-foreground">
-                OpenAI Compatible
-              </h3>
-              <p className="text-[11px] text-muted-foreground/60 leading-relaxed">
-                For custom endpoints, self-hosted LLMs, or alternative providers like OpenRouter or DeepSeek. Key details are protected here, base URLs are set at the node layer.
-              </p>
-            </div>
+        <hr className="border-border/50" />
 
-            <div className="space-y-1">
-              <h3 className="text-xs font-medium text-foreground">
-                Security & Encryption
-              </h3>
-              <p className="text-[11px] text-muted-foreground/60 leading-relaxed">
-                All secret keys are encrypted at rest using AES-256-GCM. Once saved, keys are masked in the UI and never exposed in clear text again.
-              </p>
-            </div>
-          </div>
+        <div className="flex items-start gap-2.5">
+          <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-emerald-500" />
+          <p className="text-xs text-muted-foreground/50 leading-relaxed">
+            All secret keys are encrypted at rest using AES-256-GCM. Once saved,
+            keys are masked in the UI and never exposed in clear text again.
+          </p>
         </div>
       </div>
-    </EntityContainer>
+
+      <div className="flex items-center gap-3 border-t p-4">
+        <Button type="submit" form="credential-form" disabled={isPending}>
+          {isPending && <Loader className="mr-1.5 size-3.5 animate-spin" />}
+          {isEdit ? "Save changes" : "Create credential"}
+        </Button>
+        <SheetClose asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Cancel
+          </Button>
+        </SheetClose>
+      </div>
+    </div>
   );
 }
-
-export const CredentialView = ({
-  credentialId,
-}: {
-  credentialId: string;
-}) => {
-  const { data: credential } = useSuspenseCredential(credentialId);
-  return <CredentialForm initialData={credential} />;
-};

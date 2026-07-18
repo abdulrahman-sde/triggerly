@@ -9,9 +9,7 @@ import { cn } from "@/lib/utils";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { Sparkle3 } from "reicon-react";
 import { Layers } from "lucide-react";
-import OpenAICompatibleSheet, {
-  OpenAICompatibleFormValues,
-} from "./sheet";
+import OpenAICompatibleSheet, { OpenAICompatibleFormValues } from "./sheet";
 
 type OpenAICompatibleNodeTypes = Node<OpenAICompatibleFormValues>;
 
@@ -32,7 +30,8 @@ export const OpenAICompatibleNode = memo(
     const { status } = useNodeStatus({ nodeId: props.id });
 
     const hasCustomUrl = !!nodeData?.baseURL;
-    const displayModel = nodeData?.model || "nvidia/llama-3.1-nemotron-nano-8b-v1";
+    const displayModel =
+      nodeData?.model || "nvidia/llama-3.1-nemotron-nano-8b-v1";
     const displayUrl = hasCustomUrl
       ? nodeData.baseURL!.replace(/^https?:\/\//, "").replace(/\/v\d+\/?$/, "")
       : "nim (default)";
@@ -62,7 +61,7 @@ export const OpenAICompatibleNode = memo(
               )}
             >
               <Image
-                src="/assets/icons/openai-compatible.svg"
+                src="/assets/icons/openai.svg"
                 alt="OpenAI Compatible"
                 width={12}
                 height={12}

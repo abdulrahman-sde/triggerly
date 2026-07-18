@@ -11,9 +11,11 @@ import { cn } from "@/lib/utils";
 
 const chipStyles: Record<string, string> = {
   "HTTP Request":
-    "border-amber-200 bg-[#FEF3C7] text-amber-700 shadow-[0_8px_20px_-12px_rgba(217,119,6,0.5)]",
+    "border-amber-200 bg-amber-100 text-amber-700 shadow-[0_8px_20px_-12px_rgba(217,119,6,0.5)]",
   "AI Action":
-    "border-violet-200 bg-violet-50 text-violet-700 shadow-[0_8px_20px_-12px_rgba(139,92,246,0.4)]",
+    "border-violet-300 bg-violet-100 text-violet-700 shadow-[0_8px_20px_-12px_rgba(139,92,246,0.4)]",
+  "Send Message":
+    "border-sky-300 bg-sky-200/80 text-sky-800 shadow-[0_8px_20px_-12px_rgba(14,165,233,0.4)]",
 };
 
 interface BaseExecutionNodeProps extends NodeProps {
@@ -67,7 +69,7 @@ export const BaseExecutionNode = memo(
                   "border-border bg-muted text-muted-foreground",
               )}
             >
-              {ChipIcon && <ChipIcon className="size-3" />}
+              {ChipIcon && <ChipIcon className="size-3 " />}
               {chipLabel}
             </div>
           )}

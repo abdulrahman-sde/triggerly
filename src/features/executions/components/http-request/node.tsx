@@ -5,10 +5,10 @@ import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { memo, useState } from "react";
 import HttpRequestSheet from "./sheet";
 import { BaseExecutionNode } from "../base-execution-node";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 import { useNodeStatus } from "../../hooks/use-node-status";
+import { GlobePointer } from "reicon-react";
 
 const methodStyles: Record<string, string> = {
   GET: "bg-green-100/70 text-green-700",
@@ -71,12 +71,7 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
               "bg-zinc-100/80",
             )}
           >
-            <Image
-              src="/assets/icons/http-request.svg"
-              alt="HTTP Request"
-              width={36}
-              height={36}
-            />
+            <GlobePointer className="size-6" color="#b45309" />
           </div>
 
           <div className="min-w-0 flex-1">

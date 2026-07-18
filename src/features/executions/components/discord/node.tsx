@@ -8,7 +8,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 import { useNodeStatus } from "../../hooks/use-node-status";
-import { Message } from "reicon-react";
+import { Chat } from "reicon-react";
 
 type DiscordNodeData = {
   variableName?: string;
@@ -46,7 +46,7 @@ export const DiscordNode = memo((props: NodeProps<DiscordNodeType>) => {
         {...props}
         id={props.id}
         chipLabel="Send Message"
-        chipIcon={Message}
+        chipIcon={Chat}
         onSettings={handleOpenSettings}
         onDoubleClick={handleOpenSettings}
         status={status ?? "initial"}
@@ -61,8 +61,8 @@ export const DiscordNode = memo((props: NodeProps<DiscordNodeType>) => {
             <Image
               src="/assets/icons/discord.svg"
               alt="Discord"
-              width={36}
-              height={36}
+              width={24}
+              height={24}
             />
           </div>
 
@@ -70,6 +70,11 @@ export const DiscordNode = memo((props: NodeProps<DiscordNodeType>) => {
             <p className="truncate text-[15px] font-medium leading-5 text-foreground">
               {nodeData?.username || "Discord"}
             </p>
+            <span className="text-sm leading-5 text-muted-foreground truncate">
+              {nodeData?.content
+                ? `"${nodeData.content.slice(0, 40)}${nodeData.content.length > 40 ? "..." : ""}"`
+                : "No message set"}
+            </span>
           </div>
         </div>
       </BaseExecutionNode>

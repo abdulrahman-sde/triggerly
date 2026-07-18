@@ -19,9 +19,9 @@ export function BaseNode({
     status === "loading"
       ? "border-blue-400/25"
       : status === "success"
-        ? "border-emerald-400/25"
+        ? "border-emerald-400/50"
         : status === "error"
-          ? "border-red-300/25"
+          ? "border-red-300/50"
           : "border-border/70";
 
   return (
@@ -32,7 +32,7 @@ export function BaseNode({
     >
       <div
         className={cn(
-          "bg-card text-card-foreground relative z-10 rounded-2xl border shadow-[0_18px_40px_-28px_rgba(15,23,42,0.45)] duration-200",
+          "bg-card text-card-foreground relative z-10 rounded-2xl border-2 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.45)] duration-200",
           selected &&
             "shadow-[inset_0_0_0_2px_rgba(59,130,246,0.7),0_18px_40px_-28px_rgba(15,23,42,0.45)]",
           statusStyles,

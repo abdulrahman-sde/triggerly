@@ -34,6 +34,7 @@ export const CredentialsRouter = createTRPCRouter({
         name: z.string(),
         type: z.enum(CredentialType),
         value: z.string(),
+        baseURL: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -42,6 +43,7 @@ export const CredentialsRouter = createTRPCRouter({
           name: input.name,
           type: input.type,
           value: input.value,
+          baseURL: input.baseURL,
           userId: ctx.user.id,
         },
       });
@@ -65,6 +67,7 @@ export const CredentialsRouter = createTRPCRouter({
         name: z.string(),
         type: z.enum(CredentialType),
         value: z.string(),
+        baseURL: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -77,6 +80,7 @@ export const CredentialsRouter = createTRPCRouter({
           name: input.name,
           type: input.type,
           value: input.value,
+          baseURL: input.baseURL,
         },
       });
     }),

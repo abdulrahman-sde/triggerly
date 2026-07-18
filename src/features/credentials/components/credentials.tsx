@@ -1,154 +1,244 @@
 "use client";
 
-import { Trash2, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { MoreHorizontal, Trash2, KeyRound, Plus } from "lucide-react";
 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardAction,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+} from "@/components/ui/sheet";
 import { EntityContainer } from "@/components/shared/entity-container";
 import { EntityHeader } from "@/components/shared/entity-header";
 import { cn } from "@/lib/utils";
 
-import Image from "next/image";
-import Link from "next/link";
 import {
   useRemoveCredential,
   useSuspenseCredentials,
 } from "../hooks/use-credentials";
 import { CredentialType } from "@/generated/prisma/enums";
+import CredentialForm from "./credential-form";
+
+type EditingCredential = {
+  id: string;
+  name: string;
+  type: CredentialType;
+  value: string;
+};
 
 const providerMeta: Record<
   CredentialType,
-  { label: string; icon: string; iconBg: string }
+  { label: string; icon: string; gradient: string }
 > = {
   [CredentialType.GEMINI]: {
     label: "Gemini",
     icon: "/assets/icons/gemini.svg",
-    iconBg: "bg-blue-500/10",
+    gradient: "from-blue-500/20 via-blue-500/10 to-transparent",
   },
   [CredentialType.OPENAI_COMPATIBLE]: {
     label: "OpenAI Compatible",
     icon: "/assets/icons/openai-compatible.svg",
-    iconBg: "bg-emerald-500/10",
+    gradient: "from-emerald-500/20 via-emerald-500/10 to-transparent",
   },
 };
 
 export default function CredentialsList() {
   const credentials = useSuspenseCredentials();
   const removeCredential = useRemoveCredential();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [editingCredential, setEditingCredential] =
+    useState<EditingCredential | null>(null);
+
+  const openCreate = () => {
+    setEditingCredential(null);
+    setSheetOpen(true);
+  };
+
+  const openEdit = (credential: EditingCredential) => {
+    setEditingCredential(credential);
+    setSheetOpen(true);
+  };
+
+  const closeSheet = () => {
+    setSheetOpen(false);
+    setEditingCredential(null);
+  };
 
   return (
-    <EntityContainer
-      header={
-        <EntityHeader
-          title="Credentials"
-          newButtonLabel="New Credential"
-          newButtonHref={"/dashboard/credentials/new"}
-        />
-      }
-    >
-      {credentials.data.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="mb-3 flex size-12 items-center justify-center rounded-xl border border-border/50 bg-secondary/40">
-            <svg
-              className="size-5 text-muted-foreground/50"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+    <>
+      <EntityContainer
+        header={
+          <EntityHeader
+            title="Credentials"
+            newButtonLabel="New Credential"
+            onNew={openCreate}
+          />
+        }
+      >
+        {credentials.data.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <div className="mb-5 flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent ring-1 ring-primary/10">
+              <KeyRound className="size-7 text-primary/60" />
+            </div>
+            <p className="text-sm font-medium text-foreground/70">
+              No credentials yet
+            </p>
+            <p className="mt-1.5 text-xs text-muted-foreground/60 max-w-xs">
+              Add an API key to connect your workflows to external AI models and
+              services.
+            </p>
+            <Button
+              onClick={openCreate}
+              variant="outline"
+              size="sm"
+              className="mt-5"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
-              />
-            </svg>
+              <Plus className="size-3.5 mr-1.5" />
+              Add credential
+            </Button>
           </div>
-          <p className="text-sm font-medium text-foreground/70">No credentials yet</p>
-          <p className="mt-1 text-xs text-muted-foreground/60">
-            Add an API key to use with your workflows.
-          </p>
-        </div>
-      ) : (
-        <div className="divide-y divide-border/40 rounded-xl border border-border/40 overflow-hidden">
-          {credentials.data.map((credential) => {
-            const meta = providerMeta[credential.type] ?? {
-              label: credential.type,
-              icon: "/assets/icons/openai-compatible.svg",
-              iconBg: "bg-secondary/60",
-            };
-            const isPendingDelete =
-              removeCredential.isPending &&
-              removeCredential.variables?.id === credential.id;
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {credentials.data.map((credential) => {
+              const meta = providerMeta[credential.type] ?? {
+                label: credential.type,
+                icon: "/assets/icons/openai-compatible.svg",
+                gradient: "from-secondary/40 to-transparent",
+              };
+              const isPendingDelete =
+                removeCredential.isPending &&
+                removeCredential.variables?.id === credential.id;
 
-            return (
-              <div
-                key={credential.id}
-                className={cn(
-                  "group relative flex items-center gap-4 px-4 py-3.5 transition-colors duration-150",
-                  "hover:bg-secondary/30",
-                  isPendingDelete && "pointer-events-none opacity-30",
-                )}
-              >
-                {/* Provider icon */}
+              return (
                 <div
+                  key={credential.id}
+                  onClick={() => openEdit(credential)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      openEdit(credential);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
                   className={cn(
-                    "flex size-8 shrink-0 items-center justify-center rounded-lg",
-                    meta.iconBg,
+                    "group block w-full text-left focus-visible:outline-none",
+                    isPendingDelete && "pointer-events-none opacity-30",
                   )}
                 >
-                  <Image
-                    src={meta.icon}
-                    alt={meta.label}
-                    width={16}
-                    height={16}
-                    className="object-contain"
-                  />
-                </div>
-
-                {/* Name + meta */}
-                <Link
-                  href={`/dashboard/credentials/${credential.id}`}
-                  prefetch
-                  className="min-w-0 flex-1"
-                >
-                  <p className="truncate text-sm font-medium text-foreground leading-none">
-                    {credential.name}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground/60">
-                    {meta.label} ·{" "}
-                    {new Date(credential.createdAt).toLocaleDateString(
-                      undefined,
-                      { month: "short", day: "numeric", year: "numeric" },
+                  <Card
+                    size="sm"
+                    className={cn(
+                      "relative overflow-hidden transition-all duration-200 cursor-pointer",
+                      "hover:-translate-y-0.5 hover:shadow-md",
+                      "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                     )}
-                  </p>
-                </Link>
-
-                {/* Actions (fade in on hover) */}
-                <div className="flex items-center gap-1 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    className="text-destructive/60 hover:text-destructive hover:bg-destructive/8"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeCredential.mutate({ id: credential.id });
-                    }}
-                    aria-label="Delete credential"
                   >
-                    <Trash2 className="size-3.5" />
-                  </Button>
-                  <Link
-                    href={`/dashboard/credentials/${credential.id}`}
-                    prefetch
-                    className="flex size-7 items-center justify-center rounded-md text-muted-foreground/50 transition-colors hover:text-foreground"
-                  >
-                    <ChevronRight className="size-3.5" />
-                  </Link>
+                    <div
+                      className={cn(
+                        "pointer-events-none absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-200",
+                        meta.gradient,
+                        "group-hover:opacity-100",
+                      )}
+                      aria-hidden="true"
+                    />
+                    <CardHeader>
+                      <div className="min-w-0 flex-1">
+                          <CardTitle className="truncate">
+                            {credential.name}
+                          </CardTitle>
+                          <CardDescription>
+                            <span className="mt-0.5 inline-flex items-center gap-1.5">
+                              <span
+                                className={cn(
+                                  "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider",
+                                  credential.type === CredentialType.GEMINI
+                                    ? "bg-blue-500/10 text-blue-500"
+                                    : "bg-emerald-500/10 text-emerald-500",
+                                )}
+                              >
+                                {meta.label}
+                              </span>
+                              <span className="text-[11px] text-muted-foreground/50">
+                                {new Date(
+                                  credential.createdAt,
+                                ).toLocaleDateString(undefined, {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })}
+                              </span>
+                            </span>
+                          </CardDescription>
+                        </div>
+                      <CardAction>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              aria-label="Credential actions"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal className="size-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            align="end"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <DropdownMenuItem
+                              className="gap-2 text-destructive focus:text-destructive"
+                              onClick={() =>
+                                removeCredential.mutate({
+                                  id: credential.id,
+                                })
+                              }
+                            >
+                              <Trash2 className="size-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </CardAction>
+                    </CardHeader>
+                  </Card>
                 </div>
-              </div>
             );
           })}
         </div>
-      )}
-    </EntityContainer>
+        )}
+      </EntityContainer>
+
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent className="flex flex-col p-0 w-full sm:max-w-lg">
+          <CredentialForm
+            initialData={
+              editingCredential
+                ? {
+                    id: editingCredential.id,
+                    name: editingCredential.name,
+                    type: editingCredential.type,
+                    value: editingCredential.value,
+                  }
+                : undefined
+            }
+            onSuccess={closeSheet}
+          />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }

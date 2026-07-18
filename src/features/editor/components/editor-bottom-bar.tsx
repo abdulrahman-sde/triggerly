@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useEditorStore } from "@/store/editor-store";
-import { useUpdateWorkflow } from "@/features/workflows/hooks/use-worflows";
+import { useExecuteWorkflow } from "@/features/workflows/hooks/use-worflows";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import { Floppy, Loader } from "reicon-react";
+import { Loader, Play } from "reicon-react";
 import { Maximize2, Minimize2, WandSparklesIcon, ZoomIn } from "lucide-react";
 
 export function EditorBottomBar({
@@ -15,25 +14,11 @@ export function EditorBottomBar({
   workflowId: string;
   zoom: number;
 }) {
-  const editorState = useEditorStore((state) => state.editorState);
-  const handleSaveWorkflow = useUpdateWorkflow();
-  const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const executeWorkflow = useExecuteWorkflow();
 
-  const handleSave = () => {
-    if (!editorState) return;
-    handleSaveWorkflow.mutate(
-      {
-        id: workflowId,
-        nodes: editorState.getNodes(),
-        edges: editorState.getEdges(),
-      },
-      {
-        onSuccess: () => {
-          setLastSaved(new Date().toLocaleTimeString());
-        },
-      },
-    );
+  const handleExecuteWorkflow = () => {
+    executeWorkflow.mutate({ workflowId });
   };
 
   const handleAiGenerate = () => {
@@ -55,7 +40,6 @@ export function EditorBottomBar({
       <div className="flex items-center gap-1.5 text-muted-foreground text-xs font-medium px-1">
         <ZoomIn className="h-3 w-3" />
         {zoom}%<span className="text-muted-foreground/40">|</span>
-        {lastSaved ? `Saved ${lastSaved}` : "Not saved"}
       </div>
       <div className="ml-auto flex items-center gap-1.5">
         <span className="text-muted-foreground/40">|</span>
@@ -72,15 +56,21 @@ export function EditorBottomBar({
 
         <Button
           size="sm"
-          onClick={handleSave}
-          disabled={handleSaveWorkflow.isPending}
+          variant="default"
+          onClick={handleExecuteWorkflow}
+          disabled={executeWorkflow.isPending}
         >
-          {handleSaveWorkflow.isPending ? (
-            <Loader className="h-4 w-4 animate-spin" />
+          {executeWorkflow.isPending ? (
+            <>
+              <Loader size={24} className="animate-spin" />
+              Executing ...
+            </>
           ) : (
-            <Floppy className="h-4 w-4" />
+            <>
+              <Play size={18} />
+              Execute Workflow
+            </>
           )}
-          Save Workflow
         </Button>
       </div>
     </div>

@@ -3,13 +3,24 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { CredentialType } from "@/generated/prisma/enums";
+import { useSuspenseCredentials } from "@/features/credentials/hooks/use-credentials";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,8 +33,9 @@ const formSchema = z.object({
       message:
         "Variable name must start with a letter or underscore and can only contain letters, numbers, and underscores",
     }),
-  baseURL: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  credentialId: z.string().optional(),
   apiKey: z.string().optional(),
+  baseURL: z.string().optional(),
   model: z.string().optional(),
   systemPrompt: z.string().optional(),
   userPrompt: z.string().optional(),
@@ -42,10 +54,17 @@ export default function OpenAICompatibleSheet({
   onSubmit: (values: OpenAICompatibleFormValues) => void;
   defaultValues?: Partial<OpenAICompatibleFormValues>;
 }) {
+  const router = useRouter();
+  const { data: credentials } = useSuspenseCredentials();
+  const openaiCredentials = credentials.filter(
+    (c) => c.type === CredentialType.OPENAI_COMPATIBLE,
+  );
+
   const defaults = {
     variableName: defaultValues?.variableName ?? "",
-    baseURL: defaultValues?.baseURL ?? "https://integrate.api.nvidia.com/v1",
+    credentialId: defaultValues?.credentialId ?? "",
     apiKey: defaultValues?.apiKey ?? "",
+    baseURL: defaultValues?.baseURL ?? "",
     model: defaultValues?.model ?? "nvidia/llama-3.1-nemotron-nano-8b-v1",
     systemPrompt: defaultValues?.systemPrompt ?? "",
     userPrompt: defaultValues?.userPrompt ?? "",
@@ -69,7 +88,7 @@ export default function OpenAICompatibleSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-80 border-l overflow-auto border-border/40 p-0 rounded-l-2xl bg-gradient-to-b from-background via-background to-secondary/20 shadow-2xl backdrop-blur-2xl">
+      <SheetContent className="w-80 border-l border-border/40 p-0 gap-0 rounded-l-2xl bg-gradient-to-b from-background via-background to-secondary/20 shadow-2xl backdrop-blur-2xl">
         <SheetHeader className="px-5 pt-6 pb-4 border-b border-border/40 bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent">
           <SheetTitle className="text-base tracking-tight">
             OpenAI Compatible
@@ -79,15 +98,8 @@ export default function OpenAICompatibleSheet({
           </p>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
-          <div className="mx-5 mt-4 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-700 leading-relaxed">
-            Defaults to NIM using{" "}
-            <code className="text-[11px] font-mono bg-blue-100/60 px-1 rounded">
-              NIM_API_KEY
-            </code>
-            . Fill in custom values to override.
-          </div>
-          <div className="flex flex-col gap-6 px-5 pt-5 pb-5 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-1 min-h-0 flex-col">
+          <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-5 pt-5 pb-5">
             <div className="grid gap-1.5">
               <div className="flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-primary/60" />
@@ -114,39 +126,56 @@ export default function OpenAICompatibleSheet({
 
             <div className="grid gap-1.5">
               <div className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                <span className="size-1.5 rounded-full bg-primary/60" />
                 <p className="text-xs font-medium text-foreground/80">
-                  Base URL
+                  Credential
                 </p>
               </div>
-              <Input
-                placeholder="https://api.openai.com/v1"
-                className="h-8.5 px-3 text-[12px]"
-                {...form.register("baseURL")}
-              />
-              {form.formState.errors.baseURL && (
-                <p className="text-xs text-destructive pl-1">
-                  {form.formState.errors.baseURL.message}
-                </p>
-              )}
-            </div>
-
-            <div className="grid gap-1.5">
-              <div className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-muted-foreground/40" />
-                <p className="text-xs font-medium text-foreground/80">
-                  API Key
-                </p>
-              </div>
-              <Input
-                type="password"
-                placeholder="sk-..."
-                className="h-8.5 px-3 text-[12px]"
-                {...form.register("apiKey")}
-              />
-              {form.formState.errors.apiKey && (
-                <p className="text-xs text-destructive pl-1">
-                  {form.formState.errors.apiKey.message}
+              <Select
+                value={form.watch("credentialId") || ""}
+                onValueChange={(id) => {
+                  if (id === "__manage__") {
+                    router.push("/dashboard/credentials");
+                    return;
+                  }
+                  const cred = openaiCredentials.find((c) => c.id === id);
+                  if (cred) {
+                    form.setValue("credentialId", cred.id);
+                    form.setValue("apiKey", cred.value);
+                    if (cred.baseURL) form.setValue("baseURL", cred.baseURL);
+                  }
+                }}
+              >
+                <SelectTrigger size="sm" className="h-8.5 px-3 text-[12px]">
+                  <SelectValue placeholder={openaiCredentials.length > 0 ? "Select credential..." : "No credentials saved"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {openaiCredentials.length === 0 ? (
+                    <SelectItem value="__manage__">
+                      Add credential →
+                    </SelectItem>
+                  ) : (
+                    <>
+                      {openaiCredentials.map((cred) => (
+                        <SelectItem key={cred.id} value={cred.id}>
+                          {cred.name}
+                        </SelectItem>
+                      ))}
+                      <SelectSeparator />
+                      <SelectItem value="__manage__">
+                        Manage credentials
+                      </SelectItem>
+                    </>
+                  )}
+                </SelectContent>
+              </Select>
+              <input type="hidden" {...form.register("apiKey")} />
+              {form.watch("credentialId") && (
+                <p className="text-xs text-muted-foreground/60 pl-1">
+                  Using{" "}
+                  <span className="font-medium text-foreground/70">
+                    {openaiCredentials.find((c) => c.id === form.watch("credentialId"))?.name}
+                  </span>
                 </p>
               )}
             </div>
@@ -202,6 +231,30 @@ export default function OpenAICompatibleSheet({
                 <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variable}}`}</code>{" "}
                 templating.
               </p>
+            </div>
+
+            <div>
+              <p className="text-[11px] font-semibold text-foreground/50 uppercase mb-3">
+                Quick Guide
+              </p>
+              <ol className="space-y-2.5">
+                {[
+                  "Save your provider's API key & base URL as a credential",
+                  "Select the credential for this node",
+                  "Specify the model name your provider uses",
+                  "Write your prompt using {{variable}} templating",
+                ].map((step, i) => (
+                  <li
+                    key={i}
+                    className="flex gap-2.5 text-xs text-muted-foreground/60"
+                  >
+                    <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-500">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
 

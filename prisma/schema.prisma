@@ -81,6 +81,7 @@ model Credential {
     id    String @id @default(uuid())
     name  String
     value String
+    baseURL String?
 
     type      CredentialType
     createdAt DateTime       @default(now())
