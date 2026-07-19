@@ -14,7 +14,7 @@ export default function Workflows() {
     <HydrateClient>
       <ErrorBoundary fallback={<div>Failed to load workflows.</div>}>
         <Suspense fallback={<WorkflowsSkeleton />}>
-          <WorkflowsList />
+          <WorkflowsList description="Create, edit, and manage your automation workflows." />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

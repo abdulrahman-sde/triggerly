@@ -35,9 +35,6 @@
   --sidebar-accent-foreground: oklch(0.3742 0.1844 263.942);
   --sidebar-border: oklch(0.9271 0.0075 260.7315);
   --sidebar-ring: oklch(0.6225 0.2041 259.9027);
-  --font-sans: Inter, sans-serif;
-  --font-serif: Source Serif 4, serif;
-  --font-mono: JetBrains Mono, monospace;
   --radius: 0.6rem;
   --shadow-x: 0;
   --shadow-y: 1px;
@@ -94,10 +91,7 @@
   --sidebar-accent-foreground: oklch(0.882 0.0588 253.9688);
   --sidebar-border: oklch(0.3715 0 0);
   --sidebar-ring: oklch(0.6225 0.2041 259.9027);
-  --font-sans: Inter, sans-serif;
-  --font-serif: Source Serif 4, serif;
-  --font-mono: JetBrains Mono, monospace;
-  --radius: 1.15rem;
+  --radius: 0.6rem;
   --shadow-x: 0;
   --shadow-y: 1px;
   --shadow-blur: 3px;
@@ -169,6 +163,34 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+[data-slot="skeleton"] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-slot="skeleton"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklch, var(--muted-foreground) 15%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
 }
 
 @layer base {

@@ -1,8 +1,7 @@
+"use client";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Plus, Loader } from "reicon-react";
-import { toast } from "sonner";
-
 type EntityHeaderProps = {
   title: string;
   description?: string;
@@ -27,7 +26,7 @@ export const EntityHeader = ({
   return (
     <div className="flex flex-row items-center justify-between gap-x-4">
       <div className="flex flex-col">
-        <h1 className="text-lg md:text-xl font-semibold">{title}</h1>
+        <h1 className="text-lg md:text-xl font-medium">{title}</h1>
         {description && (
           <p className="text-xs md:text-sm text-muted-foreground">
             {description}

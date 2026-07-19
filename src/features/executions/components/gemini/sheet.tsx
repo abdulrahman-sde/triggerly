@@ -27,9 +27,9 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 
 const AVAILABLE_MODELS = [
-  "gemini-2.0-flash",
-  "gemini-2.0-flash-lite",
+  "gemini-3.5-flash",
   "gemini-2.5-pro",
+  "gemini-3-flash-preview",
 ] as const;
 
 const formSchema = z.object({
@@ -70,7 +70,7 @@ export default function GeminiSheet({
     variableName: defaultValues?.variableName ?? "",
     credentialId: defaultValues?.credentialId ?? "",
     apiKey: defaultValues?.apiKey ?? "",
-    model: defaultValues?.model ?? "gemini-2.0-flash",
+    model: defaultValues?.model ?? "gemini-3.5-flash",
     systemPrompt: defaultValues?.systemPrompt ?? "",
     userPrompt: defaultValues?.userPrompt ?? "",
   };
@@ -151,13 +151,17 @@ export default function GeminiSheet({
                 }}
               >
                 <SelectTrigger size="sm" className="h-8.5 px-3 text-[12px]">
-                  <SelectValue placeholder={geminiCredentials.length > 0 ? "Select credential..." : "No credentials saved"} />
+                  <SelectValue
+                    placeholder={
+                      geminiCredentials.length > 0
+                        ? "Select credential..."
+                        : "No credentials saved"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {geminiCredentials.length === 0 ? (
-                    <SelectItem value="__manage__">
-                      Add credential →
-                    </SelectItem>
+                    <SelectItem value="__manage__">Add credential →</SelectItem>
                   ) : (
                     <>
                       {geminiCredentials.map((cred) => (
@@ -178,7 +182,11 @@ export default function GeminiSheet({
                 <p className="text-xs text-muted-foreground/60 pl-1">
                   Using{" "}
                   <span className="font-medium text-foreground/70">
-                    {geminiCredentials.find((c) => c.id === form.watch("credentialId"))?.name}
+                    {
+                      geminiCredentials.find(
+                        (c) => c.id === form.watch("credentialId"),
+                      )?.name
+                    }
                   </span>
                 </p>
               )}

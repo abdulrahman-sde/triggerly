@@ -36,7 +36,7 @@ export const OpenAICompatibleExecutor: NodeExecutor<
     const baseURL = data.baseURL || "https://integrate.api.nvidia.com/v1";
     const apiKey = data.apiKey || process.env.NIM_API_KEY || "";
 
-    const selectedModel = "nvidia/nemotron-3-nano-30b-a3b";
+    const selectedModel = data.model || "nvidia/nemotron-3-nano-30b-a3b";
     const provider = createOpenAICompatible({
       baseURL,
       name: "openai-compatible",
@@ -50,6 +50,7 @@ export const OpenAICompatibleExecutor: NodeExecutor<
         model: provider.chatModel(selectedModel),
         system: systemPrompt,
         prompt: userPrompt,
+        maxRetries: 1,
       },
     );
 

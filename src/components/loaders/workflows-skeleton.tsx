@@ -31,10 +31,11 @@ export default function WorkflowsSkeleton() {
     <EntityContainer
       header={
         <div className="flex flex-row items-center justify-between gap-x-4">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <Skeleton className="h-7 w-28" />
+            <Skeleton className="h-3.5 w-48" />
           </div>
-          <Skeleton className="h-9 w-32 rounded-md" />
+          <Skeleton className="h-8 w-32 rounded-md" />
         </div>
       }
     >

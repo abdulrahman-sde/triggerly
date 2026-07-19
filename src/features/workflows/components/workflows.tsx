@@ -28,7 +28,11 @@ import {
 } from "../hooks/use-worflows";
 import Link from "next/link";
 
-export default function WorkflowsList() {
+export default function WorkflowsList({
+  description,
+}: {
+  description?: string;
+}) {
   const workflows = useSuspenseWorkflows();
   const removeWorkflow = useRemoveWorkflow();
   const createWorkflow = useCreateWorkflow();
@@ -53,6 +57,7 @@ export default function WorkflowsList() {
       header={
         <EntityHeader
           title="Workflows"
+          description={description}
           newButtonLabel="New Workflow"
           onNew={handleCreateWorkflow}
           isCreating={createWorkflow.isPending}
@@ -76,8 +81,8 @@ export default function WorkflowsList() {
               })}
             >
               <CardHeader>
-                <CardTitle>{workflow.name}</CardTitle>
-                <CardDescription>
+                <CardTitle className="capitalize">{workflow.name}</CardTitle>
+                <CardDescription className="text-xs">
                   Created {new Date(workflow.createdAt).toLocaleDateString()}
                 </CardDescription>
                 <CardAction>

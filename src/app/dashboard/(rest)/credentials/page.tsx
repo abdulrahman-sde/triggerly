@@ -24,7 +24,7 @@ export default function Credentials() {
         }
       >
         <Suspense fallback={<WorkflowsSkeleton />}>
-          <CredentialsList />
+          <CredentialsList description="Manage API keys and authentication for external services." />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

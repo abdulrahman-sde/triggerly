@@ -55,7 +55,7 @@ const providerMeta: Record<
   },
 };
 
-export default function CredentialsList() {
+export default function CredentialsList({ description }: { description?: string }) {
   const credentials = useSuspenseCredentials();
   const removeCredential = useRemoveCredential();
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -83,6 +83,7 @@ export default function CredentialsList() {
         header={
           <EntityHeader
             title="Credentials"
+            description={description}
             newButtonLabel="New Credential"
             onNew={openCreate}
           />

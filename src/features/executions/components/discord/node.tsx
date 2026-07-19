@@ -70,10 +70,10 @@ export const DiscordNode = memo((props: NodeProps<DiscordNodeType>) => {
             <p className="truncate text-[15px] font-medium leading-5 text-foreground">
               {nodeData?.username || "Discord"}
             </p>
-            <span className="text-sm leading-5 text-muted-foreground truncate">
+            <span className="text-sm leading-5 text-muted-foreground line-clamp-1">
               {nodeData?.content
-                ? `"${nodeData.content.slice(0, 40)}${nodeData.content.length > 40 ? "..." : ""}"`
-                : "No message set"}
+                ? `${nodeData.content.slice(0, 40)}${nodeData.content.length > 40 ? "..." : ""}`
+                : "No Manual message set"}
             </span>
           </div>
         </div>

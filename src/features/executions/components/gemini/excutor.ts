@@ -38,7 +38,7 @@ export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
     const credentials = data.apiKey || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
     const google = createGoogleGenerativeAI({ apiKey: credentials || "" });
-    const selectedModel = data.model || "gemini-2.0-flash";
+    const selectedModel = data.model || "gemini-2.5-pro";
 
     const { steps } = await step.ai.wrap("gemini-generate-text", generateText, {
       model: google(selectedModel),

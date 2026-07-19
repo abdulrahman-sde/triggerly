@@ -80,7 +80,7 @@ export const GeminiNode = memo((props: NodeProps<GeminiNodeTypes>) => {
           <div className="self-start flex items-center gap-1.5 rounded-lg border border-border/50 bg-secondary/15 px-2 py-1 text-xs text-muted-foreground">
             <Layers className="size-3.5 text-muted-foreground/60" />
             <span className="font-sans text-[11px] leading-none lowercase">
-              {(nodeData?.model || "gemini-2.0-flash").toLowerCase()}
+              {(nodeData?.model || "gemini-2.5-pro").toLowerCase()}
             </span>
           </div>
         </div>
