@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 
 import { useEditorStore } from "@/store/editor-store";
 import { useWorkflowStatus } from "../hooks/use-workflow-status";
+import { useTheme } from "next-themes";
 
 export default function Editor({ workflowId }: { workflowId: string }) {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
@@ -57,11 +58,13 @@ export default function Editor({ workflowId }: { workflowId: string }) {
   );
 
   useWorkflowStatus(workflowId);
+  const theme = useTheme();
+  const isDark = theme.theme === "dark";
   return (
     <div className="h-full w-full bg-background bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_0)] bg-size-[18px_18px]">
       <ReactFlow
         proOptions={{ hideAttribution: true }}
-        colorMode="light"
+        colorMode={isDark ? "dark" : "light"}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
