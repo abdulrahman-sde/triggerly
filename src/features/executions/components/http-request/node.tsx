@@ -71,7 +71,7 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
               "bg-zinc-100/80",
             )}
           >
-            <GlobePointer className="size-6" color="#b45309" />
+            <GlobePointer className="size-6" color="#b45309" weight="Filled" />
           </div>
 
           <div className="min-w-0 flex-1">

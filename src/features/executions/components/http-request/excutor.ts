@@ -10,16 +10,25 @@ type httpRequestData = {
   body?: string;
 };
 
+Handlebars.registerHelper("json", (value) => {
+  return new Handlebars.SafeString(
+    JSON.stringify(value === undefined ? null : value),
+  );
+});
+
+function render(source?: string, context?: Record<string, unknown>): string {
+  return Handlebars.compile(source, { noEscape: true, strict: false })(context);
+}
+
 export const httpRequestExecutor: NodeExecutor<httpRequestData> = async ({
   data,
   context,
   step,
-  publish,
   channel,
   nodeId,
 }) => {
   try {
-    const endpoint = Handlebars.compile(data.endpoint)(context);
+    const endpoint = render(data.endpoint, context);
     if (!endpoint) {
       throw new NonRetriableError("Endpoint is required for HTTP request node");
     }
@@ -41,10 +50,12 @@ export const httpRequestExecutor: NodeExecutor<httpRequestData> = async ({
       const options: kyOptions = { method };
 
       if (["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
-        const resolvedBody = Handlebars.compile(data.body)(context);
+        const resolvedBody = render(data.body, context);
+
         JSON.parse(resolvedBody);
         options.body = resolvedBody;
-        options.headers = { "Content-status": "application/json" };
+
+        options.headers = { "Content-Type": "application/json" };
       }
       const response = await ky(endpoint, options);
       const contentType = response.headers.get("content-type");
