@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Manrope, Space_Grotesk } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/trpc/client";
@@ -24,7 +24,11 @@ export default function TriggerlyLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fontSans.variable} `} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${fontSans.variable} `}
+      suppressHydrationWarning
+    >
       <body className="antialiased font-sans ">
         <TRPCReactProvider>
           <TooltipProvider delayDuration={0}>

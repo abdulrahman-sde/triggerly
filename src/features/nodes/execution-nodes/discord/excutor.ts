@@ -1,4 +1,4 @@
-import type { NodeExecutor } from "@/features/executions/types";
+import type { NodeExecutor } from "@/features/nodes/types";
 import { NonRetriableError } from "inngest";
 import ky from "ky";
 import Handlebars from "handlebars";
@@ -11,7 +11,7 @@ type DiscordData = {
   content?: string;
 };
 
-export const discordExecutor: NodeExecutor<DiscordData> = async ({
+export const DiscordExecutor: NodeExecutor<DiscordData> = async ({
   data,
   context,
   step,

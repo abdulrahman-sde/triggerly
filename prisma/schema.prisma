@@ -78,9 +78,9 @@ enum CredentialType {
 }
 
 model Credential {
-    id    String @id @default(uuid())
-    name  String
-    value String
+    id      String  @id @default(uuid())
+    name    String
+    value   String
     baseURL String?
 
     type      CredentialType
@@ -102,6 +102,7 @@ model Workflow {
     user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
     nodes       Node[]
     connections Connection[]
+    executions  Execution[]
 
     @@map("workflow")
 }
@@ -147,4 +148,24 @@ model Connection {
 
     @@unique([fromNodeId, toNodeId, workflowId])
     @@map("connection")
+}
+
+enum ExecutionStatus {
+    PENDING
+    RUNNING
+    SUCCESS
+    FAILED
+}
+
+model Execution {
+    id         String          @id @default(uuid())
+    workflowId String
+    workflow   Workflow        @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+    status     ExecutionStatus @default(PENDING)
+    startedAt  DateTime        @default(now())
+    finishedAt DateTime?
+    logs       Json            @default("[]")
+    runId      String          @unique
+
+    @@map("execution")
 }

@@ -1,25 +1,22 @@
-import type { NodeExecutor } from "@/features/executions/types";
+import type { NodeExecutor } from "@/features/nodes/types";
 import { NonRetriableError } from "inngest";
 import Handlebars from "handlebars";
 import { inngest } from "@/inngest/client";
 import { generateText } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 
-type GeminiData = {
+type OpenAICompatibleData = {
   variableName?: string;
+  baseURL?: string;
   apiKey?: string;
   model?: string;
   systemPrompt?: string;
   userPrompt?: string;
 };
 
-export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
-  data,
-  context,
-  step,
-  channel,
-  nodeId,
-}) => {
+export const OpenAICompatibleExecutor: NodeExecutor<
+  OpenAICompatibleData
+> = async ({ data, context, step, channel, nodeId }) => {
   try {
     if (!data.variableName) {
       throw new NonRetriableError("Variable name is required");
@@ -29,27 +26,33 @@ export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
       status: "loading",
       nodeId: nodeId,
     });
+
     const systemPrompt = data.systemPrompt
       ? Handlebars.compile(data.systemPrompt)(context)
       : "you are a helpful assistant";
     const userPrompt = data.userPrompt
       ? Handlebars.compile(data.userPrompt)(context)
       : "";
-    const credentials = data.apiKey || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    const baseURL = data.baseURL || "https://integrate.api.nvidia.com/v1";
+    const apiKey = data.apiKey || process.env.NIM_API_KEY || "";
 
-    const google = createGoogleGenerativeAI({ apiKey: credentials || "" });
-    const selectedModel = data.model || "gemini-2.5-pro";
-
-    const { steps } = await step.ai.wrap("gemini-generate-text", generateText, {
-      model: google(selectedModel),
-      system: systemPrompt,
-      prompt: userPrompt,
-      experimental_telemetry: {
-        isEnabled: true,
-        recordInputs: true,
-        recordOutputs: true,
-      },
+    const selectedModel = data.model || "nvidia/nemotron-3-nano-30b-a3b";
+    const provider = createOpenAICompatible({
+      baseURL,
+      name: "openai-compatible",
+      apiKey,
     });
+
+    const { steps } = await step.ai.wrap(
+      "openai-compatible-generate-text",
+      generateText,
+      {
+        model: provider.chatModel(selectedModel),
+        system: systemPrompt,
+        prompt: userPrompt,
+        maxRetries: 1,
+      },
+    );
 
     const text =
       steps[0].content[0].type === "text" ? steps[0].content[0].text : "";

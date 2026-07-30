@@ -3,7 +3,7 @@ import { BaseTriggerNode } from "../base-trigger-node";
 import { memo, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 
-import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
+import { useNodeStatus } from "@/features/nodes/hooks/use-node-status";
 import GoogleFormSetupSheet from "./setup-guide";
 
 const NGROK_URL = process.env.NEXT_PUBLIC_NGROK_URL;

@@ -10,7 +10,7 @@ import { Edge, Node } from "@xyflow/react";
 import z from "zod";
 
 export const workflowsRouter = createTRPCRouter({
-  execute: premiumProcedure
+  execute: protectedProcedure
     .input(
       z.object({
         workflowId: z.string(),
@@ -28,17 +28,23 @@ export const workflowsRouter = createTRPCRouter({
         },
       });
 
-      const runId = crypto.randomUUID(); // <-- generate a unique runId for this execution
-
+      const runId = crypto.randomUUID();
+      const execution = await prisma.execution.create({
+        data: {
+          workflowId: workflow.id,
+          runId,
+        },
+      });
       await inngest.send({
         name: "workflows/execute.workflow",
         data: {
           workflowId: workflow.id,
-          runId, // <-- include the runId in the event data
+          executionId: execution.id,
+          runId,
         },
       });
 
-      return { message: "Workflow execution triggered", runId }; // <-- return it here
+      return { message: "Workflow execution triggered", runId };
     }),
 
   getAll: protectedProcedure.query(async ({ ctx }) => {

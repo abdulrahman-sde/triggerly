@@ -18,7 +18,6 @@ export const useWorkflowStatus = (workflowId: string) => {
   useEffect(() => {
     const latest: Realtime.Message | undefined = messages.all.at(-1);
     if (latest) {
-      console.log(latest);
       useWorkflowRun.getState().setRunId(latest.data.runId);
     }
   }, [messages]);

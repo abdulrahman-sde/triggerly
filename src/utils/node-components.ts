@@ -1,10 +1,10 @@
 import { initialNode } from "@/components/react-flow/initial-node";
-import { DiscordNode } from "@/features/executions/components/discord/node";
-import { GeminiNode } from "@/features/executions/components/gemini/node";
-import { HttpRequestNode } from "@/features/executions/components/http-request/node";
-import { OpenAICompatibleNode } from "@/features/executions/components/openai-compatible/node";
-import GoogleFormTriggerNode from "@/features/triggers/components/google-form-trigger/node";
-import ManualTriggerNode from "@/features/triggers/components/manual-trigger/node";
+import { DiscordNode } from "@/features/nodes/execution-nodes/discord/node";
+import { GeminiNode } from "@/features/nodes/execution-nodes/gemini/node";
+import { HttpRequestNode } from "@/features/nodes/execution-nodes/http-request/node";
+import { OpenAICompatibleNode } from "@/features/nodes/execution-nodes/openai-compatible/node";
+import GoogleFormTriggerNode from "@/features/nodes/trigger-nodes/google-form-trigger/node";
+import ManualTriggerNode from "@/features/nodes/trigger-nodes/manual-trigger/node";
 import { NodeType } from "@/generated/prisma/enums";
 import type { NodeTypes } from "@xyflow/react";
 

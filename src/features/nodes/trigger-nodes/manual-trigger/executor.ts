@@ -1,4 +1,4 @@
-import type { NodeExecutor } from "@/features/executions/types";
+import type { NodeExecutor } from "@/features/nodes/types";
 
 import { inngest } from "@/inngest/client";
 

@@ -1,6 +1,6 @@
 import { NodeProps } from "@xyflow/react";
 import { BaseTriggerNode } from "../base-trigger-node";
-import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
+import { useNodeStatus } from "@/features/nodes/hooks/use-node-status";
 import { Pointer } from "reicon-react";
 
 export default function ManualTriggerNode(props: NodeProps) {

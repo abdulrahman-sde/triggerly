@@ -143,23 +143,22 @@ export default function DiscordSheet({
                 Override the webhook&apos;s default username (optional).
               </p>
             </div>
-          </div>
-
-          <div className="grid gap-1.5">
-            <div className="flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-muted-foreground/40" />
-              <p className="text-xs font-medium text-foreground/80">
-                Message
+            <div className="grid gap-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                <p className="text-xs font-medium text-foreground/80">
+                  Message
+                </p>
+              </div>
+              <Textarea
+                placeholder="Hello @everyone!"
+                className="h-20 px-3 text-[12px] resize-none"
+                {...form.register("content")}
+              />
+              <p className="text-xs text-muted-foreground/60 pl-1">
+                Message content sent to the channel (optional).
               </p>
             </div>
-            <Textarea
-              placeholder="Hello @everyone!"
-              className="h-20 px-3 text-[12px] resize-none"
-              {...form.register("content")}
-            />
-            <p className="text-xs text-muted-foreground/60 pl-1">
-              Message content sent to the channel (optional).
-            </p>
           </div>
 
           <div className="mt-auto px-5 py-4 border-t border-border/40 bg-gradient-to-b from-transparent to-secondary/10">

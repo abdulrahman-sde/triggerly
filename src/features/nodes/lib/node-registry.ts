@@ -1,11 +1,11 @@
 import { NodeType } from "@/generated/prisma/browser";
 import { NodeExecutor } from "../types";
-import { manualTriggerExecutor } from "@/features/triggers/components/manual-trigger/executor";
-import { httpRequestExecutor } from "@/features/executions/components/http-request/excutor";
-import { googleFormTriggerExecutor } from "@/features/triggers/components/google-form-trigger/executor";
-import { discordExecutor } from "@/features/executions/components/discord/excutor";
-import { GeminiExecutor } from "../components/gemini/excutor";
-import { OpenAICompatibleExecutor } from "../components/openai-compatible/excutor";
+import { httpRequestExecutor } from "@/features/nodes/execution-nodes/http-request/excutor";
+import { googleFormTriggerExecutor } from "@/features/nodes/trigger-nodes/google-form-trigger/executor";
+import { DiscordExecutor } from "@/features/nodes/execution-nodes/discord/excutor";
+import { GeminiExecutor } from "../execution-nodes/gemini/excutor";
+import { OpenAICompatibleExecutor } from "../execution-nodes/openai-compatible/excutor";
+import { manualTriggerExecutor } from "../trigger-nodes/manual-trigger/executor";
 
 export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.INITIAL]: manualTriggerExecutor,
@@ -14,7 +14,7 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.GOOGLE_FORM_TRIGGER]: googleFormTriggerExecutor,
   [NodeType.GEMINI]: GeminiExecutor,
   [NodeType.OPENAI_COMPATIBLE]: OpenAICompatibleExecutor,
-  [NodeType.DISCORD]: discordExecutor,
+  [NodeType.DISCORD]: DiscordExecutor,
 };
 
 export const getExecutor = (nodeType: NodeType): NodeExecutor => {
