@@ -89,7 +89,7 @@ export const workflowsRouter = createTRPCRouter({
       return { ...workflow, nodes, edges };
     }),
 
-  create: protectedProcedure
+  create: premiumProcedure
     .input(
       z.object({
         name: z.string(),

@@ -11,11 +11,11 @@ import { useNodeStatus } from "../../hooks/use-node-status";
 import { GlobePointer } from "reicon-react";
 
 const methodStyles: Record<string, string> = {
-  GET: "bg-green-100/70 text-green-700",
-  POST: "bg-blue-100/70 text-blue-700",
-  PUT: "bg-orange-100/70 text-orange-700",
-  PATCH: "bg-violet-100/70 text-violet-700",
-  DELETE: "bg-red-100/70 text-red-700",
+  GET: "bg-green-100/70 text-green-700 dark:bg-green-200",
+  POST: "bg-blue-100/70 text-blue-700 dark:bg-blue-200",
+  PUT: "bg-orange-100/70 text-orange-700 dark:bg-orange-200",
+  PATCH: "bg-violet-100/70 text-violet-700 dark:bg-violet-200",
+  DELETE: "bg-red-100/70 text-red-700 dark:bg-red-200",
 };
 
 type HttpRequestNodeData = {
@@ -81,7 +81,7 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
             <div className="mt-1 flex items-center gap-1.5">
               {method && (
                 <span
-                  className={`inline-block rounded-md px-1.5 py-0.5 text-[10px] font-medium leading-none ${methodStyles[method] || "bg-zinc-100/70 text-zinc-700"}`}
+                  className={`inline-block rounded-sm px-1.5 py-0.5 text-[10px] font-medium leading-none ${methodStyles[method] || "bg-zinc-100/70 text-zinc-700 dark:bg-zinc-200"}`}
                 >
                   {method}
                 </span>

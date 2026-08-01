@@ -18,7 +18,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Plus } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NodeSelector } from "./node-selector";
 import { EditorBottomBar } from "./editor-bottom-bar";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/editor-store";
 import { useWorkflowStatus } from "../hooks/use-workflow-status";
 import { useTheme } from "next-themes";
+import WorkflowEditorSkeleton from "@/components/loaders/workflow-editor-skeleton";
 
 export default function Editor({ workflowId }: { workflowId: string }) {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
@@ -58,8 +59,15 @@ export default function Editor({ workflowId }: { workflowId: string }) {
   );
 
   useWorkflowStatus(workflowId);
-  const theme = useTheme();
-  const isDark = theme.theme === "dark";
+  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  const isDark = mounted && resolvedTheme === "dark";
+  if (!mounted) return <WorkflowEditorSkeleton />;
   return (
     <div className="h-full w-full bg-background bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_0)] bg-size-[18px_18px]">
       <ReactFlow
