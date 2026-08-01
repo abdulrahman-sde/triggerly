@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Play } from "lucide-react";
 
 import {
@@ -14,11 +15,9 @@ import { cn } from "@/lib/utils";
 
 import { useSuspenseExecutions } from "../hooks/use-executions";
 import { ExecutionStatus } from "@/generated/prisma/enums";
+import { formatDate } from "@/utils/format-date";
 
-const statusMeta: Record<
-  ExecutionStatus,
-  { label: string; dot: string }
-> = {
+const statusMeta: Record<ExecutionStatus, { label: string; dot: string }> = {
   [ExecutionStatus.PENDING]: {
     label: "Pending",
     dot: "bg-yellow-500",
@@ -46,12 +45,7 @@ export default function ExecutionsList({
 
   return (
     <EntityContainer
-      header={
-        <EntityHeader
-          title="Executions"
-          description={description}
-        />
-      }
+      header={<EntityHeader title="Executions" description={description} />}
     >
       {executions.data.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
@@ -71,39 +65,47 @@ export default function ExecutionsList({
             const meta = statusMeta[execution.status];
 
             return (
-              <Card
+              <Link
                 key={execution.id}
-                size="sm"
-                className={cn(
-                  "relative overflow-hidden transition-all duration-200",
-                  "hover:-translate-y-0.5 hover:shadow-md",
-                )}
+                href={`/dashboard/executions/${execution.id}`}
+                prefetch
               >
-                <CardHeader>
-                  <div className="min-w-0 flex-1">
-                    <CardTitle className="truncate">
-                      {execution.workflow.name}
-                    </CardTitle>
-                    <CardDescription>
-                      <span className="mt-0.5 inline-flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5">
-                          <span className={cn("size-1.5 rounded-full", meta.dot)} />
-                          <span className="text-[11px] font-medium">
-                            {meta.label}
+                <Card
+                  size="sm"
+                  className={cn(
+                    "relative overflow-hidden transition-all duration-200",
+                    "hover:-translate-y-0.5 hover:shadow-md",
+                  )}
+                >
+                  <CardHeader>
+                    <div className="min-w-0 flex-1">
+                      <CardTitle className="truncate">
+                        {execution.workflow.name}
+                      </CardTitle>
+                      <CardDescription>
+                        <span className=" mt-1 flex justify-between items-center gap-2">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span
+                              className={cn("size-1.5 rounded-full", meta.dot)}
+                            />
+                            <span className="text-[11px] font-medium">
+                              {meta.label}
+                            </span>
+                          </span>
+                          <span className="text-[11px] text-muted-foreground/50">
+                            Executed{" "}
+                            {formatDate(
+                              new Date(
+                                execution.finishedAt || execution.startedAt,
+                              ),
+                            )}
                           </span>
                         </span>
-                        <span className="text-[11px] text-muted-foreground/50">
-                          {new Date(execution.startedAt).toLocaleDateString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </span>
-                      </span>
-                    </CardDescription>
-                  </div>
-                </CardHeader>
-              </Card>
+                      </CardDescription>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
             );
           })}
         </div>

@@ -26,7 +26,7 @@ const GoogleFormTriggerNode = memo((props: NodeProps) => {
         {...props}
         name="Google Form Trigger"
         icon="/assets/icons/google-form.svg"
-        iconBg="bg-zinc-100/80"
+        iconBg="bg-zinc-100/80 dark:bg-zinc-100"
         status={status ?? "initial"}
         onSettings={handleSettings}
         onDoubleClick={handleSettings}

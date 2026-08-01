@@ -49,7 +49,7 @@ export const GeminiNode = memo((props: NodeProps<GeminiNodeTypes>) => {
           <div
             className={cn(
               "flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-lg",
-              "bg-zinc-100/80",
+              "bg-zinc-100/80 dark:bg-zinc-100",
             )}
           >
             <Image

@@ -78,7 +78,7 @@ export const BaseExecutionNode = memo(
             onDoubleClick={onDoubleClick}
             status={status}
             selected={selected}
-            className="group w-full overflow-hidden rounded-2xl bg-card"
+            className="group w-full overflow-hidden rounded-2xl bg-card/98"
           >
             {children}
 

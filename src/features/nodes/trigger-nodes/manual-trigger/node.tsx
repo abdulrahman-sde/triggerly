@@ -11,7 +11,7 @@ export default function ManualTriggerNode(props: NodeProps) {
       {...props}
       name="Manual Trigger"
       icon={Pointer}
-      iconBg="bg-zinc-100/80"
+      iconBg="bg-zinc-100/80 dark:bg-zinc-100"
       iconColor="#6366f1"
       status={status ?? "initial"}
     ></BaseTriggerNode>

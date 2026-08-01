@@ -6,17 +6,10 @@ export const executionsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await prisma.execution.findMany({
       where: {
-        workflow: {
-          userId: ctx.user.id,
-        },
+        userId: ctx.user.id,
       },
       include: {
-        workflow: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+        workflow: true,
       },
       orderBy: {
         startedAt: "desc",
@@ -30,17 +23,10 @@ export const executionsRouter = createTRPCRouter({
       return await prisma.execution.findUniqueOrThrow({
         where: {
           id: input.id,
-          workflow: {
-            userId: ctx.user.id,
-          },
+          userId: ctx.user.id,
         },
         include: {
-          workflow: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
+          workflow: true,
         },
       });
     }),

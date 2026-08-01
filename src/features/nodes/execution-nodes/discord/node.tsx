@@ -55,7 +55,7 @@ export const DiscordNode = memo((props: NodeProps<DiscordNodeType>) => {
           <div
             className={cn(
               "flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl",
-              "bg-zinc-100/80",
+              "bg-zinc-100/80 dark:bg-zinc-100",
             )}
           >
             <Image

@@ -99,6 +99,8 @@ export const useUpdateName = () => {
 
 export const useExecuteWorkflow = () => {
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   return useMutation(
     trpc.workflows.execute.mutationOptions({
       onMutate: () => {
@@ -106,7 +108,7 @@ export const useExecuteWorkflow = () => {
       },
       onSuccess: (data, input) => {
         useWorkflowRun.getState().setRunId(data.runId); // <-- this is "how you get the runId on the frontend"
-
+        queryClient.invalidateQueries(trpc.executions.getAll.queryOptions());
         toast.success(data.message || "Workflow execution started");
       },
       onError: (err) => {

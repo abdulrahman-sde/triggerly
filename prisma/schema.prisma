@@ -19,6 +19,7 @@ model User {
     accounts      Account[]
     workflows     Workflow[]
     credentials   Credential[]
+    executions    Execution[]
 
     @@unique([email])
     @@map("user")
@@ -164,8 +165,11 @@ model Execution {
     status     ExecutionStatus @default(PENDING)
     startedAt  DateTime        @default(now())
     finishedAt DateTime?
+    error      String?
     logs       Json            @default("[]")
     runId      String          @unique
+    userId     String
+    user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@map("execution")
 }

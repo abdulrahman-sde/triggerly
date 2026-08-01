@@ -33,6 +33,8 @@ export const workflowsRouter = createTRPCRouter({
         data: {
           workflowId: workflow.id,
           runId,
+          status: "PENDING",
+          userId: ctx.user.id,
         },
       });
       await inngest.send({

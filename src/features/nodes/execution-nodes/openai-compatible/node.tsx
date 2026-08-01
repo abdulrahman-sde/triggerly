@@ -57,7 +57,7 @@ export const OpenAICompatibleNode = memo(
             <div
               className={cn(
                 "flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-lg",
-                "bg-zinc-100/80",
+                "bg-zinc-100/80 dark:bg-zinc-200",
               )}
             >
               <Image
@@ -76,11 +76,11 @@ export const OpenAICompatibleNode = memo(
           </div>
 
           <div className="px-3 pb-3 pt-0 flex flex-col gap-3">
-            <div className="rounded-xl border border-border/60 bg-secondary/90 p-1.5 flex flex-col gap-1">
+            <div className="rounded-xl border border-border/60 bg-secondary/90 dark:bg-neutral-900/5 p-1.5 flex flex-col gap-1">
               <div className="self-start rounded border border-border/60 bg-card px-1.5 py-0.5 text-[9px] text-muted-foreground/75 uppercase leading-none">
                 Prompt
               </div>
-              <div className="text-xs leading-relaxed px-1 line-clamp-4  text-foreground/85 break-words whitespace-pre-wrap">
+              <div className="text-xs leading-relaxed px-1 line-clamp-4  text-foreground/85 break-words whitespace-pre-wrap ">
                 {nodeData?.userPrompt || "No prompt configured"}
               </div>
             </div>

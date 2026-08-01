@@ -93,6 +93,9 @@ export default function GoogleFormSetupSheet({
 
           <div>
             <p className="text-xs text-muted-foreground mb-3">Variables</p>
+            <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+              Insert these into later steps to use this submission&apos;s data.
+            </p>
             <div className="divide-y divide-border">
               {variables.map(([variable, description]) => (
                 <div key={variable} className="py-2.5 first:pt-0 last:pb-0">

@@ -1,4 +1,3 @@
-import { error } from "console";
 import { realtime } from "inngest";
 import z from "zod";
 

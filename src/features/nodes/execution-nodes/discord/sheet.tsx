@@ -13,6 +13,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  VariableDefinitionHint,
+  VariableReferenceHint,
+} from "@/components/shared/variable-hints";
 
 const formSchema = z.object({
   variableName: z
@@ -96,11 +100,10 @@ export default function DiscordSheet({
                 className="h-8.5 px-3 text-[12px]"
                 {...form.register("variableName")}
               />
-              <p className="text-xs text-muted-foreground/60 pl-1">
-                Use{" "}
-                <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variableName}}`}</code>{" "}
-                in later steps.
-              </p>
+              <VariableDefinitionHint
+                name={form.watch("variableName") ?? ""}
+                path="status"
+              />
               {form.formState.errors.variableName && (
                 <p className="text-xs text-destructive pl-1">
                   {form.formState.errors.variableName.message}
@@ -120,6 +123,7 @@ export default function DiscordSheet({
                 className="h-8.5 px-3 text-[12px]"
                 {...form.register("webhookUrl")}
               />
+              <VariableReferenceHint />
               {form.formState.errors.webhookUrl && (
                 <p className="text-xs text-destructive pl-1">
                   {form.formState.errors.webhookUrl.message}
@@ -142,6 +146,7 @@ export default function DiscordSheet({
               <p className="text-xs text-muted-foreground/60 pl-1">
                 Override the webhook&apos;s default username (optional).
               </p>
+              <VariableReferenceHint />
             </div>
             <div className="grid gap-1.5">
               <div className="flex items-center gap-1.5">
@@ -158,6 +163,7 @@ export default function DiscordSheet({
               <p className="text-xs text-muted-foreground/60 pl-1">
                 Message content sent to the channel (optional).
               </p>
+              <VariableReferenceHint />
             </div>
           </div>
 

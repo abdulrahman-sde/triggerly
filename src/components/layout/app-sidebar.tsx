@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { LogoIcon } from "../logo";
-import { History, Home, Logout6 } from "reicon-react";
+import { History, Logout6 } from "reicon-react";
 
 function CredentialsIcon(props: { className?: string }) {
   return (
@@ -93,7 +93,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <div className="absolute top-0 z-[-2] h-screen w-20 bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+        <div className="hidden md:block absolute top-0 z-[-2] h-screen w-20 bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
         <SidebarGroup>
           <SidebarGroupLabel>General</SidebarGroupLabel>
           <SidebarMenu>

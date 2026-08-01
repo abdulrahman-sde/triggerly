@@ -25,6 +25,10 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
+import {
+  VariableDefinitionHint,
+  VariableReferenceHint,
+} from "@/components/shared/variable-hints";
 
 const AVAILABLE_MODELS = [
   "gemini-3.5-flash",
@@ -117,11 +121,10 @@ export default function GeminiSheet({
                 className="h-8.5 px-3 text-[12px]"
                 {...form.register("variableName")}
               />
-              <p className="text-xs text-muted-foreground/60 pl-1">
-                Use{" "}
-                <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variableName}}`}</code>{" "}
-                in later steps.
-              </p>
+              <VariableDefinitionHint
+                name={form.watch("variableName") ?? ""}
+                path="aiResponse"
+              />
               {form.formState.errors.variableName && (
                 <p className="text-xs text-destructive pl-1">
                   {form.formState.errors.variableName.message}
@@ -237,6 +240,7 @@ export default function GeminiSheet({
               <p className="text-xs text-muted-foreground/60 pl-1">
                 Instructions to set the behavior of the model.
               </p>
+              <VariableReferenceHint />
             </div>
 
             <div className="grid gap-1.5">
@@ -251,11 +255,7 @@ export default function GeminiSheet({
                 className="bg-input/30 px-3 text-[12px]"
                 {...form.register("userPrompt")}
               />
-              <p className="text-xs text-muted-foreground/60 pl-1">
-                Supports{" "}
-                <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variable}}`}</code>{" "}
-                templating.
-              </p>
+              <VariableReferenceHint />
             </div>
           </div>
 

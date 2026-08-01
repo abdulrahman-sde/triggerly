@@ -14,6 +14,10 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
+import {
+  VariableDefinitionHint,
+  VariableReferenceHint,
+} from "@/components/shared/variable-hints";
 
 const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
 
@@ -125,9 +129,10 @@ export default function HttpRequestSheet({
                 className="h-8.5 px-3 text-[12px]"
                 {...form.register("variableName")}
               />
-              <p className="text-xs text-muted-foreground/60 pl-1">
-                Use <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variableName.httpResponse.data}}`}</code> in later steps to reference the response.
-              </p>
+              <VariableDefinitionHint
+                name={form.watch("variableName") ?? ""}
+                path="httpResponse.data"
+              />
               {form.formState.errors.variableName && (
                 <p className="text-xs text-destructive pl-1">
                   {form.formState.errors.variableName.message}
@@ -176,9 +181,7 @@ export default function HttpRequestSheet({
                 className="h-8.5 px-3 text-[12px]"
                 {...form.register("endpoint")}
               />
-              <p className="text-xs text-muted-foreground/60 pl-1">
-                Supports <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variable}}`}</code> templating.
-              </p>
+              <VariableReferenceHint />
               {form.formState.errors.endpoint && (
                 <p className="text-xs text-destructive pl-1">
                   {form.formState.errors.endpoint.message}
@@ -197,9 +200,13 @@ export default function HttpRequestSheet({
                   className="bg-input/30 px-3 text-[12px]"
                   {...form.register("body")}
                 />
-                <p className="text-xs text-muted-foreground/60 pl-1">
-                  Supports <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{variable}}`}</code> templating.
-                </p>
+                <VariableReferenceHint>
+                  Insert{" "}
+                  <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{varName}}`}</code>{" "}
+                  to use values from earlier steps. Use{" "}
+                  <code className="text-xs text-foreground/70 font-mono bg-secondary/40 px-1 py-0.5 rounded">{`{{json varName}}`}</code>{" "}
+                  to insert a value as raw JSON.
+                </VariableReferenceHint>
               </div>
             )}
           </div>

@@ -76,7 +76,7 @@ export const BaseTriggerNode = memo(
             <div className="flex items-start gap-3 p-4">
               <div
                 className={cn(
-                  "flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl",
+                  "flex size-11  shrink-0 items-center justify-center overflow-hidden rounded-xl",
                   iconBg,
                 )}
               >
@@ -85,6 +85,7 @@ export const BaseTriggerNode = memo(
                 ) : (
                   <Icon
                     className={cn("size-5.5")}
+                    weight="Filled"
                     color={iconColor ?? "currentColor"}
                   />
                 )}

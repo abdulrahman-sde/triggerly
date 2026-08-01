@@ -1,5 +1,6 @@
 import { workflowChannel } from "@/inngest/channels/workflow";
 import { inngest } from "@/inngest/client";
+import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
   const url = new URL(req.url);
@@ -24,12 +25,31 @@ export async function POST(req: Request) {
     raw: body,
   };
 
-  const runId = crypto.randomUUID();
+  const workflow = await prisma.workflow.findUnique({
+    where: { id: workflowId },
+    select: { userId: true },
+  });
 
+  if (!workflow) {
+    return Response.json(
+      { success: false, error: "Workflow not found" },
+      { status: 404 },
+    );
+  }
+  const runId = crypto.randomUUID();
+  const execution = await prisma.execution.create({
+    data: {
+      workflowId,
+      status: "PENDING",
+      userId: workflow?.userId,
+      runId,
+    },
+  });
   await inngest.send({
     name: "workflows/execute.workflow",
     data: {
       workflowId,
+      executionId: execution.id,
       initialData: formData,
       runId: runId,
     },

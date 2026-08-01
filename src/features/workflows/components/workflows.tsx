@@ -1,7 +1,7 @@
 "use client";
 import { generateSlug } from "random-word-slugs";
 
-import { MoreHorizontal, Trash2 } from "lucide-react";
+import { MoreHorizontal, Plus, Trash2, Workflow } from "lucide-react";
 
 import {
   Card,
@@ -27,6 +27,7 @@ import {
   useSuspenseWorkflows,
 } from "../hooks/use-worflows";
 import Link from "next/link";
+import { formatDate } from "@/utils/format-date";
 
 export default function WorkflowsList({
   description,
@@ -64,7 +65,30 @@ export default function WorkflowsList({
         />
       }
     >
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {workflows.data.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <div className="mb-5 flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent ring-1 ring-primary/10">
+            <Workflow className="size-7 text-primary/60" />
+          </div>
+          <p className="text-sm font-medium text-foreground/70">
+            No workflows yet
+          </p>
+          <p className="mt-1.5 text-xs text-muted-foreground/60 max-w-xs">
+            Create a workflow to start automating your tasks.
+          </p>
+          <Button
+            onClick={handleCreateWorkflow}
+            variant="outline"
+            size="sm"
+            className="mt-5"
+            disabled={createWorkflow.isPending}
+          >
+            <Plus className="size-3.5 mr-1.5" />
+            Create workflow
+          </Button>
+        </div>
+      ) : (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {workflows.data.map((workflow) => (
           <Link
             href={`/dashboard/workflows/${workflow.id}`}
@@ -81,9 +105,11 @@ export default function WorkflowsList({
               })}
             >
               <CardHeader>
-                <CardTitle className="capitalize">{workflow.name}</CardTitle>
-                <CardDescription className="text-xs">
-                  Created {new Date(workflow.createdAt).toLocaleDateString()}
+                <CardTitle className="capitalize line-clamp-1">
+                  {workflow.name}
+                </CardTitle>
+                <CardDescription className="text-xs mt-1">
+                  Created {formatDate(new Date(workflow.createdAt))}
                 </CardDescription>
                 <CardAction>
                   <DropdownMenu>
@@ -110,7 +136,8 @@ export default function WorkflowsList({
             </Card>
           </Link>
         ))}
-      </div>
+        </div>
+      )}
     </EntityContainer>
   );
 }

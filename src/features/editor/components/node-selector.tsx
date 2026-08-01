@@ -179,7 +179,7 @@ export function NodeSelector({
                       "hover:bg-primary/[0.03] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 focus-visible:outline-none duration-300",
                     )}
                   >
-                    <span className="absolute left-0 top-2 h-[calc(100%-1rem)] w-0.5 rounded-full bg-primary/0 transition-all duration-300 group-hover:bg-primary group-hover:shadow-[0_0_12px_2px] group-hover:shadow-primary/60" />
+                    <span className="absolute left-0 -top-1 h-[calc(100%-1rem)] w-0.5 rounded-full bg-primary/0 transition-all duration-300 group-hover:bg-primary group-hover:shadow-[0_0_12px_2px] group-hover:shadow-primary/60" />
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border">
                       {node.icon}
                     </div>

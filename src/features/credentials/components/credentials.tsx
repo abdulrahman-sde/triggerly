@@ -17,10 +17,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EntityContainer } from "@/components/shared/entity-container";
 import { EntityHeader } from "@/components/shared/entity-header";
 import { cn } from "@/lib/utils";
@@ -55,7 +52,11 @@ const providerMeta: Record<
   },
 };
 
-export default function CredentialsList({ description }: { description?: string }) {
+export default function CredentialsList({
+  description,
+}: {
+  description?: string;
+}) {
   const credentials = useSuspenseCredentials();
   const removeCredential = useRemoveCredential();
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -157,33 +158,33 @@ export default function CredentialsList({ description }: { description?: string 
                     />
                     <CardHeader>
                       <div className="min-w-0 flex-1">
-                          <CardTitle className="truncate">
-                            {credential.name}
-                          </CardTitle>
-                          <CardDescription>
-                            <span className="mt-0.5 inline-flex items-center gap-1.5">
-                              <span
-                                className={cn(
-                                  "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider",
-                                  credential.type === CredentialType.GEMINI
-                                    ? "bg-blue-500/10 text-blue-500"
-                                    : "bg-emerald-500/10 text-emerald-500",
-                                )}
-                              >
-                                {meta.label}
-                              </span>
-                              <span className="text-[11px] text-muted-foreground/50">
-                                {new Date(
-                                  credential.createdAt,
-                                ).toLocaleDateString(undefined, {
-                                  month: "short",
-                                  day: "numeric",
-                                  year: "numeric",
-                                })}
-                              </span>
+                        <CardTitle className="truncate">
+                          {credential.name}
+                        </CardTitle>
+                        <CardDescription>
+                          <span className="mt-1.5 flex justify-between items-center gap-1.5">
+                            <span
+                              className={cn(
+                                "inline-flex items-center rounded-sm px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider",
+                                credential.type === CredentialType.GEMINI
+                                  ? "bg-blue-500/10 text-blue-500"
+                                  : "bg-emerald-500/10 text-emerald-500",
+                              )}
+                            >
+                              {meta.label}
                             </span>
-                          </CardDescription>
-                        </div>
+                            <span className="text-[11px] -mr-6 text-muted-foreground/50">
+                              {new Date(
+                                credential.createdAt,
+                              ).toLocaleDateString(undefined, {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              })}
+                            </span>
+                          </span>
+                        </CardDescription>
+                      </div>
                       <CardAction>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -217,9 +218,9 @@ export default function CredentialsList({ description }: { description?: string 
                     </CardHeader>
                   </Card>
                 </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
         )}
       </EntityContainer>
 

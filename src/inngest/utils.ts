@@ -1,5 +1,19 @@
 import toposort from "toposort";
+import { NonRetriableError } from "inngest";
 import { Connection, Node } from "@/generated/prisma/client";
+import prisma from "@/lib/prisma";
+import { StepTools } from "@/features/nodes/types";
+
+export type ExecutionLog = {
+  success: boolean;
+  message: string;
+  timestamp: Date;
+  nodeId?: string;
+  error?: string;
+};
+
+export const toErrorMessage = (error: unknown): string =>
+  error instanceof Error ? error.message : String(error);
 
 export const topologicalSort = (
   nodes: Node[],
@@ -37,7 +51,7 @@ export const topologicalSort = (
     sortedNodeIds = [...new Set(sortedNodeIds)];
   } catch (error) {
     if (error instanceof Error && error.message.includes("Cyclic")) {
-      throw new Error("Workflow contains a cycle");
+      throw new NonRetriableError("Workflow contains a cycle");
     }
     throw error;
   }
@@ -45,4 +59,26 @@ export const topologicalSort = (
   // Map sorted IDs back to node objects
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
   return sortedNodeIds.map((id) => nodeMap.get(id)!).filter(Boolean);
+};
+
+export const updateExecutionLogs = ({
+  executionId,
+  nodeId,
+  log,
+  step,
+}: {
+  executionId: string;
+  nodeId: string;
+  log: ExecutionLog;
+  step: StepTools;
+}) => {
+  return step.run(`update-execution-logs-${nodeId}`, async () => {
+      await prisma.$executeRaw`
+        UPDATE "execution"
+        SET
+          "logs" = COALESCE("logs", '[]'::jsonb) || ${JSON.stringify(log)}::jsonb
+        WHERE "id" = ${executionId}
+      `;
+    },
+  );
 };
