@@ -149,7 +149,6 @@ export default function GeminiSheet({
                   const cred = geminiCredentials.find((c) => c.id === id);
                   if (cred) {
                     form.setValue("credentialId", cred.id);
-                    form.setValue("apiKey", cred.value);
                   }
                 }}
               >

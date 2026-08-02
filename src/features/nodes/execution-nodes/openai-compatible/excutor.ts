@@ -4,9 +4,11 @@ import Handlebars from "handlebars";
 import { inngest } from "@/inngest/client";
 import { generateText } from "ai";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { resolveCredentialApiKey } from "@/lib/credential-crypto";
 
 type OpenAICompatibleData = {
   variableName?: string;
+  credentialId?: string;
   baseURL?: string;
   apiKey?: string;
   model?: string;
@@ -33,7 +35,11 @@ export const OpenAICompatibleExecutor: NodeExecutor<
     ? Handlebars.compile(data.userPrompt)(context)
     : "";
   const baseURL = data.baseURL || "https://integrate.api.nvidia.com/v1";
-  const apiKey = data.apiKey || process.env.NIM_API_KEY || "";
+  const apiKey =
+    data.apiKey ||
+    (await resolveCredentialApiKey(data.credentialId)) ||
+    process.env.NIM_API_KEY ||
+    "";
 
   const selectedModel = data.model || "nvidia/nemotron-3-nano-30b-a3b";
   const provider = createOpenAICompatible({

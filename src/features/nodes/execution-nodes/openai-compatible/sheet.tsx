@@ -144,7 +144,6 @@ export default function OpenAICompatibleSheet({
                   const cred = openaiCredentials.find((c) => c.id === id);
                   if (cred) {
                     form.setValue("credentialId", cred.id);
-                    form.setValue("apiKey", cred.value);
                     if (cred.baseURL) form.setValue("baseURL", cred.baseURL);
                   }
                 }}

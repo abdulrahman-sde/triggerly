@@ -4,9 +4,11 @@ import Handlebars from "handlebars";
 import { inngest } from "@/inngest/client";
 import { generateText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { resolveCredentialApiKey } from "@/lib/credential-crypto";
 
 type GeminiData = {
   variableName?: string;
+  credentialId?: string;
   apiKey?: string;
   model?: string;
   systemPrompt?: string;
@@ -34,7 +36,10 @@ export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
   const userPrompt = data.userPrompt
     ? Handlebars.compile(data.userPrompt)(context)
     : "";
-  const credentials = data.apiKey || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  const credentials =
+    data.apiKey ||
+    (await resolveCredentialApiKey(data.credentialId)) ||
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
   const google = createGoogleGenerativeAI({ apiKey: credentials || "" });
   const selectedModel = data.model || "gemini-2.5-pro";

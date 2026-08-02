@@ -31,7 +31,7 @@ import {
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   type: z.nativeEnum(CredentialType),
-  value: z.string().min(1, "API key is required"),
+  value: z.string().optional(),
   baseURL: z.string().optional(),
 });
 
@@ -119,9 +119,30 @@ export default function CredentialForm({
     };
 
     if (isEdit && initialData?.id) {
-      updateCredential.mutate({ id: initialData.id, ...values }, { onSettled });
+      updateCredential.mutate(
+        {
+          id: initialData.id,
+          name: values.name,
+          type: values.type,
+          ...(values.value ? { value: values.value } : {}),
+          ...(values.baseURL ? { baseURL: values.baseURL } : {}),
+        },
+        { onSettled },
+      );
     } else {
-      createCredential.mutate(values, { onSettled });
+      if (!values.value) {
+        form.setError("value", { message: "API key is required" });
+        return;
+      }
+      createCredential.mutate(
+        {
+          name: values.name,
+          type: values.type,
+          value: values.value,
+          ...(values.baseURL ? { baseURL: values.baseURL } : {}),
+        },
+        { onSettled },
+      );
     }
   });
 
@@ -206,12 +227,17 @@ export default function CredentialForm({
           </div>
 
           <div className="space-y-1.5">
-            <label
-              htmlFor="value"
-              className="text-[11px] font-semibold  text-foreground/70 uppercase "
-            >
-              API Key
-            </label>
+              <label
+                htmlFor="value"
+                className="text-[11px] font-semibold  text-foreground/70 uppercase "
+              >
+                API Key
+              </label>
+              {isEdit && (
+                <p className="text-[11px] text-muted-foreground/60 -mt-1.5">
+                  Leave blank to keep the existing key.
+                </p>
+              )}
             <div className="relative">
               <Input
                 id="value"
