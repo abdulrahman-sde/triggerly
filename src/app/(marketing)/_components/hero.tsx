@@ -132,8 +132,7 @@ export function Hero() {
                 </Button>
               </Link>
               <button className="text-zinc-300 font-medium hover:text-white transition-colors flex items-center gap-2 text-sm">
-                <span className="text-zinc-500">New:</span> Triggerly AI builds
-                your flows
+                <span className="text-zinc-500">New:</span> AI-powered nodes
                 <span aria-hidden="true">→</span>
               </button>
             </motion.div>

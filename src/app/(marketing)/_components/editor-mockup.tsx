@@ -9,15 +9,12 @@ import {
   ChevronRight,
   Zap,
   GitBranch,
-  Filter,
+  Globe,
+  Sparkles,
   Play,
   Plus,
   Search,
 } from "lucide-react";
-import { GitHub } from "../../../../public/assets/icons/github";
-import { Notion } from "../../../../public/assets/icons/notion";
-import { Slack } from "../../../../public/assets/icons/slack";
-import { Stripe } from "../../../../public/assets/icons/stripe";
 
 export function EditorMockup() {
   const containerVariants = {
@@ -86,10 +83,10 @@ export function EditorMockup() {
               color="text-emerald-400"
             />
             <NavItem
-              icon={Filter}
-              label="Logic"
+              icon={Sparkles}
+              label="AI"
               hasSubmenu
-              color="text-blue-400"
+              color="text-violet-400"
             />
           </div>
         </div>
@@ -98,10 +95,11 @@ export function EditorMockup() {
             Apps
           </div>
           <div className="space-y-0.5 mt-1">
-            <AppNavItem icon={Slack} label="Slack" />
-            <AppNavItem icon={GitHub} label="GitHub" />
-            <AppNavItem icon={Stripe} label="Stripe" />
-            <AppNavItem icon={Notion} label="Notion" />
+            <AppNavItem icon={appIcon("/assets/icons/google-form.svg")} label="Google Forms" />
+            <AppNavItem icon={appIcon("/assets/icons/http-request.svg")} label="HTTP request" />
+            <AppNavItem icon={appIcon("/assets/icons/gemini.svg")} label="Gemini" />
+            <AppNavItem icon={appIcon("/assets/icons/openai.svg")} label="OpenAI" />
+            <AppNavItem icon={appIcon("/assets/icons/discord.svg")} label="Discord" />
           </div>
         </div>
         <div className="p-3 border-t border-border/50">
@@ -132,13 +130,6 @@ export function EditorMockup() {
                 strokeLinecap="round"
               />
               <path
-                d="M400 190 C 460 190, 460 110, 520 110"
-                stroke="rgba(113,113,122,0.6)"
-                strokeWidth="2"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <path
                 d="M400 230 C 460 230, 460 320, 520 320"
                 stroke="rgba(113,113,122,0.6)"
                 strokeWidth="2"
@@ -149,35 +140,27 @@ export function EditorMockup() {
             <CanvasNode
               x={20}
               y={30}
-              icon={Slack}
+              icon={appIcon("/assets/icons/google-form.svg")}
               accent="amber"
-              title="New message"
-              subtitle="Slack · Trigger"
+              title="New submission"
+              subtitle="Google Form · Trigger"
             />
             <CanvasNode
               x={280}
               y={170}
-              icon={Filter}
+              icon={appIcon("/assets/icons/http-request.svg")}
               accent="blue"
-              title="Filter"
-              subtitle="If channel = #ops"
+              title="Send webhook"
+              subtitle="HTTP request · Action"
               selected
             />
             <CanvasNode
               x={500}
-              y={70}
-              icon={GitHub}
-              accent="zinc"
-              title="Create issue"
-              subtitle="GitHub · Action"
-            />
-            <CanvasNode
-              x={500}
               y={280}
-              icon={Notion}
+              icon={appIcon("/assets/icons/discord.svg")}
               accent="zinc"
-              title="Add page"
-              subtitle="Notion · Action"
+              title="Notify channel"
+              subtitle="Discord · Action"
             />
           </div>
         </div>
@@ -188,20 +171,21 @@ export function EditorMockup() {
         variants={panelVariants}
       >
         <div className="px-4 py-3 border-b border-border/50 flex items-center gap-2">
-          <Filter className="w-4 h-4 text-blue-400" />
-          <span className="text-foreground text-sm font-medium">Filter</span>
+          <Globe className="w-4 h-4 text-blue-400" />
+          <span className="text-foreground text-sm font-medium">HTTP request</span>
           <span className="ml-auto text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded">
-            Logic
+            Action
           </span>
         </div>
         <div className="p-4 space-y-4 overflow-auto scrollbar-hide">
-          <FieldRow label="Condition">
-            <span className="text-card-foreground text-[11px]">
-              channel equals #ops
-            </span>
+          <FieldRow label="Method">
+            <span className="text-card-foreground text-[11px] font-mono">POST</span>
           </FieldRow>
-          <FieldRow label="Operator">
-            <span className="text-card-foreground text-[11px]">AND</span>
+          <FieldRow label="Endpoint">
+            <span className="text-card-foreground text-[11px] font-mono truncate">https://api.example.com/hook</span>
+          </FieldRow>
+          <FieldRow label="Headers">
+            <span className="text-card-foreground text-[11px] font-mono">Content-Type: JSON</span>
           </FieldRow>
           <FieldRow label="Retry on fail">
             <span className="text-emerald-400 text-[11px]">3 attempts</span>
@@ -212,24 +196,24 @@ export function EditorMockup() {
             </div>
             <div className="bg-background rounded-lg p-3 space-y-2 font-mono text-[11px]">
               <div>
-                <span className="text-muted-foreground">value</span>
+                <span className="text-muted-foreground">url</span>
                 <span className="text-muted-foreground">: </span>
-                <span className="text-emerald-300">{`{{message.text}}`}</span>
+                <span className="text-emerald-300">{`{{form.url}}`}</span>
               </div>
               <div>
-                <span className="text-muted-foreground">user</span>
+                <span className="text-muted-foreground">payload</span>
                 <span className="text-muted-foreground">: </span>
-                <span className="text-emerald-300">{`{{message.author}}`}</span>
+                <span className="text-emerald-300">{`{{form.response}}`}</span>
               </div>
               <div>
-                <span className="text-muted-foreground">ts</span>
+                <span className="text-muted-foreground">token</span>
                 <span className="text-muted-foreground">: </span>
-                <span className="text-emerald-300">{`{{message.ts}}`}</span>
+                <span className="text-emerald-300">{`{{credentials.apiKey}}`}</span>
               </div>
             </div>
           </div>
           <Button variant="outline" size="sm" className="w-full text-xs">
-            <Plus className="w-3.5 h-3.5" /> Add condition
+            <Plus className="w-3.5 h-3.5" /> Add header
           </Button>
         </div>
         <div className="px-4 py-3 border-t border-border/50">
@@ -273,17 +257,24 @@ function NavItem({
 }
 
 function AppNavItem({
-  icon: Icon,
+  icon,
   label,
 }: {
-  icon: React.ElementType;
+  icon: React.ReactNode;
   label: string;
 }) {
   return (
     <div className="flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors text-muted-foreground hover:bg-muted/50 hover:text-card-foreground">
-      <Icon className="w-4 h-4" />
+      <span className="flex items-center justify-center w-4 h-4">{icon}</span>
       <span className="flex-1 text-xs">{label}</span>
     </div>
+  );
+}
+
+function appIcon(src: string) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt="" className="w-4 h-4" aria-hidden="true" />
   );
 }
 
@@ -326,7 +317,7 @@ function CanvasGrid() {
 function CanvasNode({
   x,
   y,
-  icon: Icon,
+  icon,
   accent,
   title,
   subtitle,
@@ -334,7 +325,7 @@ function CanvasNode({
 }: {
   x: number;
   y: number;
-  icon: React.ElementType;
+  icon: React.ReactNode;
   accent: "amber" | "blue" | "zinc";
   title: string;
   subtitle: string;
@@ -354,7 +345,7 @@ function CanvasNode({
         <div
           className={`w-5 h-5 rounded flex items-center justify-center ${accentClass}`}
         >
-          <Icon className="w-3.5 h-3.5" />
+          <span className="flex items-center justify-center w-3.5 h-3.5">{icon}</span>
         </div>
         <span className="text-foreground text-xs font-medium">{title}</span>
       </div>
