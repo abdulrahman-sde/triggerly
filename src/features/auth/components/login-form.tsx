@@ -36,11 +36,11 @@ export function LoginForm() {
   async function onSubmit(data: LoginData) {
     setIsSubmitting(true);
     await authClient.signIn.email(
-      { email: data.email, password: data.password },
+      { email: data.email, password: data.password, callbackURL: "/dashboard" },
       {
         onSuccess: () => {
-          router.push("/dashboard");
           toast.success("Logged in successfully");
+          setIsSubmitting(false);
         },
         onError: (ctx) => {
           toast.error(ctx.error.message || "Something went wrong");
