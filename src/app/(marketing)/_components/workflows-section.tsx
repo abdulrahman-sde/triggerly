@@ -6,69 +6,60 @@ import {
   ChevronRight,
   Plus,
   Zap,
-  GitBranch,
   Webhook,
-  Clock,
   Code,
-  MessageSquare,
-  LayoutGrid,
 } from "lucide-react";
-import { Slack } from "../../../../public/assets/icons/slack";
-import { GitHub } from "../../../../public/assets/icons/github";
-import { Stripe } from "../../../../public/assets/icons/stripe";
-import { Notion } from "../../../../public/assets/icons/notion";
-import { Supabase } from "../../../../public/assets/icons/supabase";
-import { Figma } from "../../../../public/assets/icons/figma";
 
 const carouselCards = [
   {
     id: 1,
-    category: "Messaging",
-    title: "Slack message to Linear issue",
-    mockup: "slack-linear",
+    category: "Forms",
+    title: "Google Form response to Discord alert",
+    mockup: "form-discord",
   },
   {
     id: 2,
-    category: "Payments",
-    title: "Stripe payment to receipt and Notion",
-    mockup: "stripe-notion",
+    category: "Forms",
+    title: "Form submission to HTTP endpoint",
+    mockup: "form-http",
   },
   {
     id: 3,
-    category: "Code",
-    title: "Pull request checks and notify",
-    mockup: "github-notify",
+    category: "AI",
+    title: "Manual run to Gemini draft",
+    mockup: "manual-gemini",
   },
   {
     id: 4,
-    category: "Forms",
-    title: "Form submission to CRM and email",
-    mockup: "form-crm",
+    category: "AI",
+    title: "Webhook to OpenAI classification",
+    mockup: "webhook-openai",
   },
   {
     id: 5,
-    category: "Data",
-    title: "Scheduled database snapshot sync",
-    mockup: "schedule-sync",
+    category: "Developer",
+    title: "Manual run to AI summary and HTTP",
+    mockup: "manual-ai-http",
   },
   {
     id: 6,
-    category: "Design",
-    title: "Figma comment to task",
-    mockup: "figma-task",
-  },
-  {
-    id: 7,
     category: "Developer",
     title: "Build your own with the API",
     mockup: "api",
   },
 ];
 
+function appIcon(src: string, className = "w-3.5 h-3.5") {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt="" className={className} aria-hidden="true" />
+  );
+}
+
 function MiniFlow({
   nodes,
 }: {
-  nodes: { icon?: React.ElementType; label: string; color?: string }[];
+  nodes: { icon: React.ReactNode; label: string }[];
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -76,7 +67,9 @@ function MiniFlow({
         <React.Fragment key={i}>
           {i > 0 && <span className="text-zinc-600 text-xs">→</span>}
           <div className="flex items-center gap-1.5 bg-zinc-800/50 border border-zinc-700/30 rounded-md px-2 py-1.5 backdrop-blur-sm">
-            {node.icon && <node.icon className="w-3.5 h-3.5 text-zinc-400" />}
+            <span className="flex items-center justify-center w-3.5 h-3.5">
+              {node.icon}
+            </span>
             <span className="text-xs text-zinc-300 text-nowrap">
               {node.label}
             </span>
@@ -89,89 +82,84 @@ function MiniFlow({
 
 function CardMockup({ type }: { type: string }) {
   switch (type) {
-    case "slack-linear":
+    case "form-discord":
       return (
         <div className="flex flex-col gap-3 p-4">
           <MiniFlow
             nodes={[
-              { icon: Slack, label: "New message" },
-              { icon: GitBranch, label: "Filter" },
-              { icon: GitHub, label: "Create issue" },
+              { icon: appIcon("/assets/icons/google-form.svg"), label: "Submission" },
+              { icon: appIcon("/assets/icons/discord.svg"), label: "Alert" },
             ]}
           />
           <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
             <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
-            <span className="text-xs text-zinc-400">When message in #ops</span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-2">
-              <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
-                <Zap className="w-2.5 h-2.5 text-emerald-400" />
-              </span>
-              <span className="text-xs text-zinc-300">Runs in 1.2s</span>
-              <span className="text-[10px] text-zinc-600 ml-auto">•••</span>
-          </div>
-        </div>
-      );
-    case "stripe-notion":
-      return (
-        <div className="flex flex-col gap-3 p-4">
-          <MiniFlow
-            nodes={[
-              { icon: Stripe, label: "Payment" },
-              { icon: GitBranch, label: "Branch" },
-              { icon: MessageSquare, label: "Receipt" },
-              { icon: Notion, label: "Log" },
-            ]}
-          />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
-              Trigger
-            </span>
-            <span className="text-xs text-zinc-400">Successful payment</span>
+            <span className="text-xs text-zinc-400">New response submitted</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
             <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
-            <span className="text-xs text-zinc-300">2 actions in parallel</span>
+            <span className="text-xs text-zinc-300">Runs on every response</span>
           </div>
         </div>
       );
-    case "github-notify":
+    case "form-http":
       return (
         <div className="flex flex-col gap-3 p-4">
           <MiniFlow
             nodes={[
-              { icon: GitHub, label: "PR opened" },
-              { icon: GitBranch, label: "Checks" },
-              { icon: Slack, label: "Notify" },
+              { icon: appIcon("/assets/icons/google-form.svg"), label: "Submission" },
+              { icon: appIcon("/assets/icons/http-request.svg"), label: "Create record" },
             ]}
           />
           <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
             <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
-            <span className="text-xs text-zinc-400">Pull request opened</span>
+            <span className="text-xs text-zinc-400">New response submitted</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
             <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
-            <span className="text-xs text-zinc-300">Runs on every PR</span>
+            <span className="text-xs text-zinc-300">2 steps, linear</span>
           </div>
         </div>
       );
-    case "form-crm":
+    case "manual-gemini":
       return (
         <div className="flex flex-col gap-3 p-4">
           <MiniFlow
             nodes={[
-              { icon: Webhook, label: "Form submit" },
-              { icon: GitBranch, label: "Branch" },
-              { icon: LayoutGrid, label: "Add to CRM" },
-              { icon: MessageSquare, label: "Email" },
+              { icon: appIcon("/assets/icons/manual-trigger.svg"), label: "Run" },
+              { icon: appIcon("/assets/icons/gemini.svg"), label: "Draft" },
+              { icon: appIcon("/assets/icons/discord.svg"), label: "Post" },
+            ]}
+          />
+          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
+            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
+              Trigger
+            </span>
+            <span className="text-xs text-zinc-400">Run on demand</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2">
+            <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
+              <Zap className="w-2.5 h-2.5 text-emerald-400" />
+            </span>
+            <span className="text-xs text-zinc-300">Manual execution</span>
+          </div>
+        </div>
+      );
+    case "webhook-openai":
+      return (
+        <div className="flex flex-col gap-3 p-4">
+          <MiniFlow
+            nodes={[
+              { icon: <Webhook className="w-3.5 h-3.5 text-zinc-400" />, label: "HTTP request" },
+              { icon: appIcon("/assets/icons/openai.svg"), label: "Classify" },
+              { icon: appIcon("/assets/icons/discord.svg"), label: "Alert" },
             ]}
           />
           <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
@@ -184,55 +172,31 @@ function CardMockup({ type }: { type: string }) {
             <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
-            <span className="text-xs text-zinc-300">4 steps, 2 parallel</span>
+            <span className="text-xs text-zinc-300">3 steps, linear</span>
           </div>
         </div>
       );
-    case "schedule-sync":
+    case "manual-ai-http":
       return (
         <div className="flex flex-col gap-3 p-4">
           <MiniFlow
             nodes={[
-              { icon: Clock, label: "Cron" },
-              { icon: Supabase, label: "Snapshot" },
-              { icon: Webhook, label: "Sync" },
-            ]}
-          />
-          <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
-            <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
-              Schedule
-            </span>
-            <span className="text-xs text-zinc-400">Every 6 hours</span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-2">
-            <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
-              <Zap className="w-2.5 h-2.5 text-emerald-400" />
-            </span>
-            <span className="text-xs text-zinc-300">Sequential execution</span>
-          </div>
-        </div>
-      );
-    case "figma-task":
-      return (
-        <div className="flex flex-col gap-3 p-4">
-          <MiniFlow
-            nodes={[
-              { icon: Figma, label: "Comment" },
-              { icon: GitBranch, label: "Filter" },
-              { icon: GitHub, label: "Create task" },
+              { icon: appIcon("/assets/icons/manual-trigger.svg"), label: "Run" },
+              { icon: appIcon("/assets/icons/gemini.svg"), label: "Summarize" },
+              { icon: appIcon("/assets/icons/http-request.svg"), label: "Send" },
             ]}
           />
           <div className="mt-2 flex items-center gap-2 bg-zinc-800/50 border border-zinc-700/20 rounded-lg px-3 py-2">
             <span className="text-[10px] text-zinc-500 bg-zinc-700/70 px-1.5 py-0.5 rounded">
               Trigger
             </span>
-            <span className="text-xs text-zinc-400">New comment added</span>
+            <span className="text-xs text-zinc-400">Run on demand</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2">
             <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center">
               <Zap className="w-2.5 h-2.5 text-emerald-400" />
             </span>
-            <span className="text-xs text-zinc-300">Runs in 0.8s</span>
+            <span className="text-xs text-zinc-300">3 steps, linear</span>
           </div>
         </div>
       );
@@ -241,11 +205,11 @@ function CardMockup({ type }: { type: string }) {
         <div className="flex items-center justify-center h-full">
           <div className="flex flex-col items-center gap-3">
             <div className="bg-zinc-800/50 rounded-lg px-4 py-3 border border-zinc-700/30 backdrop-blur-sm">
-                <Code className="w-6 h-6 text-zinc-400" />
-              </div>
-              <span className="text-xs font-mono text-zinc-500">
-                POST /api/triggers
-              </span>
+              <Code className="w-6 h-6 text-zinc-400" />
+            </div>
+            <span className="text-xs font-mono text-zinc-500">
+              POST /api/webhooks/google-form
+            </span>
           </div>
         </div>
       );
