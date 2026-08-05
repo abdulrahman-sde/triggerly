@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Eye, EyeOff, Loader } from "lucide-react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { LogoIcon } from "@/components/logo"
-import { authClient } from "@/lib/auth-clinet"
-import { toast } from "sonner"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Eye, EyeOff, Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { LogoIcon } from "@/components/logo";
+import { authClient } from "@/lib/auth-clinet";
+import { toast } from "sonner";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
-})
+});
 
-type RegisterData = z.infer<typeof registerSchema>
+type RegisterData = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -32,23 +32,27 @@ export function RegisterForm() {
     formState: { errors },
   } = useForm<RegisterData>({
     resolver: zodResolver(registerSchema),
-  })
+  });
 
   async function onSubmit(data: RegisterData) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     await authClient.signUp.email(
-      { name: data.name, email: data.email, password: data.password },
+      {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        callbackURL: "/dashboard",
+      },
       {
         onSuccess: () => {
-          setIsSubmitting(false)
-          router.push("/dashboard")
+          setIsSubmitting(false);
         },
         onError: (ctx) => {
-          toast.error(ctx.error.message || "Something went wrong")
-          setIsSubmitting(false)
+          toast.error(ctx.error.message || "Something went wrong");
+          setIsSubmitting(false);
         },
       },
-    )
+    );
   }
 
   return (
@@ -59,7 +63,9 @@ export function RegisterForm() {
             <LogoIcon />
           </Link>
           <h1 className="mt-4 text-xl font-semibold">Create account</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Register for Triggerly</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Register for Triggerly
+          </p>
         </div>
 
         <div className="mt-8 space-y-4">
@@ -72,7 +78,9 @@ export function RegisterForm() {
               autoComplete="name"
             />
             {errors.name && (
-              <p className="mt-1 text-xs text-destructive">{errors.name.message}</p>
+              <p className="mt-1 text-xs text-destructive">
+                {errors.name.message}
+              </p>
             )}
           </div>
 
@@ -85,7 +93,9 @@ export function RegisterForm() {
               autoComplete="email"
             />
             {errors.email && (
-              <p className="mt-1 text-xs text-destructive">{errors.email.message}</p>
+              <p className="mt-1 text-xs text-destructive">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -107,26 +117,39 @@ export function RegisterForm() {
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
               >
-                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                {showPassword ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
               </Button>
             </div>
             {errors.password && (
-              <p className="mt-1 text-xs text-destructive">{errors.password.message}</p>
+              <p className="mt-1 text-xs text-destructive">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? <Loader className="size-4 animate-spin" /> : "Create account"}
+            {isSubmitting ? (
+              <Loader className="size-4 animate-spin" />
+            ) : (
+              "Create account"
+            )}
           </Button>
         </div>
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="text-foreground underline underline-offset-4 hover:no-underline">
+          <Link
+            href="/login"
+            className="text-foreground underline underline-offset-4 hover:no-underline"
+          >
             Sign in
           </Link>
         </p>
       </form>
     </div>
-  )
+  );
 }
