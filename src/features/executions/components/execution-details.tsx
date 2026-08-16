@@ -49,6 +49,7 @@ const nodeTypeNames: Record<string, string> = {
   GEMINI: "Gemini",
   OPENAI_COMPATIBLE: "OpenAI Compatible",
   DISCORD: "Discord",
+  EMAIL: "Email",
 };
 
 const nodeIcons: Record<string, ReactNode> = {
@@ -89,6 +90,15 @@ const nodeIcons: Record<string, ReactNode> = {
   DISCORD: (
     <Image
       src="/assets/icons/discord.svg"
+      alt=""
+      width={16}
+      height={16}
+      className="size-4"
+    />
+  ),
+  EMAIL: (
+    <Image
+      src="/assets/icons/resend.svg"
       alt=""
       width={16}
       height={16}

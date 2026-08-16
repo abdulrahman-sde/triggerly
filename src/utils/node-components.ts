@@ -5,6 +5,8 @@ import { HttpRequestNode } from "@/features/nodes/execution-nodes/http-request/n
 import { OpenAICompatibleNode } from "@/features/nodes/execution-nodes/openai-compatible/node";
 import GoogleFormTriggerNode from "@/features/nodes/trigger-nodes/google-form-trigger/node";
 import ManualTriggerNode from "@/features/nodes/trigger-nodes/manual-trigger/node";
+import { GoogleSheetsNode } from "@/features/nodes/execution-nodes/google-sheets/node";
+import { EmailNode } from "@/features/nodes/execution-nodes/email/node";
 import { NodeType } from "@/generated/prisma/enums";
 import type { NodeTypes } from "@xyflow/react";
 
@@ -16,6 +18,8 @@ export const nodeComponents = {
   [NodeType.GEMINI]: GeminiNode,
   [NodeType.OPENAI_COMPATIBLE]: OpenAICompatibleNode,
   [NodeType.DISCORD]: DiscordNode,
+  [NodeType.GOOGLE_SHEETS]: GoogleSheetsNode,
+  [NodeType.EMAIL]: EmailNode,
 } as const satisfies NodeTypes;
 
 export type NodeComponentType = keyof typeof nodeComponents;

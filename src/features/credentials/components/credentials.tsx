@@ -50,6 +50,16 @@ const providerMeta: Record<
     icon: "/assets/icons/openai-compatible.svg",
     gradient: "from-emerald-500/20 via-emerald-500/10 to-transparent",
   },
+  [CredentialType.GOOGLE_SERVICE_ACCOUNT]: {
+    label: "Google Sheets",
+    icon: "/assets/icons/google-sheets.svg",
+    gradient: "from-green-500/20 via-green-500/10 to-transparent",
+  },
+  [CredentialType.RESEND]: {
+    label: "Resend",
+    icon: "/assets/icons/resend.svg",
+    gradient: "from-sky-500/20 via-sky-500/10 to-transparent",
+  },
 };
 
 export default function CredentialsList({

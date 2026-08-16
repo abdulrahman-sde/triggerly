@@ -30,12 +30,19 @@ export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
     status: "loading",
     nodeId: nodeId,
   });
+
+  console.log("Gemini Executer");
   const systemPrompt = data.systemPrompt
     ? Handlebars.compile(data.systemPrompt)(context)
     : "you are a helpful assistant";
   const userPrompt = data.userPrompt
     ? Handlebars.compile(data.userPrompt)(context)
     : "";
+
+  console.log("Gemini node data after Handlebars compilation:", {
+    systemPrompt,
+    userPrompt,
+  });
   const credentials =
     data.apiKey ||
     (await resolveCredentialApiKey(data.credentialId)) ||
@@ -62,7 +69,7 @@ export const GeminiExecutor: NodeExecutor<GeminiData> = async ({
     status: "success",
     nodeId: nodeId,
   });
-
+  console.log("Gemini node result:", text);
   return {
     ...context,
     [data.variableName]: {

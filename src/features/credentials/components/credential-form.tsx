@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -63,6 +64,16 @@ const PROVIDERS: {
     label: "OpenAI Compatible",
     icon: "/assets/icons/openai.svg",
   },
+  {
+    value: CredentialType.GOOGLE_SERVICE_ACCOUNT,
+    label: "Google Sheets",
+    icon: "/assets/icons/google-sheets.svg",
+  },
+  {
+    value: CredentialType.RESEND,
+    label: "Resend",
+    icon: "/assets/icons/resend.svg",
+  },
 ];
 
 const providerGuides: Record<
@@ -85,6 +96,25 @@ const providerGuides: Record<
       "Generate a new API key",
       "Copy the key and paste it below",
       "Enter your provider's API base URL",
+    ],
+  },
+  [CredentialType.GOOGLE_SERVICE_ACCOUNT]: {
+    heading: "Google Sheets Service Account",
+    steps: [
+      "Go to Google Cloud Console and create a project",
+      "Enable the Google Sheets API",
+      'Create a Service Account and download its JSON key',
+      "Paste the full JSON key below",
+      "Share your spreadsheet with the service account email",
+    ],
+  },
+  [CredentialType.RESEND]: {
+    heading: "Resend API",
+    steps: [
+      "Go to resend.com and create an account",
+      "Navigate to the API Keys section in your dashboard",
+      "Create a new API key (optionally restrict it to the sending domain)",
+      "Copy the key and paste it below",
     ],
   },
 };
@@ -131,7 +161,7 @@ export default function CredentialForm({
       );
     } else {
       if (!values.value) {
-        form.setError("value", { message: "API key is required" });
+        form.setError("value", { message: "Credential value is required" });
         return;
       }
       createCredential.mutate(
@@ -231,13 +261,25 @@ export default function CredentialForm({
                 htmlFor="value"
                 className="text-[11px] font-semibold  text-foreground/70 uppercase "
               >
-                API Key
+                {selectedType === CredentialType.GOOGLE_SERVICE_ACCOUNT
+                  ? "Service Account JSON"
+                  : "API Key"}
               </label>
               {isEdit && (
                 <p className="text-[11px] text-muted-foreground/60 -mt-1.5">
                   Leave blank to keep the existing key.
                 </p>
               )}
+            {selectedType === CredentialType.GOOGLE_SERVICE_ACCOUNT ? (
+              <Textarea
+                id="value"
+                autoComplete="off"
+                spellCheck={false}
+                placeholder={'{\n  "type": "service_account",\n  "client_email": "..."\n}'}
+                className="min-h-40 px-3 py-2 text-[11px] font-mono leading-relaxed resize-none"
+                {...form.register("value")}
+              />
+            ) : (
             <div className="relative">
               <Input
                 id="value"
@@ -266,6 +308,7 @@ export default function CredentialForm({
                 )}
               </button>
             </div>
+            )}
             {form.formState.errors.value && (
               <p className="text-xs text-destructive">
                 {form.formState.errors.value.message}

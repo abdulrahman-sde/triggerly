@@ -1,5 +1,8 @@
 import { CredentialType } from "@/generated/prisma/enums";
-import { encryptCredential } from "@/lib/credential-crypto";
+import {
+  decryptCredential,
+  encryptCredential,
+} from "@/lib/credential-crypto";
 import prisma from "@/lib/prisma";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import z from "zod";
@@ -34,6 +37,26 @@ export const CredentialsRouter = createTRPCRouter({
       });
 
       return maskCredential(credential);
+    }),
+
+  getServiceAccountEmail: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const credential = await prisma.credential.findUniqueOrThrow({
+        where: {
+          id: input.id,
+          userId: ctx.user.id,
+        },
+      });
+
+      try {
+        const key = JSON.parse(decryptCredential(credential.value)) as {
+          client_email?: string;
+        };
+        return key.client_email ?? null;
+      } catch {
+        return null;
+      }
     }),
 
   create: protectedProcedure
