@@ -94,6 +94,35 @@ const ExecutionNodes: NodeTypeOption[] = [
       />
     ),
   },
+{
+    type: NodeType.GOOGLE_SHEETS,
+    label: "Google Sheets",
+    description:
+      "Append, read, or update values in a Google Spreadsheet.",
+    icon: (
+      <Image
+        src="/assets/icons/google-sheets.svg"
+        alt=""
+        width={16}
+        height={16}
+        className="size-4"
+      />
+    ),
+  },
+  {
+    type: NodeType.EMAIL,
+    label: "Send Email",
+    description: "Send an email via the Resend API.",
+    icon: (
+      <Image
+        src="/assets/icons/resend.svg"
+        alt=""
+        width={16}
+        height={16}
+        className="size-4"
+      />
+    ),
+  },
 ];
 
 export function NodeSelector({

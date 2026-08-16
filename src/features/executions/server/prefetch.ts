@@ -1,7 +1,7 @@
 import { trpc, prefetch } from "@/trpc/server";
 
 export function prefetchExecutions() {
-  return prefetch(trpc.executions.getAll.queryOptions());
+  return prefetch(trpc.executions.getAll.queryOptions({ page: 1 }));
 }
 
 export function prefetchExecution(id: string) {

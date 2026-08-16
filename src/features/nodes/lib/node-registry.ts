@@ -6,6 +6,8 @@ import { DiscordExecutor } from "@/features/nodes/execution-nodes/discord/excuto
 import { GeminiExecutor } from "../execution-nodes/gemini/excutor";
 import { OpenAICompatibleExecutor } from "../execution-nodes/openai-compatible/excutor";
 import { manualTriggerExecutor } from "../trigger-nodes/manual-trigger/executor";
+import { GoogleSheetsExecutor } from "../execution-nodes/google-sheets/excutor";
+import { EmailExecutor } from "../execution-nodes/email/excutor";
 
 export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.INITIAL]: manualTriggerExecutor,
@@ -15,6 +17,8 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.GEMINI]: GeminiExecutor,
   [NodeType.OPENAI_COMPATIBLE]: OpenAICompatibleExecutor,
   [NodeType.DISCORD]: DiscordExecutor,
+  [NodeType.GOOGLE_SHEETS]: GoogleSheetsExecutor,
+  [NodeType.EMAIL]: EmailExecutor,
 };
 
 export const getExecutor = (nodeType: NodeType): NodeExecutor => {

@@ -76,6 +76,8 @@ model Verification {
 enum CredentialType {
     GEMINI
     OPENAI_COMPATIBLE
+    GOOGLE_SERVICE_ACCOUNT
+    RESEND
 }
 
 model Credential {
@@ -116,6 +118,8 @@ enum NodeType {
     GEMINI
     OPENAI_COMPATIBLE
     DISCORD
+    GOOGLE_SHEETS
+    EMAIL
 }
 
 model Node {

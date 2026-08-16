@@ -16,6 +16,10 @@ const chipStyles: Record<string, string> = {
     "border-violet-300 bg-violet-100 text-violet-700 shadow-[0_8px_20px_-12px_rgba(139,92,246,0.4)]",
   "Send Message":
     "border-sky-300 bg-sky-200/80 text-sky-800 shadow-[0_8px_20px_-12px_rgba(14,165,233,0.4)]",
+  "Google Sheets":
+    "border-green-300 bg-green-100 text-green-700 shadow-[0_8px_20px_-12px_rgba(34,197,94,0.4)]",
+  "Email":
+    "border-rose-300 bg-rose-100 text-rose-700 shadow-[0_8px_20px_-12px_rgba(244,63,94,0.4)]",
 };
 
 interface BaseExecutionNodeProps extends NodeProps {

@@ -1,10 +1,15 @@
 "use client";
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { keepPreviousData, useSuspenseQuery } from "@tanstack/react-query";
 
-export const useSuspenseExecutions = () => {
+export const useSuspenseExecutions = (page: number) => {
   const trpc = useTRPC();
-  return useSuspenseQuery(trpc.executions.getAll.queryOptions());
+  return useSuspenseQuery(
+    trpc.executions.getAll.queryOptions(
+      { page },
+      { placeholderData: keepPreviousData },
+    ),
+  );
 };
 
 export const useSuspenseExecution = (id: string) => {

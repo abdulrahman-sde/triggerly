@@ -108,7 +108,7 @@ export const useExecuteWorkflow = () => {
       },
       onSuccess: (data, input) => {
         useWorkflowRun.getState().setRunId(data.runId); // <-- this is "how you get the runId on the frontend"
-        queryClient.invalidateQueries(trpc.executions.getAll.queryOptions());
+        queryClient.invalidateQueries(trpc.executions.pathFilter());
         toast.success(data.message || "Workflow execution started");
       },
       onError: (err) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { Play } from "lucide-react";
 
 import {
@@ -9,6 +10,14 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { EntityContainer } from "@/components/shared/entity-container";
 import { EntityHeader } from "@/components/shared/entity-header";
 import { cn } from "@/lib/utils";
@@ -41,13 +50,16 @@ export default function ExecutionsList({
 }: {
   description?: string;
 }) {
-  const executions = useSuspenseExecutions();
+  const [page, setPage] = useState(1);
+  const executions = useSuspenseExecutions(page);
+
+  const totalPages = executions.data.totalPages;
 
   return (
     <EntityContainer
       header={<EntityHeader title="Executions" description={description} />}
     >
-      {executions.data.length === 0 ? (
+      {executions.data.total === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <div className="mb-5 flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent ring-1 ring-primary/10">
             <Play className="size-7 text-primary/60" />
@@ -61,7 +73,7 @@ export default function ExecutionsList({
         </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {executions.data.map((execution) => {
+          {executions.data.items.map((execution) => {
             const meta = statusMeta[execution.status];
 
             return (
@@ -109,6 +121,54 @@ export default function ExecutionsList({
             );
           })}
         </div>
+      )}
+
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                text=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((p) => Math.max(1, p - 1));
+                }}
+                className={cn(
+                  "pointer-events-none opacity-50",
+                  page > 1 && "pointer-events-auto opacity-100",
+                )}
+              />
+            </PaginationItem>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <PaginationItem key={p}>
+                <PaginationLink
+                  href="#"
+                  isActive={p === page}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(p);
+                  }}
+                >
+                  {p}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((p) => Math.min(totalPages, p + 1));
+                }}
+                className={cn(
+                  "pointer-events-none opacity-50",
+                  page < totalPages && "pointer-events-auto opacity-100",
+                )}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       )}
     </EntityContainer>
   );
